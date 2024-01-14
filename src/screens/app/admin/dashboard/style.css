@@ -1,0 +1,30 @@
+.ant-table td {
+  font-family: 'Quicksand', sans-serif;
+  font-size: x-large;
+  font-weight: 1000;
+}
+
+.ant-table tr:nth-child(even) {
+  background-color: #D6D6D6
+}
+
+.ant-table tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.del-btn {
+  color: #fff;
+  background-color: #F42F4C;
+}
+.edit-btn {
+  color: #fff;
+  background-color: #336A29;
+}
+.pause-btn {
+  color: #fff;
+  background-color: #2D80E9;
+}
+
+.ant-divider {
+  font-weight: bold;
+}

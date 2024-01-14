@@ -1,0 +1,10 @@
+* {
+    font-family: 'Quicksand', sans-serif;
+}
+span {
+    font-weight: bold;
+    padding-bottom: 2px;
+}
+.ant-input, .ant-input-affix-wrapper {
+    border-radius: 0;
+}
