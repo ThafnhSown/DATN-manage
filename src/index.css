@@ -8,3 +8,12 @@ html {
   margin: 0;
   font-family: 'Quicksand';
 }
+
+.ant-btn {
+  background-color: #006D38;
+  color: #fff;
+}
+
+.ant-btn:hover {
+  background-color: #fff;
+}

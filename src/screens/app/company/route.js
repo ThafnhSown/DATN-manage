@@ -8,6 +8,8 @@ import InfoCompany from "./infoCompany";
 import Report from "./report";
 import Policy from "./policy";
 import Schedule from "./schedule";
+import OfficeForm from "./components/OfficeForm";
+import ModalRoute from "./components/ModalRoute";
 
 export const companyRouteList = [
     {
@@ -23,6 +25,14 @@ export const companyRouteList = [
             {
                 path: '',
                 element: <Location />
+            },
+            {
+                path: 'van-phong',
+                element: <OfficeForm />
+            },
+            {
+                path: 'tuyen',
+                element: <ModalRoute />
             },
             {
                 path: 'phuong-tien',

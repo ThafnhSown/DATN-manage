@@ -1,30 +1,27 @@
 import { useEffect, useState } from 'react' 
 import { Select, Card, Button, Input, Modal, Menu, Row, Form } from 'antd'
-import { PlusOutlined, LoadingOutlined } from '@ant-design/icons'
+import { SaveOutlined, DeleteFilled } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestCreateRoute, requestLoadListRoute, requestDeleteRoute } from "../../../../../redux/slices/routeSlice"
 import { apiAddPointToRoute, apiGetListDistrict, apiGetListProvince, apiGetLocation, apiGetRouteDetail } from "../../../../../api/services"
 import { requestLoadListOffice } from '../../../../../redux/slices/officeSlice'
 
-const AddPointToRoute = () => {
+const AddPointToRoute = ({currentRoute}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector((state) => state.routeState.listRoute)
     const listOffice = useAppSelector((state) => state.officeState.listOffice)
-    const [currentRoute, setCurrentRoute] = useState()
+    // const [currentRoute, setCurrentRoute] = useState()
     const [listProvince, setListProvince] = useState([])
     const [listDistrict, setListDistrict] = useState([])
     const [listPoint, setListPoint] = useState([])
     const [listDataPoint, setListDataPoint] = useState([])
-    const selectOption = listRoute.map(route => ({
-        value: route.id,
-        label: `${route?.startPoint.district} ${route?.startPoint.province} - ${route?.endPoint.district} ${route?.endPoint.province}`
-    }))
+  
     useEffect(() => {
-        handleLoadPoint(31)
+        handleLoadPoint(currentRoute)
         loadProvince()
         handleLoadRoutes()
-    }, [])
+    }, [currentRoute])
     const son = listOffice.map(e => ({
         value: e.id,
         label: e.address
@@ -69,7 +66,8 @@ const AddPointToRoute = () => {
 
     async function handleLoadPoint(id) {
         const res = await apiGetRouteDetail(id)
-        console.log(res)
+        setListPoint([...res.data.data.pointList])
+        setListDataPoint([...res.data.data.pointList])
     }
 
     async function handleAddPoint(listPoint) {
@@ -84,7 +82,6 @@ const AddPointToRoute = () => {
         <>
             <div>
                 <div>
-                <Select defaultValue="Chọn tuyến xe" options={selectOption} style={{width: 500, height:50}} onChange={(value) => setCurrentRoute(value)}/>
                     <div className="flex flex-row mt-6 space-x-4">
                         <div className="w-1/4">
                             <Card>
@@ -114,28 +111,37 @@ const AddPointToRoute = () => {
                                             return (
                                             <>
                                             <div className='flex-row space-x-4 grid grid-cols-12'>
-                                               <b className='col-span-4'>{point.address}</b>
+                                               <b className='col-span-5'>{point.address}</b>
                                                <div className='col-span-5 flex flex-row space-x-2'>
-                                                <Input onChange={(e) => abc.description=e.target.value} style={{width: 200}}/>
+                                                <Input onChange={(e) => abc.description=e.target.value} placeholder={point.description}/>
                                                 <p>hoặc</p>
-                                                <Select options={son} defaultValue="Văn phòng" onChange={(value) => abc.officeId = value} />
+                                                <Select defaultValue={point.officeId ? point.officeId : 'Văn phòng'} onChange={(value) => abc.officeId = value} >
+                                                    {
+                                                        son.map(({label, value}) => (
+                                                            <Select.Option key={value} value={value}>
+                                                                {label}
+                                                            </Select.Option>
+                                                        ))
+                                                    }
+                                                </Select>
                                                 </div>
                                                 <div className='col-span-2 space-x-1'>
                                                 <Button onClick={() => {
-                                                    let isOffice
-                                                    if(!son.officeId) isOffice = false;
+                                                    let isOffice = false
+                                                    if(abc.officeId) isOffice = false;
                                                     const vn = {...point, ...abc, sequence: index+1, isOffice: isOffice}
                                                     setListDataPoint([...listDataPoint, vn])
                                                 }}
-                                                className='bg-green-700 text-white hover:bg-white'
-                                                >Lưu</Button>
+                                                icon={<SaveOutlined />}
+                                                className='save-btn'
+                                                />
                                                 <Button onClick={() => {
                                                     listPoint.splice(index, 1)
                                                     setListPoint([...listPoint])
-                                                    console.log(listPoint)
                                                 }}
-                                                className='bg-red-600 text-white hover:bg-white hover:text-red-600'
-                                                >Xóa</Button>
+                                                className='del-btn'
+                                                icon={<DeleteFilled />}
+                                                />
                                                 </div>                                       
                                             </div>
                                                
@@ -145,7 +151,7 @@ const AddPointToRoute = () => {
                                     }
                                 </div> : null
                             }
-                            <Button onClick={() => handleAddPoint(listDataPoint)} className='mt-10'>Tạo lộ trình</Button>
+                            <Button onClick={() => handleAddPoint(listDataPoint)} className='mt-10 text-white'>Tạo lộ trình</Button>
                             </Card>   
                         </div>
                     </div>

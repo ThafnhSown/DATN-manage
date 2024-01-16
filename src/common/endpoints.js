@@ -21,4 +21,12 @@ export default class EndPoint {
     static GET_ROUTE_DETAIL = "/company/get-coach-route-detail"
     static CREATE_OFFICE = "/company/create-company-office"
     static LIST_OFFICE = "/company/get-company-office-list"
+    static DEL_OFFICE ="/company/delete-company-office"
+    static CREATE_COACH = "/company/create-coach"
+    static CREATE_SCHEDULE = "/company/create-coach-schedule"
+    static LIST_SCHEDULE = "/company/get-coach-schedule-list"
+    static CREATE_SECTION = "/company/create-coach-schedule-section"
+    static LIST_SECTION = "/company/get-coach-schedule-section-list"
+    static CREATE_STAFF = "/company/create-employee"
+    static LIST_STAFF = "/company/get-employee-list"
 }

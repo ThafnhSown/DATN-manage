@@ -4,7 +4,7 @@ import { LoadingOutlined, CameraFilled } from '@ant-design/icons';
 import axios from 'axios';
 import './style.css'
 
-const ImgUpload = ({ onImageUpload, imageUrl, setImageUrl }) => {
+const ImgUpload = ({ onImageUpload, imageUrl, setImageUrl, isAvatar }) => {
   const [loading, setLoading] = useState(false)
     const beforeUpload = (file) => {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -49,15 +49,26 @@ const ImgUpload = ({ onImageUpload, imageUrl, setImageUrl }) => {
 
     const uploadButton = (
       <Button
-        className='upload-btn w-80 h-40'
+        className='upload-btn w-40 h-40 border-dashed border-2'
         >
         {loading ? <LoadingOutlined /> : <CameraFilled />}
-        <div className='text-md font-semibold text-xl'>
+        <div className='font-semibold text-sm'>
           Upload Image
         </div>
       </Button>
     );
-  
+    
+    const uploadAvatar = (
+      <Button
+        className='rounded-full w-40 h-40'
+      >
+        {loading ? <LoadingOutlined /> : <CameraFilled />}
+          <div className='text-md font-semibold'>
+            Upload Image
+          </div>
+      </Button>
+    )
+
     return (
       <Upload
         beforeUpload={beforeUpload}
@@ -65,13 +76,13 @@ const ImgUpload = ({ onImageUpload, imageUrl, setImageUrl }) => {
         showUploadList={false}
       >
        {imageUrl ? (
-                    <div className='w-80'>
+                    <div>
                       <img
                         src={imageUrl}
                         alt="avatar"
                     />
                     </div>
-                ) : ( uploadButton )}
+                ) : ( isAvatar ? uploadAvatar : uploadButton )}
              
       </Upload>
     );

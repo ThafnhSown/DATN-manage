@@ -21,18 +21,13 @@ const AvatarDropdown = () => {
    
 
     return (
-        <>
-            <div>
-                <Dropdown
-                menu={{items}}
-                >
-                    <a onClick={(e) => e.preventDefault()}>
-                        <Avatar icon={<UserOutlined />} />
-                    </a>
-                </Dropdown>
-                
-            </div>
-        </>
+        <Dropdown
+        menu={{items}}
+        >
+            <a onClick={(e) => e.preventDefault()}>
+                <Avatar icon={<UserOutlined />} />
+            </a>
+        </Dropdown>
     )
 }
 

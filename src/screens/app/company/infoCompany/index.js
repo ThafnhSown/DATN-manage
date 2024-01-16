@@ -1,9 +1,10 @@
 import { Card, Form, Input, Button, Typography, Row, Col } from 'antd'
 import { EditFilled } from '@ant-design/icons'
-import { UploadImage } from '../../../../components/layouts/components/UpLoadImage'
+import ImgUpload from '../../../../components/layouts/components/ImgUpload'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hook'
 import { apiGetCompanyInfo } from '../../../../api/services'
+import './style.css'
 
 const { Title } = Typography
 
@@ -14,34 +15,32 @@ const InfoCompany = () => {
     const loadCompanyInfo = async () => {
         const res = await apiGetCompanyInfo()
         form.setFieldsValue({...res.data.data}) 
-
     }
     
     useEffect(() => {
         loadCompanyInfo()
     }, [])
-    
 
     return (
         <div className='px-24'>
-            <Card title={<Title level={3}>Thông tin hãng xe</Title>} extra={<Button className="w-36 h-14 bg-green-700 text-white text-base font-medium border rounded-xl mt-4" onClick={() => {setChange(false)}} icon={<EditFilled /> }>Chỉnh sửa</Button>}>
+            <Card title={<Title level={4}>Thông tin hãng xe</Title>} extra={<Button className="text-white hover:bg-white text-base font-medium border rounded-md" onClick={() => {setChange(false)}} icon={<EditFilled /> }>Chỉnh sửa</Button>}>
                 {<div>
                 <Form form={form}>
-                    <Title level={4}>Logo hãng xe</Title>
+                    <Title level={5}>Logo hãng xe</Title>
                 
                     <Row>
-                        <Col span={8}>
+                        <Col span={9}>
 
                         </Col>
-                        <Col span={8}>
+                        <Col span={7}>
                             <Form.Item>
-                                <UploadImage />
+                                <ImgUpload isAvatar={true}/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={24}>
-                            <Title level={4}>Tên hãng xe</Title>
+                            <Title level={5}>Tên hãng xe</Title>
                             <Form.Item name="name">
                                 <Input disabled={change}/>
                             </Form.Item>
@@ -50,14 +49,14 @@ const InfoCompany = () => {
                     </Row>
                     <Row className='space-x-4'>
                         <Col span={10}>
-                            <Title level={4}>Số hotline đặt vé</Title>
+                            <Title level={5}>Số hotline đặt vé</Title>
                             <Form.Item name="phoneNumber">
                                 <Input disabled={change}/>
                             </Form.Item>
                         </Col>
 
                         <Col span={10}>
-                            <Title level={4}>Email đặt vé</Title>
+                            <Title level={5}>Email đặt vé</Title>
                             <Form.Item name="email">
                                 <Input disabled={change}/>
                             </Form.Item>
@@ -65,13 +64,13 @@ const InfoCompany = () => {
                     </Row>
                     <Row>
                         <Col span={24}>
-                            <Title level={4}>Mật khẩu</Title>
+                            <Title level={5}>Mật khẩu</Title>
                             <Form.Item name="password">
                                 <Input.Password disabled={change}/>
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Button htmlType='submit' className="w-30 h-10 bg-green-700 text-white font-extrabold border rounded-xl mt-4">Lưu</Button>
+                    <Button htmlType='submit' className="bg-green-700 text-white hover:bg-white border rounded-md">Lưu</Button>
                 </Form>
                 </div>
                 }

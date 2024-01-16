@@ -11,16 +11,18 @@ const PolicyForm = () => {
         <>
             <div>
                 <div>
-                    <Card title={<Title level={3}>Chính sách</Title>} extra={<Button className="w-40 h-14 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-xl mt-4" icon={<PlusOutlined />} onClick={() => {setModalShow(!modalShow)}}>Tạo chính sách</Button>}>   
+                    <Card title={<Title level={4}>Chính sách</Title>} extra={<Button className="w-40 h-10 text-white font-medium border rounded-xl" icon={<PlusOutlined />} onClick={() => {setModalShow(!modalShow)}}>Tạo chính sách</Button>}>   
                         {modalShow && <div>
                                 <Form
                                 title='Tạo chính sách'
                                 >
+                                    <Title level={4}>Tạo chính sách</Title>
+
                                     <Title level={5}>Tên chính sách</Title>
                                     <Row>
-                                        <Col span={12}>
+                                        <Col>
                                         <Form.Item>
-                                            <Input placeholder='Nhập tên chính sách' style={{height: 50}}/>
+                                            <Input placeholder='Nhập tên chính sách' style={{height: 50, width: 900}}/>
                                         </Form.Item>
                                         </Col>
                                         
@@ -28,9 +30,9 @@ const PolicyForm = () => {
 
                                     <Title level={5}>Nội dung</Title>
                                     <Row>
-                                        <Col span={12}>
+                                        <Col>
                                         <Form.Item>
-                                            <TextArea placeholder='Nhập nội dung' style={{height: 100}}/>
+                                            <TextArea placeholder='Nhập nội dung' style={{height: 100, width: 900}}/>
                                         </Form.Item>
                                         </Col>
                                        

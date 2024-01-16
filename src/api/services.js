@@ -43,7 +43,19 @@ export const apiGetLocation = async (p) => {
     return ApiConfig(`/global/get-location?locationId=${p}`, undefined, "GET")
 }
 
+export const apiGetCoaches = async () => {
+    return ApiConfig("/global/get-coaches", undefined, "GET")
+}
+
 //manage
+
+export const apiCreateStaff = async (props) => {
+    return ApiAdminConfig(EndPoint.CREATE_STAFF, props)
+}
+
+export const apiGetStaff = async (id) => {
+    return ApiAdminConfig(`${EndPoint.LIST_STAFF}?companyId=${id}`, undefined, "GET")
+}
 
 export const apiUpdateCompany = async (props) => {
     return ApiAdminConfig(EndPoint.UPDATE_COMPANY, props)
@@ -66,7 +78,7 @@ export const apiAddPointToRoute = async(props) => {
 }
 
 export const apiGetRouteDetail = async (id) => {
-    return ApiAdminConfig(`${EndPoint.GET_ROUTE_DETAIL}?coachRouteId=${id}`)
+    return ApiAdminConfig(`${EndPoint.GET_ROUTE_DETAIL}?coachRouteId=${id}`, undefined, "GET")
 }
 
 export const apiDeleteRoute = async (props) => {
@@ -79,4 +91,28 @@ export const apiCreateOffice = async(props) => {
 
 export const apiListOffice = async (companyId) => {
     return ApiAdminConfig(`${EndPoint.LIST_OFFICE}?companyId=${companyId}`, undefined, "GET")
+}
+
+export const apiDeleteOffice = async(props) => {
+    return ApiAdminConfig(EndPoint.DEL_OFFICE, props)
+}
+
+export const apiCreateCoach = async(props) => {
+    return ApiAdminConfig(EndPoint.CREATE_COACH, props)
+}
+
+export const apiCreateSchedule = async(props) => {
+    return ApiAdminConfig(EndPoint.CREATE_SCHEDULE, props)
+}
+
+export const apiListSchedule = async(id) => {
+    return ApiAdminConfig(`${EndPoint.LIST_SCHEDULE}?coachRouteId=${id}`, undefined, "GET")
+}
+
+export const apiCreateSection = async (props) => {
+    return ApiAdminConfig(EndPoint.CREATE_SECTION, props)
+}
+
+export const apiGetSection = async (id) => {
+    return ApiAdminConfig(`${EndPoint.LIST_SECTION}?coachScheduleId=${id}`)
 }

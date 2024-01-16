@@ -1,8 +1,8 @@
-import { UploadImage } from '../../../../../components/layouts/components/UpLoadImage'
 import { Card, Typography, Col, Row } from "antd"
 import { PhoneFilled, EditFilled, DeleteFilled, EnvironmentFilled, PushpinFilled } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-import { apiGetLocation } from '../../../../../api/services'
+import { apiDeleteOffice, apiGetLocation } from '../../../../../api/services'
+import ImgUpload from '../../../../../components/layouts/components/ImgUpload'
 const { Title } = Typography
 const OfficeCard = ({office}) => {
     const [configAddress, setConfigAddress] = useState()
@@ -11,6 +11,11 @@ const OfficeCard = ({office}) => {
             setConfigAddress(`${res.data.data.district} - ${res.data.data.province}`)
         })
     }, [])
+
+    const handleDelOffice = async (id) => {
+        const res = await apiDeleteOffice({id: id})
+        console.log(res)
+    }
     return (
         <>
             <div>
@@ -18,11 +23,13 @@ const OfficeCard = ({office}) => {
                 title={<Title level={4}>{office.address}</Title>} 
                 extra={<Row className='space-x-3'>
                     <div><EditFilled /> Sửa</div>
-                    <div><DeleteFilled /> Xóa</div>
+                    <div onClick={() => handleDelOffice(office.id)}><DeleteFilled /> Xóa</div>
                 </Row>}>
                     <Row>
                     <Col span={6}>
-                        <UploadImage />
+                        {
+                            office.logoLink ? <img src={office.logoLink} className="w-40 h-auto"/> : <ImgUpload />
+                        }
                     </Col>
                     <Col span={2}/>
                     <Col span={9} className='space-y-1'>

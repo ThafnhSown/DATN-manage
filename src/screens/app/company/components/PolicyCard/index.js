@@ -1,7 +1,7 @@
 import { Card, Row, Typography, Col} from 'antd'
 import { useState } from 'react'
 import { DownOutlined, EditFilled, DeleteFilled } from '@ant-design/icons';
-import NumCalculator from 'antd/es/theme/util/calc/NumCalculator';
+
 const {Title} = Typography
 
 const PolicyCard = () => {
@@ -21,7 +21,9 @@ const PolicyCard = () => {
                         </Col>
                         <Col span={18}/>
                         <Col span={3}>
-                            {status ? 'Chi tiết' : 'Thu gọn'} <DownOutlined onClick={() => setStatus(!status)}/>
+                            <div>
+                                {status ? 'Thu gọn' : 'Chi tiết'} <DownOutlined onClick={() => setStatus(!status)}/>
+                            </div>
                         </Col>
                        
                     </Row>

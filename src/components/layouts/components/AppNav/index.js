@@ -15,7 +15,7 @@ const AppNav = () => {
             <a onClick={() => {
               setStatus("operating")
               navigate("/")
-              }} className="text-xl font-quicksand">
+              }} className="text-sm font-quicksand">
               Điều hành
             </a>
           ),
@@ -26,7 +26,7 @@ const AppNav = () => {
             <a onClick={() => {
               setStatus("manage")
               navigate("/thong-tin")
-              }} className="text-xl font-quicksand">
+              }} className="text-sm font-quicksand">
               Quản lý
             </a>
           )
@@ -34,8 +34,8 @@ const AppNav = () => {
       ];
     return (
         <div>
-            <div className='flex flex-row items-center justify-center ml-4'>
-                <div className="text-white font-extrabold text-xl">
+            <div className='flex-row items-center ml-4 grid grid-cols-12'>
+                <div className="col-span-2 text-white font-extrabold text-base">
                     <Dropdown menu={{ items }}>
                         <a onClick={(e) => e.preventDefault()}>
                             <Space>
@@ -45,38 +45,31 @@ const AppNav = () => {
                         </a>
                     </Dropdown>
                 </div>
-                <div>
+                <div className="col-span-9">
                     {
                       status === 'operating' ? <div>
-                          <Row className="bg-white mx-4 space-x-16 rounded-lg font-medium">
-                            <Col span={1}/>
-                            <Col span={20} className="space-x-16">
-                              <Link to="/" className="hover:text-green-600 text-xl">Địa điểm</Link>
-                              <Link to="/phuong-tien" className="hover:text-green-600 text-xl">Phương tiện</Link>
-                              <Link to="/chinh-sach" className="hover:text-green-600 text-xl">Chính sách</Link>
-                              <Link to="/lich-xuat-ben" className="hover:text-green-600 text-xl">Lịch xuất bến</Link>
+                          <Row className="bg-white rounded h-9 items-center">
+                            <Col className="space-x-20">
+                              <Link to="/" className="hover:text-green-600 text-base ml-2">Địa điểm</Link>
+                              <Link to="/phuong-tien" className="hover:text-green-600 text-base">Phương tiện</Link>
+                              <Link to="/chinh-sach" className="hover:text-green-600 text-base">Chính sách</Link>
+                              <Link to="/lich-xuat-ben" className="hover:text-green-600 text-base">Lịch xuất bến</Link>
                             </Col>
-
-                            <Col span={2}/>
                           </Row>  
                       </div>
-                      : <Row className="bg-white mx-4 space-x-16 rounded-lg font-bold">
-                          <Col span={1}/>
-                          <Col span={20} className="space-x-16">
-                            <Link to="/nhan-vien" className="hover:text-green-600 text-xl">Nhân viên</Link>
-                            <Link to="/thong-tin" className="hover:text-green-600 text-xl">Thông tin hãng xe</Link>
-                            <Link to="/bao-cao" className="hover:text-green-600 text-xl">Báo cáo</Link>
+                      : <Row className="bg-white rounded h-9 items-center">
+                          <Col className="space-x-20">
+                            <Link to="/nhan-vien" className="hover:text-green-600 text-base ml-20">Nhân viên</Link>
+                            <Link to="/thong-tin" className="hover:text-green-600 text-base">Thông tin hãng xe</Link>
+                            <Link to="/bao-cao" className="hover:text-green-600 text-base">Báo cáo</Link>
                           </Col>
-                          
-                          <Col span={2}/>
                       </Row>
 
                     }
                 </div>
-                <div className="ml-10">
+                <div className="col-span-1 ml-10">
                     <AvatarDropdown />
                 </div>
-                <div className="ml-10"/>
             </div>
         </div>
     )

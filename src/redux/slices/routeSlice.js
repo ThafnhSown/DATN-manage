@@ -3,7 +3,8 @@ import { apiGetListRoute} from "../../api/services";
 
 const initialState = {
     loading: false,
-    listRoute: []
+    listRoute: [],
+    currentRoute: {}
 };
 
 export const requestLoadListRoute = createAsyncThunk("/company/get-coach-route-list", async(companyId) => {
@@ -15,7 +16,9 @@ export const routeSlice = createSlice({
     name: "route",
     initialState,
     reducers: {
-        
+        setCurrentRoute: (state, action) => {
+            state.currentRoute = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(requestLoadListRoute.pending, (state) => {
@@ -27,6 +30,10 @@ export const routeSlice = createSlice({
         })
     }
 });
+
+export const {
+    setCurrentRoute
+} = routeSlice.actions
 
 export const routeState = (state) => state.routeState;
 

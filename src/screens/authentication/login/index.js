@@ -34,13 +34,13 @@ export const LoginScreen = () => {
 
     return (
       <div className="flex">
-        <div className="w-1/2">
-          <img src={background} alt="background"/>
+        <div className="w-1/2 h-screen flex items-center justify-center">
+          <img src={background} alt="background" className="max-h-full max-w-full"/>
         </div>
 
         <div className="w-1/2 p-4 flex flex-col items-center justify-center h-screen">
-          <div className="max-h-100">
-          <img src={logo} alt="logo" className="mb-4 ml-16"/>
+          <div>
+          <img src={logo} alt="logo" height='100vh'/>
           <b className="text-2xl">Đăng nhập</b>
           <Form 
             initialValues={{ remember: true }}

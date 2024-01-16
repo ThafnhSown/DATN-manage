@@ -1,15 +1,15 @@
 
-import { apiCreateCompany, apiCreateOffice, apiGetListDistrict, apiGetListProvince } from "../../../../../api/services"
+import { apiCreateOffice, apiGetListDistrict, apiGetListProvince } from "../../../../../api/services"
 import {
     Form, Input, Col, Row, Card, Typography, Button, Select
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-import { UploadImage } from '../../../../../components/layouts/components/UpLoadImage'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestCreateOffice, requestLoadListOffice } from "../../../../../redux/slices/officeSlice"
-import './style.css'
 import OfficeCard from "../OfficeCard"
+import ImgUpload from "../../../../../components/layouts/components/ImgUpload"
+import './style.css'
 
 const { Title } = Typography
 
@@ -21,10 +21,11 @@ const OfficeForm = () => {
     const [listProvince, setListProvince] = useState([])
     const [listDistrict, setListDistrict] = useState([])
     const [modalShow, setModalShow] = useState(false)
+    const [avatar, setAvatar] = useState()
     
     async function handleCreateOffice() {
         const data = form.getFieldsValue()
-        const payload = {...data, coachCompanyId: companyId}
+        const payload = {...data, coachCompanyId: companyId, picture: avatar}
         const res = await apiCreateOffice(payload)
         if(res.data.error == 0) {
             handleLoadOffice()
@@ -57,6 +58,9 @@ const OfficeForm = () => {
             setListDistrict(listD)
         }  
     }
+    const handlUploadAvatar = (url) => {
+        setAvatar(url)
+    }
     
     useEffect(() => {
         loadProvince()
@@ -67,8 +71,8 @@ const OfficeForm = () => {
         <>
             <div className="space-y-4">
                 <div>
-                    <Card title={<Title level={3}>Danh sách văn phòng</Title>} extra={<Button className="w-40 h-10 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-xl mt-4" icon={<PlusOutlined />} onClick={() => {setModalShow(!modalShow)}}>Tạo văn phòng</Button>}>
-                        {modalShow && <div>
+                    <Card title={<Title level={4}>Danh sách văn phòng</Title>} extra={<Button className="w-40 h-10 text-white font-medium border rounded-xl mt-4" icon={<PlusOutlined />} onClick={() => {setModalShow(!modalShow)}}>Tạo văn phòng</Button>}>
+                        {modalShow && <div className="mt-4">
                                 <Form
                                 form={form}
                                 onFinish={handleCreateOffice}
@@ -89,31 +93,40 @@ const OfficeForm = () => {
                                         </Col>
                                     </Row>
 
-                                    <Title level={5}>Số điện thoại</Title>
+                                    <Title level={5}>Địa chỉ</Title>
                                     <Row>
                                         <Col span={11}>
-                                            <Form.Item name="phoneNumber1">
-                                                <Input placeholder='Nhập số điện thoại' style={{height: 50}}/>
+                                            <Form.Item name="address">
+                                                <Input placeholder='Nhập địa chỉ' style={{height: 50, width: 1000}}/>
+                                            </Form.Item>
+                                        </Col>    
+                                    </Row>
+
+                                    <Title level={5}>Bản đồ</Title>
+                                    <Row>
+                                        <Col span={11}>
+                                            <Form.Item name="mapLink">
+                                                <Input placeholder='Nhập liên kết' style={{height: 50, width: 1000}}/>
                                             </Form.Item>
                                         </Col>    
                                     </Row>
 
                                     <Row>
                                         <Col span={11}>
-                                            <Title level={5}>Địa chỉ</Title>
+                                            <Title level={5}>Số điện thoại</Title>
                                             <Row>
                                                 <Col span={24}>
-                                                    <Form.Item name="address">
-                                                        <Input placeholder='Nhập địa chỉ' style={{height: 50}}/>
+                                                    <Form.Item name="phoneNumber1">
+                                                        <Input placeholder='Nhập số điện thoại' style={{height: 50}}/>
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
 
-                                            <Title level={5}>Bản đồ</Title>
+                                            <Title level={5}>Số điện thoại</Title>
                                             <Row>
                                                 <Col span={24}>
-                                                    <Form.Item name="mapLink">
-                                                        <Input placeholder='Nhập liên kết' style={{height: 50}}/>
+                                                    <Form.Item name="phoneNumber2">
+                                                        <Input placeholder='Nhập số điện thoại' style={{height: 50}}/>
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
@@ -122,11 +135,11 @@ const OfficeForm = () => {
                                         <Col span={11}>
                                             <Form.Item name="picture">
                                                 <Title level={5}>Hình ảnh văn phòng</Title>
-                                                <UploadImage />
+                                                <ImgUpload onImageUpload={handlUploadAvatar} imageUrl={avatar} setImageUrl={setAvatar}/>
                                             </Form.Item>
                                         </Col>
                                     </Row>     
-                                    <Button className="w-30 h-10 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-xl mt-4" htmlType="submit">Xác nhận</Button>
+                                    <Button className="border rounded-xl" htmlType="submit">Xác nhận</Button>
                                 </Form>
                             </div>}
                     </Card>
