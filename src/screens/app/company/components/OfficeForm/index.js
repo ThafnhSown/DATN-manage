@@ -69,7 +69,7 @@ const OfficeForm = () => {
 
     return(
         <>
-            <div className="space-y-4">
+            <div className="space-y-4 mx-16">
                 <div>
                     <Card title={<Title level={4}>Danh sách văn phòng</Title>} extra={<Button className="w-40 h-10 text-white font-medium border rounded-xl mt-4" icon={<PlusOutlined />} onClick={() => {setModalShow(!modalShow)}}>Tạo văn phòng</Button>}>
                         {modalShow && <div className="mt-4">
