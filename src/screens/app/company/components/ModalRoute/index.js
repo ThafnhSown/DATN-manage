@@ -81,7 +81,7 @@ const ModalRoute = () => {
     }
 
     return (
-        <div>
+        <div className="mx-16">
             <div>
             <Card>
                 <div className="flex flex-row space-x-4 justify-center">
