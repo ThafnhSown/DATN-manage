@@ -1,5 +1,6 @@
+import { apiCreateStaff, apiDelStaff } from "../../../../../api/services";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook";
-import { requestCreateStaff } from "../../../../../redux/slices/staffSlice";
+import { requestLoadStaff } from "../../../../../redux/slices/staffSlice";
 import {
     Col, Modal,
     Input, Form,
@@ -38,10 +39,12 @@ const ModalStaff = (props) => {
     }
     async function handleCreateStaff() {
         const data = form.getFieldsValue()
-        const res = await dispatch(requestCreateStaff({...data, companyId: companyId}))
+        const res = await apiCreateStaff({...data, companyId: companyId})
+        if(!res.error) {
+            dispatch(requestLoadStaff(companyId))
+        }
         setModalShow(false)
     }
-
     // async function handleUpdateCompanyAccount() {
     //     const data = {...form.getFieldsValue(), id: currentCompany.id}
     //     const res = await apiUpdateCompany(data)

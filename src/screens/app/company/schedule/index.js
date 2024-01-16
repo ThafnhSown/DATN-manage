@@ -5,11 +5,13 @@
  import { requestLoadListRoute, setCurrentRoute } from "../../../../redux/slices/routeSlice";
  import { useEffect, useState } from "react";
 import { requestLoadSchedule } from "../../../../redux/slices/scheduleSlice";
+import SubSchedule from "../components/SubSchedule";
  const { Title } = Typography
 
 const Schedule = () => {
     const dispatch = useAppDispatch()
     const [isCreate, setIsCreate] = useState(false)
+    const [mainSchedule, setMainSchedule] = useState([])
     const listSchedule = useAppSelector(state => state.scheduleState.listSchedule)
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector((state) => state.routeState.listRoute)
@@ -32,6 +34,8 @@ const Schedule = () => {
     async function handleLoadSchedule(id) {
         try {
             await dispatch(requestLoadSchedule(id))
+            const tmp = listSchedule.filter(item => item.type == 0)
+            setMainSchedule(tmp)
         } catch(err) {
             console.log(err)
         }
@@ -42,7 +46,8 @@ const Schedule = () => {
         label: `${route?.startPoint.district} ${route?.startPoint.province} - ${route?.endPoint.district} ${route?.endPoint.province}`
     }))
     return (
-        <Card>
+        <div className="mx-16">
+            <Card>
             <Row>
                 <Title level={3}>Lịch chính</Title>
             </Row>
@@ -61,12 +66,15 @@ const Schedule = () => {
             {
                listSchedule ? <div>
                 {
-                    listSchedule.map((sh, index) => <ScheduleCard schedule={sh} index={index}/>)
+                    listSchedule.filter(item => item.type == 0).map((sh, index) => <ScheduleCard schedule={sh} index={index}/>)
                 }
                </div> : null
             }
             <Button style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} icon={<PlusCircleOutlined />} onClick={() => setIsCreate(true)}>Thêm giờ xuất bến</Button>
         </Card>
+        <Divider />
+        <SubSchedule />
+        </div>
     )
 }
 

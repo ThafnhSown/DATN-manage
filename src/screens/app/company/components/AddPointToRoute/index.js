@@ -115,7 +115,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                                <div className='col-span-5 flex flex-row space-x-2'>
                                                 <Input onChange={(e) => abc.description=e.target.value} placeholder={point.description}/>
                                                 <p>hoặc</p>
-                                                <Select defaultValue={point.officeId ? point.officeId : 'Văn phòng'} onChange={(value) => abc.officeId = value} >
+                                                <Select placeholder={point.isOffice ? point.office.address : 'Văn phòng'} onChange={(value) => abc.officeId = value} >
                                                     {
                                                         son.map(({label, value}) => (
                                                             <Select.Option key={value} value={value}>
@@ -127,10 +127,11 @@ const AddPointToRoute = ({currentRoute}) => {
                                                 </div>
                                                 <div className='col-span-2 space-x-1'>
                                                 <Button onClick={() => {
-                                                    let isOffice = false
-                                                    if(abc.officeId) isOffice = false;
+                                                    let isOffice = true
+                                                    if(!abc.officeId) isOffice = false;
                                                     const vn = {...point, ...abc, sequence: index+1, isOffice: isOffice}
-                                                    setListDataPoint([...listDataPoint, vn])
+                                                    console.log(vn)
+                                                    // setListDataPoint([...listDataPoint, vn])
                                                 }}
                                                 icon={<SaveOutlined />}
                                                 className='save-btn'

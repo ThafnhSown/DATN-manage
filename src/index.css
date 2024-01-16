@@ -17,3 +17,7 @@ html {
 .ant-btn:hover {
   background-color: #fff;
 }
+.pause-btn {
+  color: #fff;
+  background-color: #2D80E9;
+}

@@ -57,6 +57,10 @@ export const apiGetStaff = async (id) => {
     return ApiAdminConfig(`${EndPoint.LIST_STAFF}?companyId=${id}`, undefined, "GET")
 }
 
+export const apiDelStaff = async (props) => {
+    return ApiAdminConfig(EndPoint.DEL_STAFF, props)
+}
+
 export const apiUpdateCompany = async (props) => {
     return ApiAdminConfig(EndPoint.UPDATE_COMPANY, props)
 }
@@ -114,5 +118,5 @@ export const apiCreateSection = async (props) => {
 }
 
 export const apiGetSection = async (id) => {
-    return ApiAdminConfig(`${EndPoint.LIST_SECTION}?coachScheduleId=${id}`)
+    return ApiAdminConfig(`${EndPoint.LIST_SECTION}?coachScheduleId=${id}`, undefined, "GET")
 }
