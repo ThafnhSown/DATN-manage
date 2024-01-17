@@ -56,16 +56,16 @@ const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
                 >
                 <Row className='space-x-4'>
                     <Form.Item name="departureTime">
-                        <Input suffix={<ClockCircleOutlined />} style={{width:100}}></Input>
+                        <Input suffix={<ClockCircleOutlined />} style={{width:80}}></Input>
                     </Form.Item>
                    <Form.Item name="coachTypeId">
-                        <Select defaultValue="Chọn loại xe" style={{width:300}} options={options}>
+                        <Select defaultValue="Chọn loại xe" style={{width:290}} options={options}>
 
                         </Select>
                    </Form.Item>
                     
                     <Form.Item>
-                        <Select defaultValue="Chọn lộ trình" style={{width:300}}>
+                        <Select defaultValue="Chọn lộ trình" style={{width:290}}>
 
                         </Select>
                     </Form.Item>
