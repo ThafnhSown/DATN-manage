@@ -35,13 +35,13 @@ const Section = ({section, index}) => {
             <Row className='space-x-4'>
             <Typography.Title level={5}>{(index+1) ? (index < 9 ? `Chặng 0${index+1}` : `Chặng ${index+1}`) : null}</Typography.Title>
             <Form.Item name="departureTime">
-                <Input suffix={<ClockCircleOutlined />} style={{width:100}}></Input>
+                <Input suffix={<ClockCircleOutlined />} style={{width:80}}></Input>
             </Form.Item>
             <Form.Item name="pickUpPointId">
-                <Select options={listPoint} style={{width: 258}}></Select>
+                <Select options={listPoint} style={{width: 249}}></Select>
             </Form.Item>
             <Form.Item name="dropOffPointId">
-                <Select options={listPoint} style={{width: 258}}></Select>
+                <Select options={listPoint} style={{width: 249}}></Select>
             </Form.Item>
             <Form.Item name="price">
                 <Input suffix="VND" style={{width:200}}></Input>
