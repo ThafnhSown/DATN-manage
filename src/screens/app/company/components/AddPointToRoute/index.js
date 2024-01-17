@@ -130,8 +130,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                                     let isOffice = true
                                                     if(!abc.officeId) isOffice = false;
                                                     const vn = {...point, ...abc, sequence: index+1, isOffice: isOffice}
-                                                    console.log(vn)
-                                                    // setListDataPoint([...listDataPoint, vn])
+                                                    setListDataPoint([...listDataPoint, vn])
                                                 }}
                                                 icon={<SaveOutlined />}
                                                 className='save-btn'
