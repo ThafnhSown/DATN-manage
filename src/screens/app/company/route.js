@@ -10,6 +10,7 @@ import Policy from "./policy";
 import Schedule from "./schedule";
 import OfficeForm from "./components/OfficeForm";
 import ModalRoute from "./components/ModalRoute";
+import TravelPath from "./travelPath";
 
 export const companyRouteList = [
     {
@@ -33,6 +34,10 @@ export const companyRouteList = [
             {
                 path: 'tuyen',
                 element: <ModalRoute />
+            },
+            {
+                path: 'lo-trinh',
+                element: <TravelPath />
             },
             {
                 path: 'phuong-tien',

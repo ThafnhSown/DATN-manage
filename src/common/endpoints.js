@@ -30,4 +30,6 @@ export default class EndPoint {
     static CREATE_STAFF = "/company/create-employee"
     static LIST_STAFF = "/company/get-employee-list"
     static DEL_STAFF = "/company/delete-employee"
+    static CREATE_TP = "/company/create-travel-path"
+    static GET_TP = '/company/get-travel-path-list'
 }

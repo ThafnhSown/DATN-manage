@@ -42,7 +42,7 @@ const InfoCompany = () => {
                         <Col span={24}>
                             <Title level={5}>Tên hãng xe</Title>
                             <Form.Item name="name">
-                                <Input disabled={change}/>
+                                <Input />
                             </Form.Item>
                         </Col>
 
@@ -51,14 +51,14 @@ const InfoCompany = () => {
                         <Col span={10}>
                             <Title level={5}>Số hotline đặt vé</Title>
                             <Form.Item name="phoneNumber">
-                                <Input disabled={change}/>
+                                <Input />
                             </Form.Item>
                         </Col>
 
                         <Col span={10}>
                             <Title level={5}>Email đặt vé</Title>
                             <Form.Item name="email">
-                                <Input disabled={change}/>
+                                <Input />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -66,7 +66,7 @@ const InfoCompany = () => {
                         <Col span={24}>
                             <Title level={5}>Mật khẩu</Title>
                             <Form.Item name="password">
-                                <Input.Password disabled={change}/>
+                                <Input.Password />
                             </Form.Item>
                         </Col>
                     </Row>

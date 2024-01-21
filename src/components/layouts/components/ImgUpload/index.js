@@ -80,6 +80,7 @@ const ImgUpload = ({ onImageUpload, imageUrl, setImageUrl, isAvatar }) => {
                       <img
                         src={imageUrl}
                         alt="avatar"
+                        className='h-40 w-40'
                     />
                     </div>
                 ) : ( isAvatar ? uploadAvatar : uploadButton )}

@@ -5,13 +5,16 @@ import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import { requestCreateSchedule } from '../../../../../redux/slices/scheduleSlice'
 import Section from '../Section'
-
+import { apiGetTravelPathList } from "../../../../../api/services";
 const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
     const dispatch = useAppDispatch()
+    const companyId = useAppSelector(state => state.authState.userInfo.id)
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
     const [options, setOptions] = useState([])
     const [listSection, setListSection] = useState([])
+    const [listTP, setListTP] = useState([])
     const [form] = Form.useForm()
+
     useEffect(() => {
         handleLoadCoach()
         if(schedule?.id) {
@@ -20,6 +23,7 @@ const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
         if(schedule) {
             form.setFieldsValue({...schedule})
         }
+        handleLoadTP()
     }, [])
 
     async function handleLoadCoach() {
@@ -45,6 +49,15 @@ const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
         const data = form.getFieldsValue()
         await dispatch(requestCreateSchedule({...data, coachRouteId: currentRoute, type:1, startTime: firstDate, endTime: secondDate}))
     }
+
+    async function handleLoadTP() {
+        const res = await apiGetTravelPathList(companyId)
+        const tmp = res.data.data.map(e => ({
+            label: e.detail,
+            value: e.id
+        }))
+        setListTP(tmp)
+    }
     
     return (
         <div >
@@ -64,8 +77,8 @@ const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
                         </Select>
                    </Form.Item>
                     
-                    <Form.Item>
-                        <Select defaultValue="Chọn lộ trình" style={{width:290}}>
+                    <Form.Item name="travelPathId">
+                        <Select defaultValue="Chọn lộ trình" style={{width:290}} options={listTP}>
 
                         </Select>
                     </Form.Item>

@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react' 
-import { Select, Card, Button, Input, Modal, Menu, Row, Form } from 'antd'
-import { SaveOutlined, DeleteFilled } from '@ant-design/icons'
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Select, Card, Button, Input, Modal, Menu, Row, Form, List, Typography, Checkbox } from 'antd'
+import { SaveOutlined, DeleteFilled, ArrowLeftOutlined, SearchOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestCreateRoute, requestLoadListRoute, requestDeleteRoute } from "../../../../../redux/slices/routeSlice"
 import { apiAddPointToRoute, apiGetListDistrict, apiGetListProvince, apiGetLocation, apiGetRouteDetail } from "../../../../../api/services"
 import { requestLoadListOffice } from '../../../../../redux/slices/officeSlice'
+import './style.css'
+const { Title } = Typography
 
 const AddPointToRoute = ({currentRoute}) => {
     const dispatch = useAppDispatch()
@@ -16,9 +19,13 @@ const AddPointToRoute = ({currentRoute}) => {
     const [listDistrict, setListDistrict] = useState([])
     const [listPoint, setListPoint] = useState([])
     const [listDataPoint, setListDataPoint] = useState([])
+    const [showP, setShowP] = useState([])
+    const [showD, setShowD] = useState(false)
   
     useEffect(() => {
-        handleLoadPoint(currentRoute)
+        if(currentRoute) {
+            handleLoadPoint(currentRoute)
+        }
         loadProvince()
         handleLoadRoutes()
     }, [currentRoute])
@@ -33,6 +40,7 @@ const AddPointToRoute = ({currentRoute}) => {
             label: p.province
         }))
         setListProvince(listP)
+        setShowP(listP)
     }
 
     async function loadDistrict(value) {
@@ -52,7 +60,7 @@ const AddPointToRoute = ({currentRoute}) => {
             address: `${res.data.data.district} - ${res.data.data.province}`,
             locationId: value,
         }
-     
+        setShowD(true)
         setListPoint([...listPoint, tmp])
     }
     async function handleLoadRoutes() {
@@ -77,29 +85,78 @@ const AddPointToRoute = ({currentRoute}) => {
         })
         console.log(res)
     }
+    const onSearch = (e) => {
+        const value = e.target.value
+        if(value == '') {
+            setShowP(listProvince)
+        } else {
+            const tmp = listProvince.filter(e => e.label.includes(value))
+            setShowP(tmp)
+        }
+
+    };
 
     return (
         <>
             <div>
                 <div>
                     <div className="flex flex-row mt-6 space-x-4">
-                        <div className="w-1/4">
-                            <Card>
-                                <div className='flex flex-col space-y-2'>
-                                <span>Chọn tỉnh, thành phố:</span>
-                                <Select
-                                 options={listProvince}
-                                 defaultValue='Chọn tỉnh, thành phố'
-                                 onChange={(value) => {
-                                    loadDistrict(value)
-                                 }}
+                        <div className="w-1/4" >
+                            <Card style={{
+                                height: 400,
+                                overflow: 'auto',
+                                padding: '0 16px',
+                                border: '1px solid rgba(140, 140, 140, 0.35)',
+                            }}>
+                                <InfiniteScroll
+                                dataLength={10}>
+                                    {
+                                        !showD ? <div>
+
+                                    <Title level={3}>Tỉnh / Thành</Title>
+                                    <Input
+                                        onChange={onSearch}
+                                        placeholder='Tìm kiếm'
+                                        allowClear
+                                        prefix={<SearchOutlined />}
+                                        
+                                    />
+                                    
+                                    <List
+                                        dataSource={showP}
+                                        renderItem={(item) => (
+                                            <List.Item key={item.value}
+                                                onClick={() => {
+                                                    setShowD(true)
+                                                    loadDistrict(item.value)
+                                                }}
+                                            >
+                                                <div>{item.label}</div>
+                                            </List.Item>
+                                        )}
+                                    />
+                                        </div> : <div>
+                                        <ArrowLeftOutlined onClick={() => setShowD(false)}/>
+                                        <List
+                                    dataSource={listDistrict}
+                                    renderItem={(item) => (
+                                        <List.Item key={item.value}
+                                            onClick={() => {
+                                                handleChooseDistrict(item.value)
+                                                setShowD(false)
+                                            }}
+                                        >
+                                            <div>{item.label}</div>
+                                        </List.Item>
+                                    )}
                                 />
-                                <span>Chọn quận, huyện:</span>
-                                <Select options={listDistrict} defaultValue='Chọn quận, huyện' onChange={(value) => handleChooseDistrict(value)}/>  
-                                </div>
+                                    </div>
+                                    }
+                                    
+                                </InfiniteScroll>
+                            
                             </Card>
-                            
-                            
+                         
                         </div>
                         <div className="w-3/4">
                             <Card>
@@ -107,15 +164,23 @@ const AddPointToRoute = ({currentRoute}) => {
                                 listPoint.length ? <div className='space-y-3'>
                                     {
                                         listPoint.map((point, index) => {
-                                            let abc={"description": null, "officeId": null}
                                             return (
                                             <>
                                             <div className='flex-row space-x-4 grid grid-cols-12'>
-                                               <b className='col-span-5'>{point.address}</b>
-                                               <div className='col-span-5 flex flex-row space-x-2'>
-                                                <Input onChange={(e) => abc.description=e.target.value} placeholder={point.description}/>
+                                                <div className='col-span-6 space-x-2'>
+                                                    <Checkbox />
+                                                    <b>{point.address} :</b>
+                                                </div>
+                                               <div className='col-span-6 flex flex-row space-x-2'>
+                                                <Input onPressEnter={(e) => {
+                                                    const tmp = {...point, sequence: index+1, description: e.target.value, isOffice: false}
+                                                    setListDataPoint([...listDataPoint, tmp])
+                                                    }} placeholder={point.description}/>
                                                 <p>hoặc</p>
-                                                <Select placeholder={point.isOffice ? point.office.address : 'Văn phòng'} onChange={(value) => abc.officeId = value} >
+                                                <Select placeholder={point.isOffice ? point.office.address : 'Văn phòng'} onChange={(value) => {
+                                                    const tmp = {...point, sequence: index+1, officeId: value, isOffice: true}
+                                                    setListDataPoint([...listDataPoint, tmp])
+                                                }} >
                                                     {
                                                         son.map(({label, value}) => (
                                                             <Select.Option key={value} value={value}>
@@ -125,8 +190,8 @@ const AddPointToRoute = ({currentRoute}) => {
                                                     }
                                                 </Select>
                                                 </div>
-                                                <div className='col-span-2 space-x-1'>
-                                                <Button onClick={() => {
+                                                {/* <div className='col-span-2 space-x-1'> */}
+                                                {/* <Button onClick={() => {
                                                     let isOffice = true
                                                     if(!abc.officeId) isOffice = false;
                                                     const vn = {...point, ...abc, sequence: index+1, isOffice: isOffice}
@@ -134,15 +199,15 @@ const AddPointToRoute = ({currentRoute}) => {
                                                 }}
                                                 icon={<SaveOutlined />}
                                                 className='save-btn'
-                                                />
-                                                <Button onClick={() => {
+                                                /> */}
+                                                {/* <Button onClick={() => {
                                                     listPoint.splice(index, 1)
                                                     setListPoint([...listPoint])
                                                 }}
                                                 className='del-btn'
                                                 icon={<DeleteFilled />}
-                                                />
-                                                </div>                                       
+                                                /> */}
+                                                {/* </div>                                        */}
                                             </div>
                                                
                                             </>
@@ -151,7 +216,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                     }
                                 </div> : null
                             }
-                            <Button onClick={() => handleAddPoint(listDataPoint)} className='mt-10 text-white'>Tạo lộ trình</Button>
+                            <Button onClick={() => handleAddPoint(listDataPoint)} className='mt-10 text-white'>Lưu</Button>
                             </Card>   
                         </div>
                     </div>

@@ -9,15 +9,15 @@ import {
 import { useEffect } from "react";
 const roleOptions = [
     {
-        label: "Nhân viên điều hành",
+        label: "Điều hành",
         value: "ROLE_MODERATOR_EMPLOYEE"
     },
     {
-        label: "Nhân viên bán vé",
+        label: "Bán vé",
         value: "ROLE_SELLER_EMPLOYEE" 
     },
     {
-        label: "Nhân viên hàng hóa",
+        label: "Hàng hóa",
         value: "ROLE_GOODS_EMPLOYEE" 
     },
 ]

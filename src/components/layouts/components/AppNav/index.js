@@ -33,7 +33,6 @@ const AppNav = () => {
         }
       ];
     return (
-        <div>
             <div className='flex-row items-center ml-4 grid grid-cols-12'>
                 <div className="col-span-2 text-white font-extrabold text-base">
                     <Dropdown menu={{ items }}>
@@ -50,7 +49,7 @@ const AppNav = () => {
                       status === 'operating' ? <div>
                           <Row className="bg-white rounded h-9 items-center">
                             <Col className="space-x-20">
-                              <Link to="/" className="hover:text-green-600 text-base ml-2">Địa điểm</Link>
+                              <Link to="/" className="hover:text-green-600 text-base ml-2" activeClassName="active-link">Địa điểm</Link>
                               <Link to="/phuong-tien" className="hover:text-green-600 text-base">Phương tiện</Link>
                               <Link to="/chinh-sach" className="hover:text-green-600 text-base">Chính sách</Link>
                               <Link to="/lich-xuat-ben" className="hover:text-green-600 text-base">Lịch xuất bến</Link>
@@ -71,7 +70,6 @@ const AppNav = () => {
                     <AvatarDropdown />
                 </div>
             </div>
-        </div>
     )
 }
 

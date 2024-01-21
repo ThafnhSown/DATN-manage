@@ -10,7 +10,9 @@ const Section = ({section, index}) => {
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
     const [listPoint, setListPoint] = useState([])
     useEffect(() => {
-        handleLoadPoint(currentRoute)
+        if(currentRoute) {
+            handleLoadPoint(currentRoute)
+        }
         if(section) {
             form.setFieldsValue({...section})
         }

@@ -1,12 +1,12 @@
 export const StaffRole = {
         ["ROLE_MODERATOR_EMPLOYEE"]: {
-        label: 'Nhân viên điều hành',
+        label: 'Điều hành',
     
       },
       ["ROLE_SELLER_EMPLOYEE"]: {
-        label: 'Nhân viên bán vé',
+        label: 'Bán vé',
       },
       ["ROLE_GOODS_EMPLOYEE"]: {
-        label: 'Nhân viên hàng hóa',
+        label: 'Hàng hóa',
       }
     }

@@ -1,12 +1,14 @@
 import { apiCreateCoachRoute, apiDeleteRoute, apiGetListDistrict, apiGetListProvince } from "../../../../../api/services"
 import { useEffect, useState, useMemo } from 'react' 
 import { Select, Card, Button, Input, Modal } from 'antd'
-import { SwapOutlined, EditFilled, DeleteFilled } from '@ant-design/icons'
+import { SwapOutlined, EditFilled, DeleteFilled, ArrowLeftOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestLoadListRoute } from "../../../../../redux/slices/routeSlice"
+import { useNavigate } from 'react-router'
 import './style.css'
 
 const ModalRoute = () => {
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector(state => state.routeState.listRoute)
@@ -81,7 +83,11 @@ const ModalRoute = () => {
     }
 
     return (
-        <div className="mx-16">
+        <div className="mx-16 space-y-4">
+            <div className="bg-white boder rounded-xl h-12 items-center flex flex-row space-x-2">
+                <ArrowLeftOutlined onClick={() => navigate("/")}/>
+                <p>Tạo tuyến</p>
+            </div>
             <div>
             <Card>
                 <div className="flex flex-row space-x-4 justify-center">

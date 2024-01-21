@@ -3,17 +3,19 @@ import { apiCreateOffice, apiGetListDistrict, apiGetListProvince } from "../../.
 import {
     Form, Input, Col, Row, Card, Typography, Button, Select
 } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined, ArrowLeftOutlined, EditFilled } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestCreateOffice, requestLoadListOffice } from "../../../../../redux/slices/officeSlice"
 import OfficeCard from "../OfficeCard"
 import ImgUpload from "../../../../../components/layouts/components/ImgUpload"
+import { useNavigate } from 'react-router'
 import './style.css'
 
 const { Title } = Typography
 
 const OfficeForm = () => {
+    const navigate = useNavigate()
     const [form] = Form.useForm()
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
@@ -22,6 +24,7 @@ const OfficeForm = () => {
     const [listDistrict, setListDistrict] = useState([])
     const [modalShow, setModalShow] = useState(false)
     const [avatar, setAvatar] = useState()
+    const [changeName, setChangeName] = useState(false)
     
     async function handleCreateOffice() {
         const data = form.getFieldsValue()
@@ -71,12 +74,30 @@ const OfficeForm = () => {
         <>
             <div className="space-y-4 mx-16">
                 <div>
-                    <Card title={<Title level={4}>Danh sách văn phòng</Title>} extra={<Button className="w-40 h-10 text-white font-medium border rounded-xl mt-4" icon={<PlusOutlined />} onClick={() => {setModalShow(!modalShow)}}>Tạo văn phòng</Button>}>
+                    <Card title={
+                        <div className="flex flex-row space-x-2 items-center">
+                            <ArrowLeftOutlined onClick={() => navigate("/")} className="mb-3"/>
+                            <Title level={4}>Danh sách văn phòng</Title>
+                        </div>
+                        
+                        } 
+                        extra={<Button className="w-40 h-10 text-white font-medium border rounded-xl mt-4" icon={<PlusOutlined />} onClick={() => {setModalShow(!modalShow)}}>Tạo văn phòng</Button>}>
                         {modalShow && <div className="mt-4">
                                 <Form
                                 form={form}
                                 onFinish={handleCreateOffice}
                                 >
+                                    <Row className="space-x-2">
+                                        {
+                                            changeName ? <Form.Item name="name">
+                                                <Input placeholder="Tạo văn phòng"/>
+                                            </Form.Item> :  <Title level={4}>Tên văn phòng</Title>
+                                        }
+                                        <div onClick={() => setChangeName(!changeName)} className="mt-1 text-green-900">
+                                            <EditFilled/> Sửa tên văn phòng
+                                        </div>
+                                       
+                                    </Row>
                                     <Row>
                                         <Col span={11}>
                                             <Title level={5}>Tỉnh/Thành phố</Title>
@@ -146,8 +167,8 @@ const OfficeForm = () => {
                 </div>
                 <div className="space-y-3">
                     {
-                        listOffice.map((office) => (
-                            <OfficeCard office={office}/>
+                        listOffice.map((office, index) => (
+                            <OfficeCard office={office} index={index}/>
                         ))
                     }
                 </div>

@@ -1,3 +1,4 @@
+import authHeader from "../utils/authHeader";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -24,12 +25,16 @@ export const ApiConfig = async (url, payload, _method = "POST") => {
 
 
 export const ApiAdminConfig = async (url, payload, _method = "POST") => {
-    axiosInstance.defaults.headers = {"Authorization" : `Bearer ${token.replace(/"/g, '')}`}
+    const headers = {
+        "Content-Type": "application/json",
+        ...(await authHeader())
+    }
     const method = _method.toLowerCase();
     const config = {
         url,
         method,
         data: payload,
+        headers: headers
     };
    
     return axiosInstance.request(config);

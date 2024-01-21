@@ -39,7 +39,7 @@ const SubSchedule = () => {
    }
 
    return (
-       <Card>
+       <Card className="mt-4">
            <Row>
                <Title level={3}>Lịch phụ</Title>
            </Row>
@@ -60,6 +60,11 @@ const SubSchedule = () => {
               </div> : null
            }
            <Button style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} icon={<PlusCircleOutlined />} onClick={() => setIsCreate(true)}>Thêm giờ xuất bến</Button>
+           <Row className="justify-center">
+                {
+                    isCreate && <Button onClick={() => setIsCreate(false)}>Hoàn thành</Button>
+                }
+            </Row>
        </Card>
    )
 }
