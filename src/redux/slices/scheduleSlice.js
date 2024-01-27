@@ -21,7 +21,10 @@ export const scheduleSlice = createSlice({
     name: "schedule",
     initialState,
     reducers: {
-        
+        addSchedule: (state, action) => {
+           state.listSchedule = [...state.listSchedule, action.payload]
+
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(requestCreateSchedule.pending, (state) => {
@@ -40,6 +43,10 @@ export const scheduleSlice = createSlice({
         })
     }
 });
+
+export const {
+    addSchedule
+} = scheduleSlice.actions
 
 export const scheduleState = (state) => state.scheduleState;
 

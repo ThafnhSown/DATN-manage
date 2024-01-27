@@ -1,4 +1,4 @@
-import ScheduleCard from "../../components/ScheduleCard"
+import ScheduleCard from "../TimeSlotCard"
 import { Card, Button, Typography, Row, DatePicker } from 'antd'
 import { PlusCircleOutlined, ArrowRightOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook";

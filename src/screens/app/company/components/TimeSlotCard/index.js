@@ -1,4 +1,4 @@
-import { Card, Input, Select, Row, Form, Button, Typography } from 'antd'
+import { Card, Input, Select, Row, Form, Button, Typography, TimePicker } from 'antd'
 import { ClockCircleOutlined, PlusCircleOutlined, SaveOutlined } from '@ant-design/icons'
 import { apiCreateSection, apiGetCoaches, apiGetSection } from '../../../../../api/services'
 import { useState, useEffect } from 'react'
@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import { requestCreateSchedule } from '../../../../../redux/slices/scheduleSlice'
 import Section from '../Section'
 import { apiGetTravelPathList } from "../../../../../api/services";
-const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
+const TimeSlotCard = ({schedule, index, firstDate, secondDate, isSub, son, setSon}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -14,6 +14,7 @@ const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
     const [listSection, setListSection] = useState([])
     const [listTP, setListTP] = useState([])
     const [form] = Form.useForm()
+    const [requestList, setRequestList] = useState({})
 
     useEffect(() => {
         handleLoadCoach()
@@ -42,14 +43,8 @@ const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
 
     const handleCreateSchedule = async () => {
         const data = form.getFieldsValue()
-        await dispatch(requestCreateSchedule({...data, coachRouteId: currentRoute, type:0}))
+        await dispatch(requestCreateSchedule({...data, coachRouteId: currentRoute}))
     }    
-
-    const handleCreateSubSchedule = async () => {
-        const data = form.getFieldsValue()
-        await dispatch(requestCreateSchedule({...data, coachRouteId: currentRoute, type:1, startTime: firstDate, endTime: secondDate}))
-    }
-
     async function handleLoadTP() {
         const res = await apiGetTravelPathList(companyId)
         const tmp = res.data.data.map(e => ({
@@ -65,11 +60,11 @@ const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
                 <Typography.Title level={4}>{(index+1) ? (index < 9 ? `0${index+1}` : `${index+1}`) : null}</Typography.Title>
                 <Form
                 form={form}
-                onFinish={isSub ? handleCreateSubSchedule : handleCreateSchedule}
+                onValuesChange={() => setRequestList({...form.getFieldsValue()})}
                 >
                 <Row className='space-x-4'>
                     <Form.Item name="departureTime">
-                        <Input suffix={<ClockCircleOutlined />} style={{width:80}}></Input>
+                        <TimePicker format="HH:mm" placeholder="Nhập giờ"/>
                     </Form.Item>
                    <Form.Item name="coachTypeId">
                         <Select defaultValue="Chọn loại xe" style={{width:290}} options={options}>
@@ -86,29 +81,26 @@ const ScheduleCard = ({schedule, index, firstDate, secondDate, isSub}) => {
                     <Form.Item name="price">
                         <Input suffix="VND" style={{width:200}}></Input>
                     </Form.Item>
-
-                    <Button htmlType='submit' icon={<SaveOutlined />}></Button>
                 </Row>
                 </Form>
                 <div>
                     {
                         listSection.length ? <>{
-                            listSection.map((t, index) => <Section section={t} index={index}/> )
+                            listSection.map((t, index) => <Section section={t} index={index} listSection={listSection} requestList={requestList} setRequestList={setRequestList}/> )
                         }</> : null
                     }
                 </div>
                 {
-                    schedule?.id ? <Row style={{color: '#006D38'}} onClick={() => {
-                        setListSection([...listSection, {coachScheduleId: schedule.id }])
-                        console.log(schedule.id)
-                    }}>
-                    <PlusCircleOutlined />
-                    <p>Thêm chặng</p>
-                </Row> : null
+                    <p onClick={() => {
+                        setListSection([...listSection, {}])
+                    }} style={{color: '#006D38'}}><PlusCircleOutlined />Thêm chặng</p>
                 }
+                <Button
+                    onClick={() => console.log(requestList)}
+                >son</Button>
             </Card>
         </div>
     )
 }
 
-export default ScheduleCard
+export default TimeSlotCard

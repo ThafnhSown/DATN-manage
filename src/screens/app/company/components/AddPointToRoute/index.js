@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react' 
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Select, Card, Button, Input, Modal, Menu, Row, Form, List, Typography, Checkbox } from 'antd'
+import { Select, Card, Button, Input, Modal, Menu, Row, Form, List, Typography, Checkbox, Col } from 'antd'
 import { SaveOutlined, DeleteFilled, ArrowLeftOutlined, SearchOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestCreateRoute, requestLoadListRoute, requestDeleteRoute } from "../../../../../redux/slices/routeSlice"
@@ -21,6 +21,8 @@ const AddPointToRoute = ({currentRoute}) => {
     const [listDataPoint, setListDataPoint] = useState([])
     const [showP, setShowP] = useState([])
     const [showD, setShowD] = useState(false)
+    const [delPoint, setDelPoint] = useState([])
+    const [checked, setChecked] = useState(false)
   
     useEffect(() => {
         if(currentRoute) {
@@ -79,12 +81,24 @@ const AddPointToRoute = ({currentRoute}) => {
     }
 
     async function handleAddPoint(listPoint) {
+        const tmp = listPoint.map((point, index) => ({
+            ...point,
+            sequence: index+1
+        }))
         const res = await apiAddPointToRoute({
             coachRouteId: currentRoute,
-            pointList: listPoint
+            pointList: tmp
         })
         console.log(res)
     }
+
+    async function handleDelPoint(listPoint) {
+        const tmp = listPoint.filter(item => !delPoint.includes(item.address))
+        setListPoint([...tmp])
+        setListDataPoint([...tmp])
+        // console.log(res)
+    }
+
     const onSearch = (e) => {
         const value = e.target.value
         if(value == '') {
@@ -93,8 +107,16 @@ const AddPointToRoute = ({currentRoute}) => {
             const tmp = listProvince.filter(e => e.label.includes(value))
             setShowP(tmp)
         }
-
     };
+
+    const handleChecked = (e, point) => {
+        if (e.target.checked) {
+            setDelPoint([...delPoint, point.address])
+        } else {
+            const tmp = delPoint.filter(item => item != point.address)
+            setDelPoint([...tmp])
+        }
+    }
 
     return (
         <>
@@ -168,17 +190,17 @@ const AddPointToRoute = ({currentRoute}) => {
                                             <>
                                             <div className='flex-row space-x-4 grid grid-cols-12'>
                                                 <div className='col-span-6 space-x-2'>
-                                                    <Checkbox />
+                                                    <Checkbox onChange={e => handleChecked(e, point)} checked={checked}/>
                                                     <b>{point.address} :</b>
                                                 </div>
                                                <div className='col-span-6 flex flex-row space-x-2'>
-                                                <Input onPressEnter={(e) => {
-                                                    const tmp = {...point, sequence: index+1, description: e.target.value, isOffice: false}
+                                                <Input onBlur={(e) => {
+                                                    const tmp = {...point, description: e.target.value, isOffice: false}
                                                     setListDataPoint([...listDataPoint, tmp])
                                                     }} placeholder={point.description}/>
                                                 <p>hoặc</p>
                                                 <Select placeholder={point.isOffice ? point.office.address : 'Văn phòng'} onChange={(value) => {
-                                                    const tmp = {...point, sequence: index+1, officeId: value, isOffice: true}
+                                                    const tmp = {...point, officeId: value, isOffice: true}
                                                     setListDataPoint([...listDataPoint, tmp])
                                                 }} >
                                                     {
@@ -216,7 +238,18 @@ const AddPointToRoute = ({currentRoute}) => {
                                     }
                                 </div> : null
                             }
-                            <Button onClick={() => handleAddPoint(listDataPoint)} className='mt-10 text-white'>Lưu</Button>
+                            <Row grid={12}>
+                                <Col span={4}>
+                                    <p className='mt-10'><Checkbox onChange={() => setChecked(!checked)}/> Chọn tất cả</p>
+                                </Col>
+                                <Col span={16}/>
+                                <Col span={4}>
+                                    <Button onClick={() => handleDelPoint(listDataPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
+                                    <Button onClick={() => handleAddPoint(listDataPoint)} className='mt-10 text-white'>Lưu</Button>
+                                </Col>
+                            </Row>
+                          
+                           
                             </Card>   
                         </div>
                     </div>
@@ -227,3 +260,4 @@ const AddPointToRoute = ({currentRoute}) => {
 }
 
 export default AddPointToRoute
+// chon 1 diem them vao del point, bam xoa thi xoa, khong thi 
