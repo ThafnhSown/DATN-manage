@@ -28,6 +28,9 @@ const OfficeForm = () => {
     
     async function handleCreateOffice() {
         const data = form.getFieldsValue()
+        if(data.name == null) {
+            data.name = 'Văn phòng'
+        }
         const payload = {...data, coachCompanyId: companyId, picture: avatar}
         const res = await apiCreateOffice(payload)
         if(res.data.error == 0) {

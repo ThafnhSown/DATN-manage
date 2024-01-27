@@ -25,15 +25,17 @@ const AddPointToRoute = ({currentRoute}) => {
     const [checked, setChecked] = useState(false)
   
     useEffect(() => {
-        if(currentRoute) {
-            handleLoadPoint(currentRoute)
-        }
         loadProvince()
         handleLoadRoutes()
+    }, [])
+    useEffect(() => {
+        if(currentRoute != undefined) {
+            handleLoadPoint(currentRoute)
+        }
     }, [currentRoute])
     const son = listOffice.map(e => ({
         value: e.id,
-        label: e.address
+        label: e.name
     }))
     async function loadProvince() {
         const res = await apiGetListProvince()
@@ -76,8 +78,11 @@ const AddPointToRoute = ({currentRoute}) => {
 
     async function handleLoadPoint(id) {
         const res = await apiGetRouteDetail(id)
-        setListPoint([...res.data.data.pointList])
-        setListDataPoint([...res.data.data.pointList])
+        if(res.data.data.pointList.length) {
+            setListPoint([...res.data.data.pointList])
+            setListDataPoint([...res.data.data.pointList])
+        }
+        
     }
 
     async function handleAddPoint(listPoint) {
@@ -96,7 +101,6 @@ const AddPointToRoute = ({currentRoute}) => {
         const tmp = listPoint.filter(item => !delPoint.includes(item.address))
         setListPoint([...tmp])
         setListDataPoint([...tmp])
-        // console.log(res)
     }
 
     const onSearch = (e) => {
@@ -199,7 +203,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                                     setListDataPoint([...listDataPoint, tmp])
                                                     }} placeholder={point.description}/>
                                                 <p>hoặc</p>
-                                                <Select placeholder={point.isOffice ? point.office.address : 'Văn phòng'} onChange={(value) => {
+                                                <Select placeholder={point.isOffice ? point.office.name : 'Văn phòng'} onChange={(value) => {
                                                     const tmp = {...point, officeId: value, isOffice: true}
                                                     setListDataPoint([...listDataPoint, tmp])
                                                 }} >
