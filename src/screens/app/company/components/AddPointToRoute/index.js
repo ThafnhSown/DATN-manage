@@ -25,6 +25,7 @@ const AddPointToRoute = ({currentRoute}) => {
     const [checked, setChecked] = useState(false)
   
     useEffect(() => {
+        setDelPoint([])
         loadProvince()
         handleLoadRoutes()
     }, [])
@@ -194,7 +195,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                             <>
                                             <div className='flex-row space-x-4 grid grid-cols-12'>
                                                 <div className='col-span-6 space-x-2'>
-                                                    <Checkbox onChange={e => handleChecked(e, point)} checked={checked}/>
+                                                    <Checkbox onChange={e => handleChecked(e, point)} />
                                                     <b>{point.address} :</b>
                                                 </div>
                                                <div className='col-span-6 flex flex-row space-x-2'>

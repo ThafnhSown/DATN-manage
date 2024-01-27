@@ -28,14 +28,18 @@ const OfficeForm = () => {
     
     async function handleCreateOffice() {
         const data = form.getFieldsValue()
-        if(data.name == null) {
+        if(!data.name) {
             data.name = 'Văn phòng'
         }
-        const payload = {...data, coachCompanyId: companyId, picture: avatar}
-        const res = await apiCreateOffice(payload)
-        if(res.data.error == 0) {
-            handleLoadOffice()
-        }
+        console.log("tset", data)
+        // if(data.name == null) {
+        //     data.name = 'Văn phòng'
+        // }
+        // const payload = {...data, coachCompanyId: companyId, picture: avatar}
+        // const res = await apiCreateOffice(payload)
+        // if(res.data.error == 0) {
+        //     handleLoadOffice()
+        // }
     }
 
     async function handleLoadOffice() {
@@ -91,11 +95,14 @@ const OfficeForm = () => {
                                 onFinish={handleCreateOffice}
                                 >
                                     <Row className="space-x-2">
+                                        <Form.Item name="name">
                                         {
-                                            changeName ? <Form.Item name="name">
+                                            changeName ? 
                                                 <Input placeholder="Tạo văn phòng"/>
-                                            </Form.Item> :  <Title level={4}>Tên văn phòng</Title>
+                                           :  <Title level={4}>Tên văn phòng</Title>
                                         }
+                                        </Form.Item>
+                                        
                                         <div onClick={() => setChangeName(!changeName)} className="mt-1 text-green-900">
                                             <EditFilled/> Sửa tên văn phòng
                                         </div>
