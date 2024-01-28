@@ -8,7 +8,7 @@ const OfficeCard = ({office, index}) => {
     const [configAddress, setConfigAddress] = useState()
     useEffect(() => {
         apiGetLocation(office.location.id).then((res) => {
-            setConfigAddress(`${res.data.data.district} - ${res.data.data.province}`)
+            setConfigAddress(`${res.data.data.district}, ${res.data.data.province}`)
         })
     }, [])
 
@@ -33,7 +33,7 @@ const OfficeCard = ({office, index}) => {
                     </Col>
                     <Col className='space-y-1'>
                         <Row className='text-xl space-x-1'>
-                            <EnvironmentFilled /> <p>{`${office.address}-${configAddress}`}</p>
+                            <EnvironmentFilled /> <p>{`${office.address}, ${configAddress}`}</p>
                         </Row>
                         <Row className='text-xl space-x-1'>
                             <PhoneFilled /> <p>{`${office.phoneNumber1}-${office.phoneNumber2}`}</p>

@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiCreateCompany, apiGetCompanyInfo, apiGetListCompany } from "../../api/services";
+import { apiCreateCompany, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany } from "../../api/services";
 
 const initialState = {
     loading: false,
     currentCompany: {},
-    listCompany: []
+    listCompany: [],
+    listCoach: []
 };
 
 export const requestLoadCompany = createAsyncThunk('admin/get-list-company', async () => {
@@ -20,6 +21,11 @@ export const requestCompanyInfo = createAsyncThunk('/company/get-info', async() 
 export const requestCreateCompany = createAsyncThunk("/admin/create-company-account", async(props) => {
     const res = await apiCreateCompany(props)
     return res.data
+})
+
+export const requestLoadCoach = createAsyncThunk("/company/get-coach-list", async(id) => {
+    const res = await apiGetCoachList(id)
+    return res.data.data
 })
 
 export const companySlice = createSlice({
@@ -48,6 +54,10 @@ export const companySlice = createSlice({
         builder.addCase(requestCompanyInfo.fulfilled, (state, action) => {
             state.loading = false
             state.currentCompany = action.payload
+        })
+        builder.addCase(requestLoadCoach.fulfilled, (state, action) => {
+            state.loading = false;
+            state.listCoach = action.payload
         })
     }
 });

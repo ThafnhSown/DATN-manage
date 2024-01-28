@@ -2,7 +2,7 @@ import { Row, Input, Select, Typography, Form, TimePicker } from 'antd'
 import { useAppSelector } from '../../../../../redux/hook'
 import { useEffect } from 'react'
 
-const Section = ({section, index, listSection, setRequestList, requestList}) => {
+const Section = ({section, index, listSection, setRequestList, requestList, listTimeSlot}) => {
     const [form] = Form.useForm()
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
     const listPoint = useAppSelector(state => state.routeState.currentListPoint)

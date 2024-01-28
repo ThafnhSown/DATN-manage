@@ -3,27 +3,37 @@ import { EditFilled } from '@ant-design/icons'
 import ImgUpload from '../../../../components/layouts/components/ImgUpload'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hook'
-import { apiGetCompanyInfo } from '../../../../api/services'
+import { apiGetCompanyInfo, apiUpdateCompanyInfo } from '../../../../api/services'
 import './style.css'
+import { authState } from '../../../../redux/slices/authSlice'
 
 const { Title } = Typography
 
 const InfoCompany = () => {
     const [form] = Form.useForm()
+    const id = useAppSelector(state => state.authState.userInfo.id)
     const [change, setChange] = useState(true)
-    const [loading, setLoading] = useState(true)
+    const [avatar, setAvatar] = useState()
     const loadCompanyInfo = async () => {
         const res = await apiGetCompanyInfo()
-        form.setFieldsValue({...res.data.data}) 
+        form.setFieldsValue({...res.data.data})
+        setAvatar(res.data.data.logo)
     }
-    
+    const handlUploadAvatar = (url) => {
+        setAvatar(url)
+    }
+    const handleUpdateCompanyInfo = async () => {
+        const data = form.getFieldsValue()
+        const res = await apiUpdateCompanyInfo({...data, logo: avatar, id:id })
+        setChange(!change)
+    }
     useEffect(() => {
         loadCompanyInfo()
     }, [])
 
     return (
         <div className='px-24'>
-            <Card title={<Title level={4}>Thông tin hãng xe</Title>} extra={<Button className="text-white hover:bg-white text-base font-medium border rounded-md" onClick={() => {setChange(false)}} icon={<EditFilled /> }>Chỉnh sửa</Button>}>
+            <Card title={<Title level={4}>Thông tin hãng xe</Title>} extra={<Button className="text-white hover:bg-white text-base font-medium border rounded-md h-8" onClick={() => {change ? handleUpdateCompanyInfo() : setChange(!change)}}>{change ? "Lưu" : <p><EditFilled />Chỉnh sửa</p>}</Button>}>
                 {<div>
                 <Form form={form}>
                     <Title level={5}>Logo hãng xe</Title>
@@ -34,7 +44,7 @@ const InfoCompany = () => {
                         </Col>
                         <Col span={7}>
                             <Form.Item>
-                                <ImgUpload isAvatar={true}/>
+                                <ImgUpload isAvatar={true} onImageUpload={handlUploadAvatar} imageUrl={avatar} setImageUrl={setAvatar}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -50,7 +60,7 @@ const InfoCompany = () => {
                     <Row className='space-x-4'>
                         <Col span={10}>
                             <Title level={5}>Số hotline đặt vé</Title>
-                            <Form.Item name="phoneNumber">
+                            <Form.Item name="hotline">
                                 <Input />
                             </Form.Item>
                         </Col>
@@ -70,7 +80,6 @@ const InfoCompany = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Button htmlType='submit' className="bg-green-700 text-white hover:bg-white border rounded-md">Lưu</Button>
                 </Form>
                 </div>
                 }

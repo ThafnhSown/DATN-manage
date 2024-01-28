@@ -28,18 +28,16 @@ const OfficeForm = () => {
     
     async function handleCreateOffice() {
         const data = form.getFieldsValue()
+        const index = listOffice.length + 1
         if(!data.name) {
-            data.name = 'Văn phòng'
+            data.name = `Văn phòng ${index}`
         }
-        console.log("tset", data)
-        // if(data.name == null) {
-        //     data.name = 'Văn phòng'
-        // }
-        // const payload = {...data, coachCompanyId: companyId, picture: avatar}
-        // const res = await apiCreateOffice(payload)
-        // if(res.data.error == 0) {
-        //     handleLoadOffice()
-        // }
+        console.log(data)
+        const payload = {...data, coachCompanyId: companyId, picture: avatar}
+        const res = await apiCreateOffice(payload)
+        if(res.data.error == 0) {
+            handleLoadOffice()
+        }
     }
 
     async function handleLoadOffice() {
@@ -94,7 +92,7 @@ const OfficeForm = () => {
                                 form={form}
                                 onFinish={handleCreateOffice}
                                 >
-                                    <Row className="space-x-2">
+                                    <Row>
                                         <Form.Item name="name">
                                         {
                                             changeName ? 
@@ -124,7 +122,7 @@ const OfficeForm = () => {
                                         </Col>
                                     </Row>
 
-                                    <Title level={5}>Địa chỉ</Title>
+                                    <Title level={5}>{"Địa chỉ (Số nhà/Tên đường/Xã,phường)"}</Title>
                                     <Row>
                                         <Col span={11}>
                                             <Form.Item name="address">

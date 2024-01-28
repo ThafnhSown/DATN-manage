@@ -117,7 +117,7 @@ const ModalRoute = () => {
                             <div>
                                 <div>{`Tuyến ${index+1}`}</div>
                                 <div className = "space-x-2">
-                                    <Input disabled defaultValue={`${route?.startPoint.district} ${route?.startPoint.province} - ${route?.endPoint.district} ${route?.endPoint.province}`} style={{width: 800}}/>
+                                    <Input value={`${route?.startPoint.district}/${route?.startPoint.province} - ${route?.endPoint.district}/${route?.endPoint.province}`} style={{width: 800}}/>
                                     <Button className="del-btn" onClick={() => handleDeleteRoute(route.id)} icon={<DeleteFilled />}/>
                                 </div>  
                             </div>

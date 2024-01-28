@@ -11,22 +11,20 @@ import SubSchedule from "../components/SubSchedule";
 const Schedule = () => {
     const dispatch = useAppDispatch()
     const [isCreate, setIsCreate] = useState(false)
-    const [subSchedule, setSubSchedule] = useState(false)
+    const [schedule, setSchedule] = useState({})
     const listSchedule = useAppSelector(state => state.scheduleState.listSchedule)
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector((state) => state.routeState.listRoute)
     const currentRoute = useAppSelector((state) => state.routeState.currentRoute)
-    const [son, setSon] = useState([])
+    const [listTimeSlot, setListTimeSlot] = useState([])
 
     useEffect(() => {
-        handleLoadSchedule(null)
         handleLoadRoutes()
         dispatch(setCurrentRoute(null))
+        
     }, [])
     useEffect(() => {
         handleLoadSchedule(currentRoute)
-        // console.log(listSchedule)
-        setSon(listSchedule)
     }, [currentRoute])
     async function handleLoadRoutes() {
         try{
@@ -36,9 +34,15 @@ const Schedule = () => {
         }
     }
     async function handleLoadSchedule(id) {
+        let tmp = []
         try {
-            await dispatch(requestLoadSchedule(id))
-            await dispatch(requestLoadPoint(id))
+            await Promise.all([
+                dispatch(requestLoadSchedule(id)),
+                dispatch(requestLoadPoint(id)),
+                tmp = listSchedule?.filter(item => item.type == 0),
+                setListTimeSlot(tmp?.createTimeslotRequestList ?? []),
+            ])
+            
         } catch(err) {
             console.log(err)
         }
@@ -51,6 +55,7 @@ const Schedule = () => {
     return (
         <div className="mx-16 space-y-4">
             <Card>
+                <Button onClick={() => console.log("s", schedule)}>ly</Button>
             <Row>
                 <Title level={3}>Lịch cố định</Title>
             </Row>
@@ -64,14 +69,10 @@ const Schedule = () => {
 
                 </Select>
             </Row>
-            {
-               listSchedule ? <div>
                 {
-                    listSchedule.filter(item => item.type == 0).map((sh, index) => <TimeSlotCard schedule={sh} index={index} son={son} setSon={setSon}/>)
+                    listTimeSlot?.map((sh, index) => <TimeSlotCard schedule={sh} index={index} listTimeSlot={listTimeSlot} scheduleData={schedule} setScheduleData={setSchedule}/>)
                 }
-               </div> : null
-            }
-            <Button style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} icon={<PlusCircleOutlined />} onClick={() => setSon([...son, {}])}>Thêm giờ xuất bến</Button>
+            <Button style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} icon={<PlusCircleOutlined />} onClick={() => setListTimeSlot([...listTimeSlot, {}])}>Thêm giờ xuất bến</Button>
             <Row className="justify-center">
                 {
                     isCreate &&  <Button onClick={() => setIsCreate(false)}>Hoàn thành</Button>

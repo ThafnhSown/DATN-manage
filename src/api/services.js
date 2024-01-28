@@ -69,6 +69,10 @@ export const apiGetCompanyInfo = async () => {
     return ApiAdminConfig(EndPoint.GET_COMPANY_INFO, undefined, "GET")
 }
 
+export const apiUpdateCompanyInfo = async (props) => {
+    return ApiAdminConfig(EndPoint.UPDATE_COMPANY_INFO, props)
+}
+
 export const apiCreateCoachRoute = async (props) => {
     return ApiAdminConfig(EndPoint.CREATE_ROUTE, props)
 }
@@ -103,6 +107,10 @@ export const apiDeleteOffice = async(props) => {
 
 export const apiCreateCoach = async(props) => {
     return ApiAdminConfig(EndPoint.CREATE_COACH, props)
+}
+
+export const apiGetCoachList = async(id) => {
+    return ApiAdminConfig(`/company/get-coach-list?coachCompanyId=${id}`)
 }
 
 export const apiCreateSchedule = async(props) => {

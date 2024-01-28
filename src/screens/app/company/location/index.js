@@ -26,7 +26,7 @@ const Location = () => {
     }
     const selectOption = listRoute.map(route => ({
         value: route.id,
-        label: `${route?.startPoint.district} ${route?.startPoint.province} - ${route?.endPoint.district} ${route?.endPoint.province}`
+        label: `${route?.startPoint.district}/${route?.startPoint.province} - ${route?.endPoint.district}/${route?.endPoint.province}`
     }))
 
     useEffect(() => {

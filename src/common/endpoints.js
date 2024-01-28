@@ -14,6 +14,7 @@ export default class EndPoint {
 
 //company
     static GET_COMPANY_INFO = "/company/get-info"
+    static UPDATE_COMPANY_INFO = "/company/update-coach-company"
     static CREATE_ROUTE = "/company/create-coach-route"
     static LIST_ROUTE = "/company/get-coach-route-list"
     static DELETE_ROUTE = "/company/delete-coach-route"

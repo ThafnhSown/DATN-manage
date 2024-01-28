@@ -62,7 +62,7 @@ const AddPointToRoute = ({currentRoute}) => {
     async function handleChooseDistrict(value) {
         const res = await apiGetLocation(value)
         const tmp = {
-            address: `${res.data.data.district} - ${res.data.data.province}`,
+            address: `${res.data.data.district}/${res.data.data.province}`,
             locationId: value,
         }
         setShowD(true)
@@ -183,7 +183,6 @@ const AddPointToRoute = ({currentRoute}) => {
                                 </InfiniteScroll>
                             
                             </Card>
-                         
                         </div>
                         <div className="w-3/4">
                             <Card>
@@ -194,17 +193,17 @@ const AddPointToRoute = ({currentRoute}) => {
                                             return (
                                             <>
                                             <div className='flex-row space-x-4 grid grid-cols-12'>
-                                                <div className='col-span-6 space-x-2'>
+                                                <div className='col-span-4 space-x-2'>
                                                     <Checkbox onChange={e => handleChecked(e, point)} />
                                                     <b>{point.address} :</b>
                                                 </div>
-                                               <div className='col-span-6 flex flex-row space-x-2'>
+                                               <div className='col-span-8 flex flex-row space-x-2'>
                                                 <Input onBlur={(e) => {
                                                     const tmp = {...point, description: e.target.value, isOffice: false}
                                                     setListDataPoint([...listDataPoint, tmp])
-                                                    }} placeholder={point.description}/>
+                                                    }} placeholder={point.description} className='w-40'/>
                                                 <p>hoặc</p>
-                                                <Select placeholder={point.isOffice ? point.office.name : 'Văn phòng'} onChange={(value) => {
+                                                <Select className='w-40' placeholder={point.isOffice ? point.office.name : 'Văn phòng'} onChange={(value) => {
                                                     const tmp = {...point, officeId: value, isOffice: true}
                                                     setListDataPoint([...listDataPoint, tmp])
                                                 }} >

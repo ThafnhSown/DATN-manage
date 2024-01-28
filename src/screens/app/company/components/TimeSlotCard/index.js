@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import { requestCreateSchedule } from '../../../../../redux/slices/scheduleSlice'
 import Section from '../Section'
 import { apiGetTravelPathList } from "../../../../../api/services";
-const TimeSlotCard = ({schedule, index, firstDate, secondDate, isSub, son, setSon}) => {
+const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleData}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -60,7 +60,10 @@ const TimeSlotCard = ({schedule, index, firstDate, secondDate, isSub, son, setSo
                 <Typography.Title level={4}>{(index+1) ? (index < 9 ? `0${index+1}` : `${index+1}`) : null}</Typography.Title>
                 <Form
                 form={form}
-                onValuesChange={() => setRequestList({...form.getFieldsValue()})}
+                onValuesChange={() => {
+                    listTimeSlot[index] = ({...form.getFieldsValue()})
+                    setScheduleData({...scheduleData, createTimeslotRequestList: listTimeSlot})
+                }}
                 >
                 <Row className='space-x-4'>
                     <Form.Item name="departureTime">

@@ -10,8 +10,6 @@ axiosInstance.defaults.baseURL = `${ENDPOINT_LOCAL}/${PREFIX_API}`;
 axiosInstance.defaults.timeout = 20000;
 axiosInstance.defaults.headers = { "Content-Type": "application/json" };
 
-const token = Cookies.get("x-access-token")
-
 export const ApiConfig = async (url, payload, _method = "POST") => {
     const method = _method.toLowerCase();
     const config = {
