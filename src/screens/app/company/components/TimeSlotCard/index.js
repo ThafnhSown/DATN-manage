@@ -98,9 +98,9 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleD
                         setListSection([...listSection, {}])
                     }} style={{color: '#006D38'}}><PlusCircleOutlined />Thêm chặng</p>
                 }
-                <Button
+                {/* <Button
                     onClick={() => console.log(requestList)}
-                >son</Button>
+                >son</Button> */}
             </Card>
         </div>
     )

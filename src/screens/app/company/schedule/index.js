@@ -55,7 +55,7 @@ const Schedule = () => {
     return (
         <div className="mx-16 space-y-4">
             <Card>
-                <Button onClick={() => console.log("s", schedule)}>ly</Button>
+                {/* <Button onClick={() => console.log("s", schedule)}>ly</Button> */}
             <Row>
                 <Title level={3}>Lịch cố định</Title>
             </Row>
