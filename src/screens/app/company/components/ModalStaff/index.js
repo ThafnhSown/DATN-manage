@@ -45,11 +45,6 @@ const ModalStaff = (props) => {
         }
         setModalShow(false)
     }
-    // async function handleUpdateCompanyAccount() {
-    //     const data = {...form.getFieldsValue(), id: currentCompany.id}
-    //     const res = await apiUpdateCompany(data)
-    //     setModalShow(false)
-    // }
 
     return (
     <div>

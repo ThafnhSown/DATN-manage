@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiCreateCompany, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany } from "../../api/services";
+import { apiCreateCompany, apiCreatePolicy, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany, apiGetPolicyList } from "../../api/services";
 
 const initialState = {
     loading: false,
     currentCompany: {},
     listCompany: [],
-    listCoach: []
+    listCoach: [],
+    listPolicy: []
 };
 
 export const requestLoadCompany = createAsyncThunk('admin/get-list-company', async () => {
@@ -25,6 +26,16 @@ export const requestCreateCompany = createAsyncThunk("/admin/create-company-acco
 
 export const requestLoadCoach = createAsyncThunk("/company/get-coach-list", async(id) => {
     const res = await apiGetCoachList(id)
+    return res.data.data
+})
+
+export const requestLoadPolicy = createAsyncThunk("/company/get-policy-list", async(id) => {
+    const res = await apiGetPolicyList(id)
+    return res.data.data
+})
+
+export const requestCreatePolicy = createAsyncThunk("/company/create-policy", async (props) => {
+    const res = await apiCreatePolicy(props)
     return res.data.data
 })
 
@@ -58,6 +69,13 @@ export const companySlice = createSlice({
         builder.addCase(requestLoadCoach.fulfilled, (state, action) => {
             state.loading = false;
             state.listCoach = action.payload
+        })
+        builder.addCase(requestLoadPolicy.fulfilled, (state, action) => {
+            state.loading = false
+            state.listPolicy = action.payload
+        })
+        builder.addCase(requestCreatePolicy.fulfilled, (state, action) => {
+            state.listPolicy = [...state.listPolicy, action.payload]
         })
     }
 });

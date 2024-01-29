@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import { requestCreateSchedule } from '../../../../../redux/slices/scheduleSlice'
 import Section from '../Section'
 import { apiGetTravelPathList } from "../../../../../api/services";
-const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleData}) => {
+const TimeSlotCard = ({schedule, index, listTimeSlot}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -15,7 +15,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleD
     const [listTP, setListTP] = useState([])
     const [form] = Form.useForm()
     const [requestList, setRequestList] = useState({})
-
+    const [time, setTime] = useState(0)
     useEffect(() => {
         handleLoadCoach()
         if(schedule?.id) {
@@ -41,10 +41,6 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleD
         setListSection([...res.data.data])
     }
 
-    const handleCreateSchedule = async () => {
-        const data = form.getFieldsValue()
-        await dispatch(requestCreateSchedule({...data, coachRouteId: currentRoute}))
-    }    
     async function handleLoadTP() {
         const res = await apiGetTravelPathList(companyId)
         const tmp = res.data.data.map(e => ({
@@ -53,7 +49,10 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleD
         }))
         setListTP(tmp)
     }
-    
+    const handleChooseTime = (e) => {
+        const data = (e.$H * 3600 + e.$m * 60) * 1000
+        setTime(data)
+    }
     return (
         <div >
             <Card className='bg-neutral-200 my-6'>
@@ -61,13 +60,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleD
                 <Form
                 form={form}
                 onValuesChange={() => {
-                    listTimeSlot[index] = ({...form.getFieldsValue()})
-                    setScheduleData({...scheduleData, createTimeslotRequestList: listTimeSlot})
+                    listTimeSlot[index] = ({...form.getFieldsValue(), departureTime: time})
                 }}
                 >
                 <Row className='space-x-4'>
                     <Form.Item name="departureTime">
-                        <TimePicker format="HH:mm" placeholder="Nhập giờ"/>
+                        <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={handleChooseTime}/>
                     </Form.Item>
                    <Form.Item name="coachTypeId">
                         <Select defaultValue="Chọn loại xe" style={{width:290}} options={options}>
@@ -82,14 +80,14 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleD
                     </Form.Item>
                     
                     <Form.Item name="price">
-                        <Input suffix="VND" style={{width:200}}></Input>
+                        <Input suffix="VND" style={{width:200}} type="number"></Input>
                     </Form.Item>
                 </Row>
                 </Form>
                 <div>
                     {
                         listSection.length ? <>{
-                            listSection.map((t, index) => <Section section={t} index={index} listSection={listSection} requestList={requestList} setRequestList={setRequestList}/> )
+                            listSection.map((t, sectionIndex) => <Section section={t} index={sectionIndex} listSection={listSection} listTimeSlot={listTimeSlot} timeSlotIndex={index}/> )
                         }</> : null
                     }
                 </div>
@@ -98,9 +96,6 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, scheduleData, setScheduleD
                         setListSection([...listSection, {}])
                     }} style={{color: '#006D38'}}><PlusCircleOutlined />Thêm chặng</p>
                 }
-                {/* <Button
-                    onClick={() => console.log(requestList)}
-                >son</Button> */}
             </Card>
         </div>
     )

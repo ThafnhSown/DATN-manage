@@ -32,11 +32,12 @@ const OfficeForm = () => {
         if(!data.name) {
             data.name = `Văn phòng ${index}`
         }
-        console.log(data)
         const payload = {...data, coachCompanyId: companyId, picture: avatar}
         const res = await apiCreateOffice(payload)
         if(res.data.error == 0) {
             handleLoadOffice()
+            setModalShow(false)
+            form.resetFields()
         }
     }
 

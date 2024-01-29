@@ -10,7 +10,6 @@ function AdminHeader() {
   const dispatch = useAppDispatch()
   const handleLogout = () => {
       dispatch(requestLogout())
-      Cookies.remove("x-access-token")
     }
   return (
       <div className='flex-row h-20 grid grid-cols-10'>

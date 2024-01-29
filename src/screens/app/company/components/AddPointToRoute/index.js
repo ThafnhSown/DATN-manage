@@ -30,9 +30,7 @@ const AddPointToRoute = ({currentRoute}) => {
         handleLoadRoutes()
     }, [])
     useEffect(() => {
-        if(currentRoute != undefined) {
-            handleLoadPoint(currentRoute)
-        }
+        handleLoadPoint(currentRoute)
     }, [currentRoute])
     const son = listOffice.map(e => ({
         value: e.id,
@@ -79,11 +77,8 @@ const AddPointToRoute = ({currentRoute}) => {
 
     async function handleLoadPoint(id) {
         const res = await apiGetRouteDetail(id)
-        if(res.data.data.pointList.length) {
-            setListPoint([...res.data.data.pointList])
-            setListDataPoint([...res.data.data.pointList])
-        }
-        
+        setListPoint([...res.data.data.pointList])
+        setListDataPoint([...res.data.data.pointList])
     }
 
     async function handleAddPoint(listPoint) {

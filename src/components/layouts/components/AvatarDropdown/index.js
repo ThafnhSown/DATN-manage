@@ -7,7 +7,6 @@ import Cookies from 'js-cookie'
 const AvatarDropdown = () => {
     const dispatch = useAppDispatch()
     const handleLogout = () => {
-        Cookies.remove("x-access-token")
         dispatch(requestLogout())
     }
     const items = [

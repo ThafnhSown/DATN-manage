@@ -136,3 +136,15 @@ export const apiCreateTravelPath = async (props) => {
 export const apiGetTravelPathList = async (id) => {
     return ApiAdminConfig(`${EndPoint.GET_TP}?companyId=${id}`, undefined, "GET")
 }
+
+export const apiCreatePolicy = async (props) => {
+    return ApiAdminConfig(EndPoint.CREATE_POLICY, props)
+} 
+
+export const apiGetPolicyList = async (id) => {
+    return ApiAdminConfig(`${EndPoint.GET_POLICY}?companyId=${id}`, undefined, "GET")
+}
+
+export const apiDelPolicy = async (props) => {
+    return ApiAdminConfig(EndPoint.DEL_POLICY, props)
+}

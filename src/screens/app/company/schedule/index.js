@@ -6,6 +6,8 @@
  import { useEffect, useState } from "react";
 import { requestLoadSchedule, addSchedule } from "../../../../redux/slices/scheduleSlice";
 import SubSchedule from "../components/SubSchedule";
+import { apiCreateSchedule } from "../../../../api/services";
+import moment from 'moment'
  const { Title } = Typography
 
 const Schedule = () => {
@@ -47,6 +49,20 @@ const Schedule = () => {
             console.log(err)
         }
     }
+    const handleCreateMainSchedule = async (e) => {
+        e.preventDefault()
+        const time = moment().startOf('day').valueOf()
+        const data = {
+            coachRouteId: currentRoute,
+            createTimeslotRequestList: listTimeSlot,
+            date: time,
+            type: 0
+        }
+        const res = await apiCreateSchedule(data)
+        if(res.data.error == 0) {
+            console.alert("Tạo lịch thành công")
+        }
+    }
 
     const selectOption = listRoute.map(route => ({
         value: route.id,
@@ -55,7 +71,6 @@ const Schedule = () => {
     return (
         <div className="mx-16 space-y-4">
             <Card>
-                {/* <Button onClick={() => console.log("s", schedule)}>ly</Button> */}
             <Row>
                 <Title level={3}>Lịch cố định</Title>
             </Row>
@@ -70,15 +85,26 @@ const Schedule = () => {
                 </Select>
             </Row>
                 {
-                    listTimeSlot?.map((sh, index) => <TimeSlotCard schedule={sh} index={index} listTimeSlot={listTimeSlot} scheduleData={schedule} setScheduleData={setSchedule}/>)
+                    listTimeSlot?.map((sh, index) => <TimeSlotCard schedule={sh} index={index} listTimeSlot={listTimeSlot}/>)
                 }
-            <Button style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} icon={<PlusCircleOutlined />} onClick={() => setListTimeSlot([...listTimeSlot, {}])}>Thêm giờ xuất bến</Button>
-            <Row className="justify-center">
-                {
-                    isCreate &&  <Button onClick={() => setIsCreate(false)}>Hoàn thành</Button>
-                }
-            </Row>
+            <Button 
+            style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} 
+            icon={<PlusCircleOutlined />}
+            onClick={() => {
+                setIsCreate(true)
+                setListTimeSlot([...listTimeSlot, {}])
+            }}>
+                    Thêm giờ xuất bến
+            </Button>
+            
             <Divider />
+            <Row className="justify-center">
+            {
+                isCreate && <Button onClick={e => handleCreateMainSchedule(e)}>Hoàn thành</Button>
+            }
+            </Row>
+
+           
             {/* {subSchedule && <SubSchedule />}
             <Row className="justify-center">
                 {
