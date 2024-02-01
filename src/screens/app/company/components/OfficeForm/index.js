@@ -38,6 +38,7 @@ const OfficeForm = () => {
             handleLoadOffice()
             setModalShow(false)
             form.resetFields()
+            setAvatar()
         }
     }
 

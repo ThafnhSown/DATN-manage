@@ -1,8 +1,9 @@
-import { Row, Input, Select, Typography, Form, TimePicker } from 'antd'
+import { Row, Input, Select, Typography, Form, TimePicker, Button } from 'antd'
 import { useAppSelector } from '../../../../../redux/hook'
 import { useEffect, useState } from 'react'
+import { DeleteFilled } from '@ant-design/icons'
 
-const Section = ({section, index, listSection, listTimeSlot, timeSlotIndex}) => {
+const Section = ({section, index, listSection, setListSection, listTimeSlot, timeSlotIndex}) => {
     const [time, setTime] = useState(0)
     const [form] = Form.useForm()
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -36,14 +37,18 @@ const Section = ({section, index, listSection, listTimeSlot, timeSlotIndex}) => 
                 <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={handleChooseTime}/>
             </Form.Item>
             <Form.Item name="pickUpPointId">
-                <Select options={optionsListPoint} style={{width: 249}}></Select>
+                <Select options={optionsListPoint} style={{width: 218}}></Select>
             </Form.Item>
             <Form.Item name="dropOffPointId">
-                <Select options={optionsListPoint} style={{width: 249}}></Select>
+                <Select options={optionsListPoint} style={{width: 218}}></Select>
             </Form.Item>
             <Form.Item name="price">
                 <Input suffix="VND" style={{width:200}} type="number"></Input>
             </Form.Item>
+            <Button className="del-btn" onClick={() => {
+                listSection.splice(index, 1);
+                setListSection([...listSection])
+            }} icon={<DeleteFilled />} />
             </Row>
             </Form>
 

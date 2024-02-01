@@ -14,7 +14,6 @@ const AddPointToRoute = ({currentRoute}) => {
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector((state) => state.routeState.listRoute)
     const listOffice = useAppSelector((state) => state.officeState.listOffice)
-    // const [currentRoute, setCurrentRoute] = useState()
     const [listProvince, setListProvince] = useState([])
     const [listDistrict, setListDistrict] = useState([])
     const [listPoint, setListPoint] = useState([])

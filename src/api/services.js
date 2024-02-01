@@ -129,6 +129,10 @@ export const apiGetSection = async (id) => {
     return ApiAdminConfig(`${EndPoint.LIST_SECTION}?coachScheduleId=${id}`, undefined, "GET")
 }
 
+export const apiGetTimeSlot = async (id) => {
+    return ApiAdminConfig(`${EndPoint.LIST_TIMESLOT}?coachScheduleId=${id}`, undefined, "GET")
+}
+
 export const apiCreateTravelPath = async (props) => {
     return ApiAdminConfig(EndPoint.CREATE_TP, props)
 }

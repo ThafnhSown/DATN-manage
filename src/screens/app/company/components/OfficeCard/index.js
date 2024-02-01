@@ -3,8 +3,12 @@ import { PhoneFilled, EditFilled, DeleteFilled, EnvironmentFilled, PushpinFilled
 import { useEffect, useState } from 'react'
 import { apiDeleteOffice, apiGetLocation } from '../../../../../api/services'
 import ImgUpload from '../../../../../components/layouts/components/ImgUpload'
+import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
+import { requestLoadListOffice } from "../../../../../redux/slices/officeSlice"
 const { Title } = Typography
 const OfficeCard = ({office, index}) => {
+    const dispatch = useAppDispatch()
+    const companyId = useAppSelector(state => state.authState.userInfo.id)
     const [configAddress, setConfigAddress] = useState()
     useEffect(() => {
         apiGetLocation(office.location.id).then((res) => {
@@ -14,7 +18,9 @@ const OfficeCard = ({office, index}) => {
 
     const handleDelOffice = async (id) => {
         const res = await apiDeleteOffice({id: id})
-        console.log(res)
+        if(res.data.error == 0) {
+            await dispatch(requestLoadListOffice(companyId))
+        }
     }
     return (
         <>
@@ -22,8 +28,8 @@ const OfficeCard = ({office, index}) => {
                 <Card 
                 title={<Title level={4}>{office.name ?? `Văn phòng ${index+1}`}</Title>} 
                 extra={<Row className='space-x-3'>
-                    <div><EditFilled /> Sửa</div>
-                    <div onClick={() => handleDelOffice(office.id)}><DeleteFilled /> Xóa</div>
+                    <div className="text-green-700"><EditFilled /> Sửa</div>
+                    <div className="text-red-700" onClick={() => handleDelOffice(office.id)}><DeleteFilled /> Xóa</div>
                 </Row>}>
                     <Row>
                     <Col span={6}>
@@ -36,10 +42,10 @@ const OfficeCard = ({office, index}) => {
                             <EnvironmentFilled /> <p>{`${office.address}, ${configAddress}`}</p>
                         </Row>
                         <Row className='text-xl space-x-1'>
-                            <PhoneFilled /> <p>{`${office.phoneNumber1}-${office.phoneNumber2}`}</p>
+                            <PhoneFilled /> <p>{office.phoneNumber1 && office.phoneNumber2 ? `${office.phoneNumber1}-${office.phoneNumber2}` : `${office.phoneNumber1}`}</p>
                         </Row>
                         <Row className='text-xl space-x-1'>
-                            <PushpinFilled /> <p>{office.mapLink}</p>
+                            <PushpinFilled /> <a>{office.mapLink}</a>
                         </Row>
                     </Col>
                     </Row>

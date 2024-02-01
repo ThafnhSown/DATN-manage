@@ -28,6 +28,7 @@ export default class EndPoint {
     static LIST_SCHEDULE = "/company/get-coach-schedule-list"
     static CREATE_SECTION = "/company/create-coach-schedule-section"
     static LIST_SECTION = "/company/get-coach-schedule-section-list"
+    static LIST_TIMESLOT = "/company/get-timeslot-list"
     static CREATE_STAFF = "/company/create-employee"
     static LIST_STAFF = "/company/get-employee-list"
     static DEL_STAFF = "/company/delete-employee"
