@@ -42,9 +42,9 @@ const Schedule = () => {
             await Promise.all([
                 res = await apiListSchedule(id),
                 setListSchedule(res.data.data),
-                res.data.data.map(async (mc) => {
-                    ts = await apiGetTimeSlot(mc.id)
-                })
+                // res.data.data.map(async (mc) => {
+                //     ts = await apiGetTimeSlot(mc.id)
+                // })
             ])
         } catch(err) {
             console.log(err)
@@ -64,6 +64,8 @@ const Schedule = () => {
         }
         const res = await apiCreateSchedule(data)
         if(res.data.error == 0) {
+            setListTimeSlot([])
+            handleChooseRoute(currentRoute)
         }
     }
 
