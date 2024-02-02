@@ -42,7 +42,7 @@ const OfficeCard = ({office, index}) => {
                             <EnvironmentFilled /> <p>{`${office.address}, ${configAddress}`}</p>
                         </Row>
                         <Row className='text-xl space-x-1'>
-                            <PhoneFilled /> <p>{office.phoneNumber1 && office.phoneNumber2 ? `${office.phoneNumber1}-${office.phoneNumber2}` : `${office.phoneNumber1}`}</p>
+                            <PhoneFilled /> <p>{office.phoneNumber1 && office.phoneNumber2 ? `${office.phoneNumber1}  -  ${office.phoneNumber2}` : `${office.phoneNumber1}`}</p>
                         </Row>
                         <Row className='text-xl space-x-1'>
                             <PushpinFilled /> <a>{office.mapLink}</a>
