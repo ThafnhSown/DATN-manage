@@ -1,10 +1,11 @@
 import { Card, Input, Select, Row, Form, Button, Typography, TimePicker, InputNumber } from 'antd'
 import { PlusCircleOutlined, DeleteFilled } from '@ant-design/icons'
-import { apiGetCoaches, apiGetSection } from '../../../../../api/services'
+import { apiGetCoaches, apiGetSection, apiUpdateTimeslot } from '../../../../../api/services'
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import Section from '../Section'
-const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot}) => {
+import dayjs from 'dayjs'
+const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -19,15 +20,18 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot}) => {
         if(schedule?.id) {
             handleLoadSection()
         }
-        if(schedule) {
+        if(schedule.id) {
             form.setFieldsValue({...schedule})
+            form.setFieldValue("departureTime", dayjs(schedule.departureTime))
+            form.setFieldValue("coachTypeId", schedule.coachType.id)
+            form.setFieldValue("travelPathId", schedule.travelPath.id)
         }
         const tmp = listPath.map(p => ({
             value: p.id,
             label: p.detail
         }))
         setListTP(tmp)
-    }, [])
+    }, [isEdit])
 
     async function handleLoadCoach() {
         const res = await apiGetCoaches()
@@ -43,9 +47,20 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot}) => {
         setListSection([...res.data.data])
     }
     const handleChooseTime = (e) => {
-        const data = (e.$H * 3600 + e.$m * 60) * 1000
-        setTime(data)
+        console.log(e.valueOf())
+        // console.log(dayjs(data))
+        setTime(e.valueOf())
     }
+
+    const handleUpdateTimeslot = async () => {
+        const data = {...form.getFieldsValue(), departureTime: time}
+        // console.log(data)
+        const res = await apiUpdateTimeslot(data)
+        // if(res.data.error == 0) {
+        //     setIsEdit(false)
+        // }
+    } 
+
     return (
         <div >
             <Card className='bg-neutral-200 my-6'>
@@ -53,7 +68,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot}) => {
                 <Form
                 form={form}
                 onValuesChange={() => {
-                    listTimeSlot[index] = ({...form.getFieldsValue(), departureTime: time})
+                    !isEdit ? listTimeSlot[index] = ({...form.getFieldsValue(), departureTime: time}) : null
                 }}
                 >
                 <Row className='space-x-4'>
@@ -62,13 +77,11 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot}) => {
                     </Form.Item>
                    <Form.Item name="coachTypeId">
                         <Select defaultValue="Chọn loại xe" style={{width:260}} options={options}>
-
                         </Select>
                    </Form.Item>
                     
                     <Form.Item name="travelPathId">
                         <Select defaultValue="Chọn lộ trình" style={{width:260}} options={listTP}>
-
                         </Select>
                     </Form.Item>
                     
@@ -81,6 +94,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot}) => {
                             setListTimeSlot([...listTimeSlot])
                         }} icon={<DeleteFilled />} />
                 </Row>
+                <Form.Item name="id" className='hidden'/>
                 </Form>
                 <div>
                     {
@@ -94,6 +108,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot}) => {
                         setListSection([...listSection, {}])
                     }} style={{color: '#006D38'}}><PlusCircleOutlined />Thêm chặng</p>
                 }
+                <div className='flex flex-row justify-center'>
+                    {
+                        isEdit && <Button onClick={() => handleUpdateTimeslot()}>Hoàn thành</Button>
+                    }
+                </div>
+           
             </Card>
         </div>
     )

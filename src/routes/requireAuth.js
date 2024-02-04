@@ -4,8 +4,10 @@ import { Navigate, Outlet, useLocation } from 'react-router'
 const RequireAuth = ({ allowedRoles }) => {
   const role = useRoles()
   const location = useLocation()
-
-  return role !== null ? (allowedRoles.includes(role)) ? (
+  const check = role?.map(index => {
+    return allowedRoles.includes(index)
+  })
+  return role !== null ? check ? (
       <Outlet />
     ) : (
       <Navigate to='/' state={{ from: location }} replace />

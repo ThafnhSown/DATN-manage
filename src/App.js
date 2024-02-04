@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { ConfigProvider } from 'antd';
 import { persistor } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
+import { SnackbarProvider } from "notistack"
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
    <PersistGate loading={null} persistor={persistor}>
       <Provider store={store}>
         <BrowserRouter history={history}>
-          <WebRoutes />
+          <SnackbarProvider maxSnack={3}>
+            <WebRoutes />
+          </SnackbarProvider>
         </BrowserRouter>
       </Provider>
    </PersistGate>

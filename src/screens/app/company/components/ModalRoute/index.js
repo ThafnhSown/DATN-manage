@@ -1,6 +1,6 @@
 import { apiCreateCoachRoute, apiDeleteRoute, apiGetListDistrict, apiGetListProvince } from "../../../../../api/services"
 import { useEffect, useState, useMemo } from 'react' 
-import { Select, Card, Button, Input, Modal } from 'antd'
+import { Select, Card, Button, Input, Popconfirm } from 'antd'
 import { SwapOutlined, EditFilled, DeleteFilled, ArrowLeftOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestLoadListRoute } from "../../../../../redux/slices/routeSlice"
@@ -12,20 +12,21 @@ const ModalRoute = () => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector(state => state.routeState.listRoute)
-    const [listProvince, setListProvince] = useState([])
+    const listProvince = useAppSelector(state => state.globalState.listProvince)
+    // const [listProvince, setListProvince] = useState([])
     const [listSecondDistrict, setListSecondDistrict] = useState([])
     const [listFirstDistrict, setListFirstDistrict] = useState([])
     const [firstDistrict, setFirstDistrict] = useState()
     const [secondDistrict, setSecondDistrict] = useState()
-
-    async function loadProvince() {
-        const res = await apiGetListProvince()
-        const listP = res.data.data.map((p) => ({
-            value: p.id,
-            label: p.province
-        }))
-        setListProvince(listP)
-    }
+    let listRouteMain = listRoute.filter(item => item.id %2 !=0)
+    // async function loadProvince() {
+    //     const res = await apiGetListProvince()
+    //     const listP = res.data.data.map((p) => ({
+    //         value: p.id,
+    //         label: p.province
+    //     }))
+    //     setListProvince(listP)
+    // }
     async function loadFirstDistrict(value) {
         if(value) {
             const res = await apiGetListDistrict(value)
@@ -59,10 +60,6 @@ const ModalRoute = () => {
         handleLoadRoutes(companyId)
     }, [])
 
-    useEffect(() => {
-        loadProvince()
-    }, [])
-
     const handleCreateRoute = async () => {
         const data ={
             coachCompanyId: companyId,
@@ -81,7 +78,9 @@ const ModalRoute = () => {
             handleLoadRoutes(companyId)
         }
     }
-
+    const okButtonProps = {
+        className: 'text-green-700'
+    }
     return (
         <div className="mx-16 space-y-4">
             <div className="bg-white boder rounded-xl h-12 items-center flex flex-row space-x-2">
@@ -113,12 +112,19 @@ const ModalRoute = () => {
             <div className="mt-4">
                   <Card>
                     {
-                         listRoute?.map((route, index) => (
+                         listRouteMain?.map((route, index) => (
                             <div>
                                 <div>{`Tuyến ${index+1}`}</div>
                                 <div className = "space-x-2">
                                     <Input value={`${route?.startPoint.district}/${route?.startPoint.province} - ${route?.endPoint.district}/${route?.endPoint.province}`} style={{width: 800}}/>
-                                    <Button className="del-btn" onClick={() => handleDeleteRoute(route.id)} icon={<DeleteFilled />}/>
+                                    <Popconfirm title={<p className='text-green-700 font-bold'>Bạn muốn xóa tuyến này?</p>}
+                                        okText="Có"
+                                        cancelText="Không"
+                                        okButtonProps={okButtonProps}
+                                        onConfirm={() => handleDeleteRoute(route.id)}
+                                    >
+                                    <Button className="del-btn" icon={<DeleteFilled />}/>
+                                    </Popconfirm>
                                 </div>  
                             </div>
                         ))

@@ -1,4 +1,4 @@
-import { Card, Row, Typography, Col} from 'antd'
+import { Card, Row, Typography, Popconfirm} from 'antd'
 import { useState } from 'react'
 import { DownOutlined, EditFilled, DeleteFilled } from '@ant-design/icons';
 import { apiDelPolicy } from '../../../../../api/services';
@@ -17,31 +17,36 @@ const PolicyCard = ({policy}) => {
         await dispatch(requestLoadPolicy(companyId))
        }
     }
+    const okButtonProps = {
+        className: 'text-green-700'
+    }
 
     return (
         <>
             <div>
             <Card 
-                title={<Title level={4}>{policy.name}</Title>} 
+                title={<Title level={4}>{policy?.name}</Title>} 
                 extra={<Row className='space-x-3'>
-                    <div><EditFilled /> Sửa</div>
-                    <div onClick={() => handleDelPolicy(policy.id)}><DeleteFilled /> Xóa</div>
+                    <a className='text-green-700'><EditFilled /> Sửa</a>
+                    <Popconfirm title={<p className='text-green-700 font-bold'>Bạn muốn xóa chính sách này?</p>}
+                            okText="Có"
+                            cancelText="Không"
+                            okButtonProps={okButtonProps}
+                            onConfirm={() => handleDelPolicy(policy.id)}
+                            >
+                            <a className="text-red-700" ><DeleteFilled /> Xóa</a>
+                            </Popconfirm>
                 </Row>}>
-                    <Row>
-                        <Col span={3}>
-                            <Title level={4}>Nội dung</Title>
-                            
-                        </Col>
-                        <Col span={18}/>
-                        <Col span={3}>
-                            <div>
-                                {status ? 'Thu gọn' : 'Chi tiết'} <DownOutlined onClick={() => setStatus(!status)}/>
-                            </div>
-                        </Col>
-                       
-                    </Row>
-
-                    { status ? <div>{policy.content}</div> : null}
+                <div className="content-wrapper">
+                    <p className={`limited-height ${!status ? 'expanded' : ''}`}>
+                        {policy?.content}
+                    </p>
+                    {status && (
+                        <a className="read-more-btn" onClick={() => setStatus(!status)}>
+                            Xem thêm
+                        </a>
+            )}
+        </div>
                 </Card>
             </div>
         </>

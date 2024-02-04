@@ -6,6 +6,7 @@ import routeReducer from './slices/routeSlice'
 import officeReducer from './slices/officeSlice'
 import scheduleReducer from './slices/scheduleSlice'
 import staffReducer from './slices/staffSlice'
+import globalReducer from './slices/globalSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistStore, persistReducer } from 'redux-persist'
 import { combineReducers } from 'redux'
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
     routeState: routeReducer,
     officeState: officeReducer,
     scheduleState: scheduleReducer,
-    staffState: staffReducer
+    staffState: staffReducer,
+    globalState: globalReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

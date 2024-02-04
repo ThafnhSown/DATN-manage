@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react' 
+import React, { useEffect, useState } from 'react' 
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Select, Card, Button, Input, Modal, Menu, Row, Form, List, Typography, Checkbox, Col } from 'antd'
 import { SaveOutlined, DeleteFilled, ArrowLeftOutlined, SearchOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestCreateRoute, requestLoadListRoute, requestDeleteRoute } from "../../../../../redux/slices/routeSlice"
-import { apiAddPointToRoute, apiGetListDistrict, apiGetListProvince, apiGetLocation, apiGetRouteDetail } from "../../../../../api/services"
+import { apiAddPointToRoute, apiGetListDistrict, apiGetListProvince, apiGetLocation, apiGetRouteDetail, apiOfficeInDistrict } from "../../../../../api/services"
 import { requestLoadListOffice } from '../../../../../redux/slices/officeSlice'
 import './style.css'
 const { Title } = Typography
@@ -12,20 +12,31 @@ const { Title } = Typography
 const AddPointToRoute = ({currentRoute}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
+    const listProvince = useAppSelector(state => state.globalState.listProvince)
     const listRoute = useAppSelector((state) => state.routeState.listRoute)
     const listOffice = useAppSelector((state) => state.officeState.listOffice)
-    const [listProvince, setListProvince] = useState([])
     const [listDistrict, setListDistrict] = useState([])
     const [listPoint, setListPoint] = useState([])
     const [listDataPoint, setListDataPoint] = useState([])
-    const [showP, setShowP] = useState([])
+    const [showP, setShowP] = useState(listProvince)
     const [showD, setShowD] = useState(false)
     const [delPoint, setDelPoint] = useState([])
     const [checked, setChecked] = useState(false)
-  
+    const dragItem = React.useRef(null)
+    const dragOverItem = React.useRef(null)
+    const [mapOffice, setMapOffice] = useState({})
+    
+    const handleSort = () => {
+        let _pointItems = [...listPoint]
+        const dragItemContent = _pointItems.splice(dragItem.current, 1)[0];
+        _pointItems.splice(dragOverItem.current, 0, dragItemContent)
+        dragItem.current = null
+        dragOverItem.current = null
+        setListPoint(_pointItems)
+    }
+
     useEffect(() => {
         setDelPoint([])
-        loadProvince()
         handleLoadRoutes()
     }, [])
     useEffect(() => {
@@ -35,15 +46,6 @@ const AddPointToRoute = ({currentRoute}) => {
         value: e.id,
         label: e.name
     }))
-    async function loadProvince() {
-        const res = await apiGetListProvince()
-        const listP = res.data.data.map((p) => ({
-            value: p.id,
-            label: p.province
-        }))
-        setListProvince(listP)
-        setShowP(listP)
-    }
 
     async function loadDistrict(value) {
         if(value) {
@@ -57,12 +59,18 @@ const AddPointToRoute = ({currentRoute}) => {
     }
 
     async function handleChooseDistrict(value) {
+        let officeIndex = {}
         const res = await apiGetLocation(value)
         const tmp = {
             address: `${res.data.data.district}/${res.data.data.province}`,
             locationId: value,
         }
-        setShowD(true)
+        const office = await apiOfficeInDistrict({companyId: companyId, districtId: value})
+        officeIndex[value] = office.data.data.map(of => ({
+            value: of.id,
+            label: of.name
+        }))
+        setMapOffice({...mapOffice, ...officeIndex})
         setListPoint([...listPoint, tmp])
     }
     async function handleLoadRoutes() {
@@ -89,11 +97,10 @@ const AddPointToRoute = ({currentRoute}) => {
             coachRouteId: currentRoute,
             pointList: tmp
         })
-        console.log(res)
     }
 
     async function handleDelPoint(listPoint) {
-        const tmp = listPoint.filter(item => !delPoint.includes(item.address))
+        const tmp = listPoint.filter(item => !delPoint.includes(item.locationId))
         setListPoint([...tmp])
         setListDataPoint([...tmp])
     }
@@ -110,9 +117,9 @@ const AddPointToRoute = ({currentRoute}) => {
 
     const handleChecked = (e, point) => {
         if (e.target.checked) {
-            setDelPoint([...delPoint, point.address])
+            setDelPoint([...delPoint, point.locationId])
         } else {
-            const tmp = delPoint.filter(item => item != point.address)
+            const tmp = delPoint.filter(item => item != point.locationId)
             setDelPoint([...tmp])
         }
     }
@@ -186,7 +193,15 @@ const AddPointToRoute = ({currentRoute}) => {
                                         listPoint.map((point, index) => {
                                             return (
                                             <>
-                                            <div className='flex-row space-x-4 grid grid-cols-12'>
+                                            <div className='flex-row space-x-4 grid grid-cols-12'
+                                                key={index}
+                                                draggable
+                                                onDragStart={(e) => (dragItem.current = index)}
+                                                onDragEnter={(e) => (dragOverItem.current = index)}
+                                                onDragEnd={handleSort}
+                                                onDragOver={(e) => e.preventDefault()}
+
+                                            >
                                                 <div className='col-span-4 space-x-2'>
                                                     <Checkbox onChange={e => handleChecked(e, point)} />
                                                     <b>{point.address} :</b>
@@ -202,7 +217,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                                     setListDataPoint([...listDataPoint, tmp])
                                                 }} >
                                                     {
-                                                        son.map(({label, value}) => (
+                                                        mapOffice[point.locationId]?.map(({label, value}) => (
                                                             <Select.Option key={value} value={value}>
                                                                 {label}
                                                             </Select.Option>
@@ -210,24 +225,6 @@ const AddPointToRoute = ({currentRoute}) => {
                                                     }
                                                 </Select>
                                                 </div>
-                                                {/* <div className='col-span-2 space-x-1'> */}
-                                                {/* <Button onClick={() => {
-                                                    let isOffice = true
-                                                    if(!abc.officeId) isOffice = false;
-                                                    const vn = {...point, ...abc, sequence: index+1, isOffice: isOffice}
-                                                    setListDataPoint([...listDataPoint, vn])
-                                                }}
-                                                icon={<SaveOutlined />}
-                                                className='save-btn'
-                                                /> */}
-                                                {/* <Button onClick={() => {
-                                                    listPoint.splice(index, 1)
-                                                    setListPoint([...listPoint])
-                                                }}
-                                                className='del-btn'
-                                                icon={<DeleteFilled />}
-                                                /> */}
-                                                {/* </div>                                        */}
                                             </div>
                                                
                                             </>
@@ -242,12 +239,10 @@ const AddPointToRoute = ({currentRoute}) => {
                                 </Col>
                                 <Col span={16}/>
                                 <Col span={4}>
-                                    <Button onClick={() => handleDelPoint(listDataPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
+                                    <Button onClick={() => listDataPoint.length ? handleDelPoint(listDataPoint) : handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
                                     <Button onClick={() => handleAddPoint(listDataPoint)} className='mt-10 text-white'>Lưu</Button>
                                 </Col>
                             </Row>
-                          
-                           
                             </Card>   
                         </div>
                     </div>

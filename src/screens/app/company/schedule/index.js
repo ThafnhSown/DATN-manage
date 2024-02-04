@@ -6,7 +6,7 @@
  import { requestLoadListRoute, requestLoadPoint, requestLoadTravelPath, setCurrentRoute } from "../../../../redux/slices/routeSlice";
  import { useEffect, useState } from "react";
 import SubSchedule from "../components/SubSchedule";
-import { apiCreateSchedule, apiGetTimeSlot, apiListSchedule } from "../../../../api/services";
+import { apiCreateSchedule, apiGetSection, apiGetTimeSlot, apiListSchedule } from "../../../../api/services";
 import moment from 'moment'
 const { Title } = Typography
 import { convertDate } from "../../../../utils/convertTime";
@@ -16,12 +16,15 @@ const Schedule = () => {
     const dispatch = useAppDispatch()
     const [isCreate, setIsCreate] = useState(false)
     const [listSchedule, setListSchedule] = useState([])
+    const [subSchedule, setSubSchedule] = useState([])
     // const listSchedule = useAppSelector(state => state.scheduleState.listSchedule)
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector((state) => state.routeState.listRoute)
     const currentRoute = useAppSelector((state) => state.routeState.currentRoute)
     const [listTimeSlot, setListTimeSlot] = useState([])
-
+    const [mapTS, setMapTS] = useState({})
+    const [mapEdit, setMapEdit] = useState()
+    const [isEdit, setIsEdit] = useState(false)
     useEffect(() => {
         handleLoadRoutes()
     }, [])
@@ -37,14 +40,11 @@ const Schedule = () => {
     }
     async function handleLoadSchedule(id) {
         let res= {}
-        let ts = {}
         try {
             await Promise.all([
                 res = await apiListSchedule(id),
-                setListSchedule(res.data.data),
-                // res.data.data.map(async (mc) => {
-                //     ts = await apiGetTimeSlot(mc.id)
-                // })
+                setListSchedule(res.data.data.filter(item => item.type == 1)),
+                setSubSchedule(res.data.data.filter(item => item.type == 0))
             ])
         } catch(err) {
             console.log(err)
@@ -78,6 +78,17 @@ const Schedule = () => {
         setListTimeSlot([])
     }
 
+    const handleLoadTimeSlot = async (scheduleId) => {
+        let ts = {}
+        let ed = {}
+        const res = await apiGetTimeSlot(scheduleId)
+        if(res.data.error == 0) {
+            setMapEdit(scheduleId)
+            ts[scheduleId] = res.data.data
+            setMapTS({...mapTS , ...ts})
+        }
+    }
+
     const selectOption = listRoute.map(route => ({
         value: route.id,
         label: `${route?.startPoint.district} ${route?.startPoint.province} - ${route?.endPoint.district} ${route?.endPoint.province}`
@@ -95,23 +106,34 @@ const Schedule = () => {
                 </Select>
             </Row>
                 {
-                    listSchedule && listSchedule.length > 0 ? <div className="h-48 overflow-auto mt-6">
+                    listSchedule && listSchedule.length > 0 ? <div className="h-80 overflow-auto mt-6">
                     <InfiniteScroll
                         dataLength={1}
                     >
                         <List
                             dataSource={listSchedule}
                             renderItem={(item) => (
+                                <div>
                                 <List.Item className="li-schedule">
                                     <div className="font-extrabold text-md grid grid-cols-12 w-full">
                                         <p className="ml-4 col-span-4">
                                         {`${convertDate(item.date)} | ${item.totalSlot} nốt`}
                                         </p>
                                         <p className="col-span-6"/>
-                                        <p className="col-span-1 text-green-700"><EditFilled /> Sửa</p>
-                                        <p className="col-span-1 text-red-700"><ClockCircleFilled /> Dừng</p>
+                                        <a className="col-span-1 text-green-700"
+                                            onClick={() => {
+                                                setIsEdit(!isEdit)
+                                                handleLoadTimeSlot(item.id)
+                                            }}
+                                        ><EditFilled /> Sửa</a>
+                                        <a className="col-span-1 text-red-700"><ClockCircleFilled /> Dừng</a>
                                     </div>
                                 </List.Item>
+                                    {
+                                        mapEdit == item.id & isEdit ? mapTS[item.id]?.map((ts, index) => <TimeSlotCard schedule={ts} index={index} isEdit={isEdit} setIsEdit={setIsEdit}/> ) : null
+                                    }
+                                </div>
+                             
                             )}
                         >
                         </List>
@@ -141,15 +163,17 @@ const Schedule = () => {
                 isCreate && <Button onClick={e => handleCreateMainSchedule(e)}>Hoàn thành</Button>
             }
             </Row>
+        </Card>
 
-           
-            {/* {subSchedule && <SubSchedule />}
+        <Card className="space-y-4">
+            {
+                subSchedule?.map(sc => <SubSchedule schedule={sc}/>)
+            }
             <Row className="justify-center">
-                {
-                    isCreate && <Button style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} icon={<PlusCircleOutlined />} onClick={() => setSubSchedule(true)}>Thêm lịch phụ</Button>
-                }
-                
-            </Row> */}
+                <Button 
+                    onClick={() => setSubSchedule([...subSchedule, {}])}
+                    style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} icon={<PlusCircleOutlined />}>Thêm lịch phụ</Button>
+            </Row>
         </Card>
         
 

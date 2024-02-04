@@ -2,6 +2,7 @@ import { Row, Input, Select, Typography, Form, TimePicker, Button } from 'antd'
 import { useAppSelector } from '../../../../../redux/hook'
 import { useEffect, useState } from 'react'
 import { DeleteFilled } from '@ant-design/icons'
+import dayjs from 'dayjs'
 
 const Section = ({section, index, listSection, setListSection, listTimeSlot, timeSlotIndex}) => {
     const [time, setTime] = useState(0)
@@ -16,6 +17,7 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
     useEffect(() => {
         if(section) {
             form.setFieldsValue({...section})
+            form.setFieldValue("departureTime", dayjs(section.departureTime))
         }
 
     }, [currentRoute])

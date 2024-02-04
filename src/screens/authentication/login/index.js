@@ -1,16 +1,16 @@
 import { requestLogin } from "../../../redux/slices/authSlice"
 import { useAppDispatch, useAppSelector} from "../../../redux/hook";
 import { unwrapResult } from "@reduxjs/toolkit";
-import Cookies from "js-cookie"
 import { Form, Input, Button, Checkbox, Row } from 'antd'
 import { LockFilled, MailFilled } from '@ant-design/icons' 
 import background from "../../../assets/background-login.png"
 import logo from "../../../assets/logo.png"
-import { useNavigate } from 'react-router'
+import { requestLoadProvince } from "../../../redux/slices/globalSlice";
+import { useNavigate } from 'react-router-dom'
 
 export const LoginScreen = () => {
-    const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const authState = useAppSelector((state) => state.authState)
     const handleLogin = async (data) => {
         try {
@@ -20,13 +20,12 @@ export const LoginScreen = () => {
             }))
             const res = unwrapResult(result);
             const userInfo = res.data
-            const isLoggedIn = res.error
-            if(!isLoggedIn) {
-              if(userInfo.role === "ROLE_COMPANY") {
+            if(res.error == 0) {
+              if(userInfo.role.includes("ROLE_COMPANY")) {
                 navigate("/")
               }
+              await dispatch(requestLoadProvince())
             }
-            Cookies.set("x-access-token", res.data.token)
         } catch (err) {
             console.log(err)
         }

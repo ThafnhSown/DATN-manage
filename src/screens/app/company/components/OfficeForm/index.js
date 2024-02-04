@@ -20,7 +20,8 @@ const OfficeForm = () => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listOffice = useAppSelector(state => state.officeState.listOffice)
-    const [listProvince, setListProvince] = useState([])
+    const listProvince = useAppSelector(state => state.globalState.listProvince)
+    // const [listProvince, setListProvince] = useState([])
     const [listDistrict, setListDistrict] = useState([])
     const [modalShow, setModalShow] = useState(false)
     const [avatar, setAvatar] = useState()
@@ -50,14 +51,14 @@ const OfficeForm = () => {
         }
     }
 
-    async function loadProvince() {
-        const res = await apiGetListProvince()
-        const listP = res.data.data.map((p) => ({
-            value: p.id,
-            label: p.province
-        }))
-        setListProvince(listP)
-    }
+    // async function loadProvince() {
+    //     const res = await apiGetListProvince()
+    //     const listP = res.data.data.map((p) => ({
+    //         value: p.id,
+    //         label: p.province
+    //     }))
+    //     setListProvince(listP)
+    // }
     async function loadDistrict(value) {
         if(value) {
             const res = await apiGetListDistrict(value)
@@ -73,7 +74,7 @@ const OfficeForm = () => {
     }
     
     useEffect(() => {
-        loadProvince()
+        // loadProvince()
         handleLoadOffice()
     }, [])        
 

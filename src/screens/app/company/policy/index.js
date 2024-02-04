@@ -4,13 +4,14 @@ import {
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
+import { useSnackbar } from "notistack"
 import { useAppDispatch, useAppSelector } from '../../../../redux/hook'
 import { requestCreatePolicy, requestLoadPolicy } from "../../../../redux/slices/companySlice"
-import { apiCreatePolicy, apiGetPolicyList } from '../../../../api/services'
 const { Title } = Typography
 const { TextArea } = Input
 
 const Policy = () => {
+    const { enqueueSnackbar } = useSnackbar()
     const dispatch = useAppDispatch()
     const id = useAppSelector(state => state.authState.userInfo.id)
     const [modalShow, setModalShow] = useState(false)
@@ -27,6 +28,7 @@ const Policy = () => {
     const handleCreatePolicy = async () => {
         const data = {...form.getFieldsValue(), coachCompanyId: id}
         const res = await dispatch(requestCreatePolicy(data))
+        console.log(res)
         setModalShow(false)
         form.resetFields()
     }
@@ -40,8 +42,6 @@ const Policy = () => {
                         onFinish={handleCreatePolicy}
                         >
                             <Title level={4}>Tạo chính sách</Title>
-
-                            <Title level={5}>Tên chính sách</Title>
                             <Row>
                                 <Col>
                                 <Form.Item name="name">

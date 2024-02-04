@@ -101,8 +101,16 @@ export const apiListOffice = async (companyId) => {
     return ApiAdminConfig(`${EndPoint.LIST_OFFICE}?companyId=${companyId}`, undefined, "GET")
 }
 
+export const apiOfficeInDistrict = async ({companyId, districtId}) => {
+    return ApiAdminConfig(`${EndPoint.OFFICE_IN_DISTRICT}?companyId=${companyId}&locationId=${districtId}`, undefined, "GET")
+}
+
 export const apiDeleteOffice = async(props) => {
     return ApiAdminConfig(EndPoint.DEL_OFFICE, props)
+}
+
+export const apiUpdateOffice = async (props) => {
+    return ApiAdminConfig(EndPoint.UPDATE_OFFICE, props)
 }
 
 export const apiCreateCoach = async(props) => {
@@ -111,6 +119,14 @@ export const apiCreateCoach = async(props) => {
 
 export const apiGetCoachList = async(id) => {
     return ApiAdminConfig(`/company/get-coach-list?coachCompanyId=${id}`)
+}
+
+export const apiDelCoach = async (id) => {
+    return ApiAdminConfig(EndPoint.DEL_COACH, {id: id})
+}
+
+export const apiUpdateCoach = async (props) => {
+    return ApiAdminConfig(EndPoint.UPDATE_COACH, props)
 }
 
 export const apiCreateSchedule = async(props) => {
@@ -126,11 +142,15 @@ export const apiCreateSection = async (props) => {
 }
 
 export const apiGetSection = async (id) => {
-    return ApiAdminConfig(`${EndPoint.LIST_SECTION}?coachScheduleId=${id}`, undefined, "GET")
+    return ApiAdminConfig(`${EndPoint.LIST_SECTION}?timeslotId=${id}`, undefined, "GET")
 }
 
 export const apiGetTimeSlot = async (id) => {
     return ApiAdminConfig(`${EndPoint.LIST_TIMESLOT}?coachScheduleId=${id}`, undefined, "GET")
+}
+
+export const apiUpdateTimeslot = async (props) => {
+    return ApiAdminConfig(EndPoint.UPDATE_TIMESLOT, props)
 }
 
 export const apiCreateTravelPath = async (props) => {
@@ -139,6 +159,10 @@ export const apiCreateTravelPath = async (props) => {
 
 export const apiGetTravelPathList = async (id) => {
     return ApiAdminConfig(`${EndPoint.GET_TP}?companyId=${id}`, undefined, "GET")
+}
+
+export const apiDelTravelPath = async (id) => {
+    return ApiAdminConfig(EndPoint.DEL_TP, {id: id})
 }
 
 export const apiCreatePolicy = async (props) => {
