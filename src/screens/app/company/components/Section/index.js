@@ -1,4 +1,4 @@
-import { Row, Input, Select, Typography, Form, TimePicker, Button } from 'antd'
+import { Row, Input, Select, Typography, Form, TimePicker, Button, InputNumber } from 'antd'
 import { useAppSelector } from '../../../../../redux/hook'
 import { useEffect, useState } from 'react'
 import { DeleteFilled } from '@ant-design/icons'
@@ -45,7 +45,7 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
                 <Select options={optionsListPoint} style={{width: 218}}></Select>
             </Form.Item>
             <Form.Item name="price">
-                <Input suffix="VND" style={{width:200}} type="number"></Input>
+                <InputNumber suffix="VND" style={{width:200}} type="number"></InputNumber>
             </Form.Item>
             <Button className="del-btn" onClick={() => {
                 listSection.splice(index, 1);

@@ -72,6 +72,7 @@ const AddPointToRoute = ({currentRoute}) => {
         }))
         setMapOffice({...mapOffice, ...officeIndex})
         setListPoint([...listPoint, tmp])
+        setShowP(listProvince)
     }
     async function handleLoadRoutes() {
         try{
