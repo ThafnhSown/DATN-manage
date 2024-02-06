@@ -5,11 +5,11 @@ import { apiDeleteOffice, apiGetLocation, apiGetListDistrict, apiUpdateCoach, ap
 import ImgUpload from '../../../../../components/layouts/components/ImgUpload'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { requestLoadListOffice } from "../../../../../redux/slices/officeSlice"
-import { enqueueSnackbar, useSnackbar } from "notistack"
+import { useSnackbar } from "notistack"
 const { Title } = Typography
 
 const OfficeCard = ({office, index}) => {
-    const enqueueSnackbar = useSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const [form] = Form.useForm()
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
@@ -204,7 +204,7 @@ const OfficeCard = ({office, index}) => {
                         </Row>
                         <Row className='text-2xl space-x-1 text-green-700'>
                             <PushpinFilled /> 
-                            <a className="text-black">{office.mapLink}</a>
+                            <a className="text-black" href={office.mapLink} target="blank" > {office.mapLink}</a>
                         </Row>
                     </Col>
                     </Row>

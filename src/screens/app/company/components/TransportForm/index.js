@@ -1,6 +1,6 @@
 import ImgUpload from '../../../../../components/layouts/components/ImgUpload'
 import { apiCreateCoach, apiDelCoach, apiGetCoaches, apiUpdateCoach } from '../../../../../api/services'
-import { Form, Row, Input, Select, Button, Col, Typography, Popconfirm } from 'antd'
+import { Form, Row, Input, Select, Button, Col, Typography, Popconfirm, Card } from 'antd'
 import { DeleteFilled } from '@ant-design/icons'
 import { useState, useEffect } from 'react' 
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
@@ -34,7 +34,7 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
         }
     }
     const handleDelCoach = async (coachId) => {
-        const res = await apiDelCoach(coachId)
+        const res = await apiDelCoach({id: coachId})
         if(res.data.error == 0) {
             enqueueSnackbar("Xóa thành công !", {
                 variant: "success"
@@ -57,7 +57,7 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
     }
 
     return (
-        <div>
+        <Card>
             <Form
             form={form}
             >
@@ -113,7 +113,7 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
                     </Col>  
                 </Row>
             </Form>
-        </div>
+        </Card>
     )
 }
 

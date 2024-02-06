@@ -30,7 +30,11 @@ export const authSlice = createSlice({
         builder.addCase(requestLogin.fulfilled, (state, action) => {
             state.loading = false;
             state.isLogin = true
-            state.userInfo = action.payload.data;
+            if(action.payload.data.role.includes("ROLE_MODERATOR_EMPLOYEE")) {
+                state.userInfo = {...action.payload.data, id: action.payload.data.companyId }
+            } else {
+                state.userInfo = action.payload.data;
+            }
         })
     }
 });

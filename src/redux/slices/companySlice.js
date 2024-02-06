@@ -6,7 +6,8 @@ const initialState = {
     currentCompany: {},
     listCompany: [],
     listCoach: [],
-    listPolicy: []
+    listPolicy: [],
+    mapCoach: {}
 };
 
 export const requestLoadCompany = createAsyncThunk('admin/get-list-company', async () => {
@@ -45,6 +46,9 @@ export const companySlice = createSlice({
     reducers: {
         setCurrentCompany: (state, action) => {
             state.currentCompany = action.payload
+        },
+        setCurrentListCoach: (state, action) => {
+            state.listCoach = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -69,6 +73,7 @@ export const companySlice = createSlice({
         builder.addCase(requestLoadCoach.fulfilled, (state, action) => {
             state.loading = false;
             state.listCoach = action.payload
+            // action.payload.map(coach => state.mapCoach[coach.id] = coach)
         })
         builder.addCase(requestLoadPolicy.fulfilled, (state, action) => {
             state.loading = false
@@ -80,7 +85,8 @@ export const companySlice = createSlice({
     }
 });
 export const {
-    setCurrentCompany
+    setCurrentCompany,
+    setCurrentListCoach
 } = companySlice.actions
 
 export const companyState = (state) => state.companyState;

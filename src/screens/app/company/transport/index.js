@@ -3,14 +3,16 @@ import { useAppSelector, useAppDispatch } from "../../../../redux/hook"
 import { PlusOutlined } from '@ant-design/icons'
 import { Button, Card } from 'antd'
 import { requestLoadCoach } from "../../../../redux/slices/companySlice"
-import { apiGetCoaches } from "../../../../api/services"
+import { apiGetCoachList, apiGetCoaches } from "../../../../api/services"
 import { useEffect, useState } from "react"
 
 const Transport = () => {
     const dispatch = useAppDispatch()
     const id = useAppSelector(state => state.authState.userInfo.id)
+    const son = useAppSelector(state => state.companyState.mapCoach)
     const listCoach = useAppSelector(state => state.companyState.listCoach)
     const [isCreate, setIsCreate] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
     const [options, setOptions] = useState([])
     useEffect(() => {
         handleLoadCoach()
@@ -40,17 +42,16 @@ const Transport = () => {
                     <Button icon={<PlusOutlined />} className="w-full border rounded-md h-10" onClick={() => setIsCreate(!isCreate)}>Tạo thêm xe</Button>
                 </Card>
                 {
-                    isCreate && <Card>
-                        <TransportForm setIsCreate={setIsCreate} options={options}/>
-                    </Card>
+                    isCreate && <TransportForm setIsCreate={setIsCreate} options={options}/>
                 }
+                <div>
                 {
-                    listCoach.map(coach => (
-                        <Card>
-                            <TransportForm transport={coach} options={options}/>
-                        </Card>
+                    listCoach.map((coach, index) => (
+                        <TransportForm transport={coach} options={options}/>
                     ))
-                }  
+                } 
+                </div>
+              
             </div>
         </>
     )

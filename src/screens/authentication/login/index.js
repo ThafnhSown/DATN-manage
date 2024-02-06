@@ -21,7 +21,7 @@ export const LoginScreen = () => {
             const res = unwrapResult(result);
             const userInfo = res.data
             if(res.error == 0) {
-              if(userInfo.role.includes("ROLE_COMPANY")) {
+              if(userInfo.role.includes("ROLE_COMPANY") || userInfo.role.includes("ROLE_MODERATOR_EMPLOYEE")) {
                 navigate("/")
               }
               await dispatch(requestLoadProvince())

@@ -62,7 +62,7 @@ const AddPointToRoute = ({currentRoute}) => {
         let officeIndex = {}
         const res = await apiGetLocation(value)
         const tmp = {
-            address: `${res.data.data.district}/${res.data.data.province}`,
+            address: `${res.data.data.district} / ${res.data.data.province}`,
             locationId: value,
         }
         const office = await apiOfficeInDistrict({companyId: companyId, districtId: value})
@@ -72,7 +72,6 @@ const AddPointToRoute = ({currentRoute}) => {
         }))
         setMapOffice({...mapOffice, ...officeIndex})
         setListPoint([...listPoint, tmp])
-        setShowP(listProvince)
     }
     async function handleLoadRoutes() {
         try{
@@ -172,7 +171,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                         <List.Item key={item.value}
                                             onClick={() => {
                                                 handleChooseDistrict(item.value)
-                                                setShowD(false)
+                                                // setShowD(false)
                                             }}
                                         >
                                             <div>{item.label}</div>
@@ -192,6 +191,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                 listPoint.length ? <div className='space-y-3'>
                                     {
                                         listPoint.map((point, index) => {
+                                            console.log(point)
                                             return (
                                             <>
                                             <div className='flex-row space-x-4 grid grid-cols-12'
@@ -213,10 +213,12 @@ const AddPointToRoute = ({currentRoute}) => {
                                                     setListDataPoint([...listDataPoint, tmp])
                                                     }} placeholder={point.description} className='w-40'/>
                                                 <p>hoặc</p>
-                                                <Select className='w-40' placeholder={point.isOffice ? point.office.name : 'Văn phòng'} onChange={(value) => {
+                                                <Select className='w-40' onChange={(value) => {
                                                     const tmp = {...point, officeId: value, isOffice: true}
                                                     setListDataPoint([...listDataPoint, tmp])
-                                                }} >
+                                                }} 
+                                                mode="multiple"
+                                                >
                                                     {
                                                         mapOffice[point.locationId]?.map(({label, value}) => (
                                                             <Select.Option key={value} value={value}>
@@ -240,7 +242,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                 </Col>
                                 <Col span={16}/>
                                 <Col span={4}>
-                                    <Button onClick={() => listDataPoint.length ? handleDelPoint(listDataPoint) : handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
+                                    <Button onClick={() => listPoint.length > 0 ? handleDelPoint(listPoint) : handleDelPoint(listDataPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
                                     <Button onClick={() => handleAddPoint(listDataPoint)} className='mt-10 text-white'>Lưu</Button>
                                 </Col>
                             </Row>
@@ -254,4 +256,3 @@ const AddPointToRoute = ({currentRoute}) => {
 }
 
 export default AddPointToRoute
-// chon 1 diem them vao del point, bam xoa thi xoa, khong thi 

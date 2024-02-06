@@ -17,7 +17,7 @@ export const companyRouteList = [
         path: '/',
         element: (
             <AppLayout>
-                <RequireAuth allowedRoles={["ROLE_COMPANY"]}>
+                <RequireAuth allowedRoles={["ROLE_COMPANY", "ROLE_MODERATOR_EMPLOYEE"]}>
                     <Outlet />
                 </RequireAuth>
             </AppLayout>

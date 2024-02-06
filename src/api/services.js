@@ -118,11 +118,11 @@ export const apiCreateCoach = async(props) => {
 }
 
 export const apiGetCoachList = async(id) => {
-    return ApiAdminConfig(`/company/get-coach-list?coachCompanyId=${id}`)
+    return ApiAdminConfig(`/company/get-coach-list?coachCompanyId=${id}`, undefined, "GET")
 }
 
-export const apiDelCoach = async (id) => {
-    return ApiAdminConfig(EndPoint.DEL_COACH, {id: id})
+export const apiDelCoach = async (props) => {
+    return ApiAdminConfig(EndPoint.DEL_COACH, props)
 }
 
 export const apiUpdateCoach = async (props) => {
