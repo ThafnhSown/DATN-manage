@@ -49,6 +49,12 @@ export const companySlice = createSlice({
         },
         setCurrentListCoach: (state, action) => {
             state.listCoach = action.payload
+        },
+        deleteCoach: (state, action) => {
+            const id = action.payload
+            const tmp = state.listCoach.filter(item => item.id != id)
+            console.log(tmp)
+            state.listCoach = tmp
         }
     },
     extraReducers: (builder) => {
@@ -86,7 +92,8 @@ export const companySlice = createSlice({
 });
 export const {
     setCurrentCompany,
-    setCurrentListCoach
+    setCurrentListCoach,
+    deleteCoach
 } = companySlice.actions
 
 export const companyState = (state) => state.companyState;

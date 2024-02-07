@@ -9,7 +9,6 @@ import { useEffect, useState } from "react"
 const Transport = () => {
     const dispatch = useAppDispatch()
     const id = useAppSelector(state => state.authState.userInfo.id)
-    const son = useAppSelector(state => state.companyState.mapCoach)
     const listCoach = useAppSelector(state => state.companyState.listCoach)
     const [isCreate, setIsCreate] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
@@ -44,7 +43,7 @@ const Transport = () => {
                 {
                     isCreate && <TransportForm setIsCreate={setIsCreate} options={options}/>
                 }
-                <div>
+                <div className="space-y-3">
                 {
                     listCoach.map((coach, index) => (
                         <TransportForm transport={coach} options={options}/>

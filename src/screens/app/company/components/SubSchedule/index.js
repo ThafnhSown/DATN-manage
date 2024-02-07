@@ -12,7 +12,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { listDaysInBetween } from "../../../../../utils/convertTime";
 import dayjs from 'dayjs';
 
-const SubSchedule = ({schedule}) => {
+const SubSchedule = ({schedule, setListSchedule, setSubSchedule}) => {
    const dispatch = useAppDispatch()
    const [isCreate, setIsCreate] = useState(false)
    const [firstDate, setFirstDate] = useState()
@@ -40,9 +40,21 @@ const SubSchedule = ({schedule}) => {
     }
     const res = await apiCreateSchedule(data)
     if(res.data.error == 0) {
+        handleLoadSchedule(currentRoute)
     }
    }
-
+   async function handleLoadSchedule(id) {
+    let res= {}
+    try {
+        await Promise.all([
+            res = await apiListSchedule(id),
+            setListSchedule(res.data.data.filter(item => item.type == 1)),
+            setSubSchedule(res.data.data.filter(item => item.type == 2))
+        ])
+    } catch(err) {
+        console.log(err)
+    }
+}
    return (
     <div>
         <div>

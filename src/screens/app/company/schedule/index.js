@@ -44,7 +44,7 @@ const Schedule = () => {
             await Promise.all([
                 res = await apiListSchedule(id),
                 setListSchedule(res.data.data.filter(item => item.type == 1)),
-                setSubSchedule(res.data.data.filter(item => item.type == 0))
+                setSubSchedule(res.data.data.filter(item => item.type == 2))
             ])
         } catch(err) {
             console.log(err)
@@ -115,6 +115,7 @@ const Schedule = () => {
                             renderItem={(item) => (
                                 <div>
                                 <List.Item className="li-schedule">
+                                    <div className="w-full">
                                     <div className="font-extrabold text-md grid grid-cols-12 w-full">
                                         <p className="ml-4 col-span-4">
                                         {`${convertDate(item.date)} | ${item.totalSlot} nốt`}
@@ -127,9 +128,12 @@ const Schedule = () => {
                                             }}
                                         ><EditFilled /> Sửa</a>
                                         <a className="col-span-1 text-red-700"><ClockCircleFilled /> Dừng</a>
+                                        
+                                    </div>
+
                                     </div>
                                 </List.Item>
-                                    {
+                                {
                                         mapEdit == item.id & isEdit ? mapTS[item.id]?.map((ts, index) => <TimeSlotCard schedule={ts} index={index} isEdit={isEdit} setIsEdit={setIsEdit}/> ) : null
                                     }
                                 </div>
@@ -167,7 +171,7 @@ const Schedule = () => {
 
         <Card className="space-y-4">
             {
-                subSchedule?.map(sc => <SubSchedule schedule={sc}/>)
+                subSchedule?.map(sc => <SubSchedule schedule={sc} setListSchedule={setListSchedule} setSubSchedule={setSubSchedule}/>)
             }
             <Row className="justify-center">
                 <Button 
