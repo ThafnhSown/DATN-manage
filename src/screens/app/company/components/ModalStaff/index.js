@@ -1,6 +1,7 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import { apiCreateStaff, apiDelStaff } from "../../../../../api/services";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook";
-import { requestLoadStaff } from "../../../../../redux/slices/staffSlice";
+import { requestCreateStaff, requestLoadStaff } from "../../../../../redux/slices/staffSlice";
 import {
     Col, Modal,
     Input, Form,
@@ -39,8 +40,9 @@ const ModalStaff = (props) => {
     }
     async function handleCreateStaff() {
         const data = form.getFieldsValue()
-        const res = await apiCreateStaff({...data, companyId: companyId})
-        if(!res.error) {
+        const res = await dispatch(requestCreateStaff({...data, companyId: companyId}))
+        const tmp = unwrapResult(res)
+        if(!tmp.error) {
             dispatch(requestLoadStaff(companyId))
         }
         setModalShow(false)

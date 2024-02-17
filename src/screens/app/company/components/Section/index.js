@@ -22,8 +22,7 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
 
     }, [currentRoute])
     const handleChooseTime = (e) => {
-        const data = (e.$H * 3600 + e.$m * 60) * 1000
-        setTime(data)
+        setTime(e.valueOf())
     }
     return (
             <Form
@@ -36,7 +35,7 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
             <Row className='space-x-4'>
             <Typography.Title level={5}>{(index+1) ? (index < 9 ? `Chặng 0${index+1}` : `Chặng ${index+1}`) : null}</Typography.Title>
             <Form.Item name="departureTime">
-                <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={handleChooseTime}/>
+                <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)}/>
             </Form.Item>
             <Form.Item name="pickUpPointId">
                 <Select options={optionsListPoint} style={{width: 218}}></Select>

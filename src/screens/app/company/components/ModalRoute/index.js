@@ -3,30 +3,25 @@ import { useEffect, useState, useMemo } from 'react'
 import { Select, Card, Button, Input, Popconfirm } from 'antd'
 import { SwapOutlined, EditFilled, DeleteFilled, ArrowLeftOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
-import { requestLoadListRoute } from "../../../../../redux/slices/routeSlice"
+import { requestCreateRoute, requestLoadListRoute } from "../../../../../redux/slices/routeSlice"
 import { useNavigate } from 'react-router'
+import LoadingPage from "../../../../../utils/Loading"
 import './style.css'
+import { unwrapResult } from "@reduxjs/toolkit"
 
 const ModalRoute = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector(state => state.routeState.listRoute)
+    const isLoading = useAppSelector(state => state.routeState.loading)
     const listProvince = useAppSelector(state => state.globalState.listProvince)
-    // const [listProvince, setListProvince] = useState([])
     const [listSecondDistrict, setListSecondDistrict] = useState([])
     const [listFirstDistrict, setListFirstDistrict] = useState([])
     const [firstDistrict, setFirstDistrict] = useState()
     const [secondDistrict, setSecondDistrict] = useState()
     let listRouteMain = listRoute.filter(item => item.id %2 !=0)
-    // async function loadProvince() {
-    //     const res = await apiGetListProvince()
-    //     const listP = res.data.data.map((p) => ({
-    //         value: p.id,
-    //         label: p.province
-    //     }))
-    //     setListProvince(listP)
-    // }
+
     async function loadFirstDistrict(value) {
         if(value) {
             const res = await apiGetListDistrict(value)
@@ -66,8 +61,9 @@ const ModalRoute = () => {
             endPointId: secondDistrict,
             startPointId: firstDistrict
         }
-        const res = await apiCreateCoachRoute(data)
-        if(res.data.error == 0) {
+        const res = await dispatch(requestCreateRoute(data))
+        const tmp = await unwrapResult(res)
+        if(tmp.error == 0) {
             handleLoadRoutes(companyId)
         }
     }
@@ -83,7 +79,9 @@ const ModalRoute = () => {
     }
     return (
         <div className="mx-16 space-y-4">
-            <div className="bg-white boder rounded-xl h-12 items-center flex flex-row space-x-2">
+           {
+            isLoading ? <LoadingPage /> : <>
+             <div className="bg-white boder rounded-xl h-12 items-center flex flex-row space-x-2">
                 <ArrowLeftOutlined onClick={() => navigate("/")}/>
                 <p>Tạo tuyến</p>
             </div>
@@ -130,7 +128,8 @@ const ModalRoute = () => {
                         ))
                     }
                 </Card>  
-            </div>
+            </div></>
+           }
         </div>
     )
 }

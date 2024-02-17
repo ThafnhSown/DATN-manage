@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiCreateCompany, apiCreatePolicy, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany, apiGetPolicyList } from "../../api/services";
+import { apiCreateCoach, apiCreateCompany, apiCreatePolicy, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany, apiGetPolicyList } from "../../api/services";
 
 const initialState = {
     loading: false,
@@ -22,6 +22,11 @@ export const requestCompanyInfo = createAsyncThunk('/company/get-info', async() 
 
 export const requestCreateCompany = createAsyncThunk("/admin/create-company-account", async(props) => {
     const res = await apiCreateCompany(props)
+    return res.data
+})
+
+export const requestCreateCoach = createAsyncThunk("/company/create-transport", async (payload) => {
+    const res = await apiCreateCoach(payload)
     return res.data
 })
 
@@ -53,7 +58,6 @@ export const companySlice = createSlice({
         deleteCoach: (state, action) => {
             const id = action.payload
             const tmp = state.listCoach.filter(item => item.id != id)
-            console.log(tmp)
             state.listCoach = tmp
         }
     },
@@ -76,10 +80,18 @@ export const companySlice = createSlice({
             state.loading = false
             state.currentCompany = action.payload
         })
+        builder.addCase(requestCreateCoach.pending, (state) => {
+            state.loading = true
+        })
+        builder.addCase(requestCreateCoach.fulfilled, (state) => {
+            state.loading = false
+        })
+        builder.addCase(requestLoadCoach.pending, (state, action) => {
+            state.loading = true;
+        })
         builder.addCase(requestLoadCoach.fulfilled, (state, action) => {
             state.loading = false;
             state.listCoach = action.payload
-            // action.payload.map(coach => state.mapCoach[coach.id] = coach)
         })
         builder.addCase(requestLoadPolicy.fulfilled, (state, action) => {
             state.loading = false

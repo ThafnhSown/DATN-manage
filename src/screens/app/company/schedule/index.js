@@ -11,6 +11,7 @@ import moment from 'moment'
 const { Title } = Typography
 import { convertDate } from "../../../../utils/convertTime";
 import './style.css'
+import dayjs from 'dayjs'
 
 const Schedule = () => {
     const dispatch = useAppDispatch()
@@ -62,11 +63,12 @@ const Schedule = () => {
             endTime: 0,
             type: 1
         }
-        const res = await apiCreateSchedule(data)
-        if(res.data.error == 0) {
-            setListTimeSlot([])
-            handleChooseRoute(currentRoute)
-        }
+        console.log(data)
+        // const res = await apiCreateSchedule(data)
+        // if(res.data.error == 0) {
+        //     setListTimeSlot([])
+        //     handleChooseRoute(currentRoute)
+        // }
     }
 
     const handleChooseRoute = async (value) => {
@@ -133,7 +135,7 @@ const Schedule = () => {
 
                                     </div>
                                 </List.Item>
-                                {
+                                    {
                                         mapEdit == item.id & isEdit ? mapTS[item.id]?.map((ts, index) => <TimeSlotCard schedule={ts} index={index} isEdit={isEdit} setIsEdit={setIsEdit}/> ) : null
                                     }
                                 </div>

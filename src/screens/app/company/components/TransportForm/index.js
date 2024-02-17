@@ -3,8 +3,9 @@ import { apiCreateCoach, apiDelCoach, apiUpdateCoach } from '../../../../../api/
 import { Form, Row, Input, Select, Button, Col, Typography, Popconfirm, Card } from 'antd'
 import { useState, useEffect } from 'react' 
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
-import { requestLoadCoach, deleteCoach } from '../../../../../redux/slices/companySlice'
+import { requestLoadCoach, deleteCoach, requestCreateCoach } from '../../../../../redux/slices/companySlice'
 import { useSnackbar } from 'notistack'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const { Title } = Typography
 
@@ -18,8 +19,6 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
     const [vsc, setVsc] = useState()
     const [phone, setPhone] = useState()
     useEffect(() => {
-        // form.setFieldsValue({...transport})
-        // transport ? form.setFieldValue("coachTypeId", transport.coachType.id) : null
         if(transport) {
             setPicture(transport?.picture)
             setVsc(transport.vsc)
@@ -31,8 +30,9 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
         setPicture(url)
     }
     const handleCreateCoach = async (props) => {
-        const res = await apiCreateCoach(props)
-        if(res.data.error == 0) {
+        const res = await dispatch(requestCreateCoach(props))
+        const tmp = await unwrapResult(res)
+        if(tmp.error == 0) {
             enqueueSnackbar("Tạo thành công !", {
                 variant: "success"
             })

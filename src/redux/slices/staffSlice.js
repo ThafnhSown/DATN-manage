@@ -26,8 +26,11 @@ export const staffSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(requestCreateStaff.pending, (state, action) => {
+            state.loading = true
+        })
         builder.addCase(requestCreateStaff.fulfilled, (state, action) => {
-            state.listStaff.push(action.payload)
+            state.loading = false
         })
 
         builder.addCase(requestLoadStaff.pending, (state) => {

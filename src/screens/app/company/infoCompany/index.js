@@ -5,19 +5,24 @@ import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../redux/hook'
 import { apiGetCompanyInfo, apiUpdateCompanyInfo } from '../../../../api/services'
 import './style.css'
-import { authState } from '../../../../redux/slices/authSlice'
+import LoadingPage from '../../../../utils/Loading'
+import { requestCompanyInfo } from '../../../../redux/slices/companySlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const { Title } = Typography
 
 const InfoCompany = () => {
     const [form] = Form.useForm()
+    const dispatch = useAppDispatch()
     const id = useAppSelector(state => state.authState.userInfo.id)
+    const isLoading = useAppSelector(state => state.companyState.loading)
     const [change, setChange] = useState(true)
     const [avatar, setAvatar] = useState()
     const loadCompanyInfo = async () => {
-        const res = await apiGetCompanyInfo()
-        form.setFieldsValue({...res.data.data})
-        setAvatar(res.data.data.logo)
+        const res = await dispatch(requestCompanyInfo())
+        const companyInfo = unwrapResult(res)
+        form.setFieldsValue({...companyInfo})
+        setAvatar(companyInfo.logo)
     }
     const handlUploadAvatar = (url) => {
         setAvatar(url)
@@ -33,7 +38,8 @@ const InfoCompany = () => {
 
     return (
         <div className='px-24'>
-            <Card title={<Title level={4}>Thông tin hãng xe</Title>} extra={<Button className="text-white hover:bg-white text-base font-medium border rounded-md h-8" onClick={() => {change ? handleUpdateCompanyInfo() : setChange(!change)}}>{change ? "Lưu" : <p><EditFilled />Chỉnh sửa</p>}</Button>}>
+            {
+                isLoading ? <LoadingPage /> : <Card title={<Title level={4}>Thông tin hãng xe</Title>} extra={<Button className="text-white hover:bg-white text-base font-medium border rounded-md h-8" onClick={() => {change ? handleUpdateCompanyInfo() : setChange(!change)}}>{change ? "Lưu" : <p><EditFilled />Chỉnh sửa</p>}</Button>}>
                 {<div>
                 <Form form={form}>
                     <Title level={5}>Logo hãng xe</Title>
@@ -84,6 +90,7 @@ const InfoCompany = () => {
                 </div>
                 }
             </Card>
+            }
         </div>
     )
 }

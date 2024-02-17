@@ -7,17 +7,16 @@ import { requestCreateRoute, requestLoadListRoute, requestDeleteRoute } from "..
 import { apiAddPointToRoute, apiGetListDistrict, apiGetListProvince, apiGetLocation, apiGetRouteDetail, apiOfficeInDistrict } from "../../../../../api/services"
 import { requestLoadListOffice } from '../../../../../redux/slices/officeSlice'
 import './style.css'
+import LoadingPage from "../../../../../utils/Loading";
 const { Title } = Typography
 
 const AddPointToRoute = ({currentRoute}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listProvince = useAppSelector(state => state.globalState.listProvince)
-    const listRoute = useAppSelector((state) => state.routeState.listRoute)
-    const listOffice = useAppSelector((state) => state.officeState.listOffice)
+    const isLoading = useAppSelector((state) => state.routeState.loading)
     const [listDistrict, setListDistrict] = useState([])
     const [listPoint, setListPoint] = useState([])
-    const [listDataPoint, setListDataPoint] = useState([])
     const [showP, setShowP] = useState(listProvince)
     const [showD, setShowD] = useState(false)
     const [delPoint, setDelPoint] = useState([])
@@ -25,6 +24,7 @@ const AddPointToRoute = ({currentRoute}) => {
     const dragItem = React.useRef(null)
     const dragOverItem = React.useRef(null)
     const [mapOffice, setMapOffice] = useState({})
+    const [isEdit, setIsEdit] = useState(false)
     
     const handleSort = () => {
         let _pointItems = [...listPoint]
@@ -37,7 +37,7 @@ const AddPointToRoute = ({currentRoute}) => {
 
     useEffect(() => {
         setDelPoint([])
-        handleLoadRoutes()
+        // handleLoadRoutes()
     }, [])
     useEffect(() => {
         handleLoadPoint(currentRoute)
@@ -69,16 +69,17 @@ const AddPointToRoute = ({currentRoute}) => {
         setMapOffice({...mapOffice, ...officeIndex})
         setListPoint([...listPoint, tmp])
     }
-    async function handleLoadRoutes() {
-        try{
-            await dispatch(requestLoadListRoute(companyId))
-            await dispatch(requestLoadListOffice(companyId))
-        } catch(err) {
-            console.log(err)
-        }
-    }
+    // async function handleLoadRoutes() {
+    //     try{
+    //         await dispatch(requestLoadListRoute(companyId))
+    //         await dispatch(requestLoadListOffice(companyId))
+    //     } catch(err) {
+    //         console.log(err)
+    //     }
+    // }
 
     async function handleLoadPoint(id) {
+        setIsEdit(false)
         setListPoint([])
         let officeIndex = {}
         const res = await apiGetRouteDetail(id)
@@ -145,131 +146,137 @@ const AddPointToRoute = ({currentRoute}) => {
 
     return (
         <>
+           <div>
             <div>
-                <div>
-                    <div className="flex flex-row mt-6 space-x-4">
-                        <div className="w-1/4" >
-                            <Card style={{
-                                height: 400,
-                                overflow: 'auto',
-                                padding: '0 16px',
-                                border: '1px solid rgba(140, 140, 140, 0.35)',
-                            }}>
-                                <InfiniteScroll
-                                dataLength={10}>
-                                    {
-                                        !showD ? <div>
+                <div className="flex flex-row mt-6 space-x-4">
+                    <div className="w-1/4" >
+                        <Card style={{
+                            height: 400,
+                            overflow: 'auto',
+                            padding: '0 16px',
+                            border: '1px solid rgba(140, 140, 140, 0.35)',
+                        }}>
+                            <InfiniteScroll
+                            dataLength={10}>
+                                {
+                                    !showD ? <div>
 
-                                    <Title level={3}>Tỉnh / Thành</Title>
-                                    <Input
-                                        onChange={onSearch}
-                                        placeholder='Tìm kiếm'
-                                        allowClear
-                                        prefix={<SearchOutlined />}
-                                        
-                                    />
+                                <Title level={3}>Tỉnh / Thành</Title>
+                                <Input
+                                    onChange={onSearch}
+                                    placeholder='Tìm kiếm'
+                                    allowClear
+                                    prefix={<SearchOutlined />}
                                     
-                                    <List
-                                        dataSource={showP}
-                                        renderItem={(item) => (
-                                            <List.Item key={item.value}
-                                                onClick={() => {
-                                                    setShowD(true)
-                                                    loadDistrict(item.value)
-                                                }}
-                                            >
-                                                <div>{item.label}</div>
-                                            </List.Item>
-                                        )}
-                                    />
-                                        </div> : <div>
-                                        <ArrowLeftOutlined onClick={() => setShowD(false)}/>
-                                        <List
-                                    dataSource={listDistrict}
+                                />
+                                
+                                <List
+                                    dataSource={showP}
                                     renderItem={(item) => (
                                         <List.Item key={item.value}
                                             onClick={() => {
-                                                handleChooseDistrict(item.value)
-                                                // setShowD(false)
+                                                setShowD(true)
+                                                loadDistrict(item.value)
                                             }}
                                         >
                                             <div>{item.label}</div>
                                         </List.Item>
                                     )}
                                 />
-                                    </div>
-                                    }
-                                    
-                                </InfiniteScroll>
-                            
-                            </Card>
-                        </div>
-                        <div className="w-3/4">
-                            <Card>
-                            {
-                                listPoint.length ? <div className='space-y-3'>
-                                    {
-                                        listPoint.map((point, index) => {
-                                            return (
-                                            <>
-                                            <div className='flex-row space-x-4 grid grid-cols-12'
-                                                key={index}
-                                                draggable
-                                                onDragStart={(e) => (dragItem.current = index)}
-                                                onDragEnter={(e) => (dragOverItem.current = index)}
-                                                onDragEnd={handleSort}
-                                                onDragOver={(e) => e.preventDefault()}
+                                    </div> : <div>
+                                    <ArrowLeftOutlined onClick={() => setShowD(false)}/>
+                                    <List
+                                dataSource={listDistrict}
+                                renderItem={(item) => (
+                                    <List.Item key={item.value}
+                                        onClick={() => {
+                                            handleChooseDistrict(item.value)
+                                            // setShowD(false)
+                                        }}
+                                    >
+                                        <div>{item.label}</div>
+                                    </List.Item>
+                                )}
+                            />
+                                </div>
+                                }
+                                
+                            </InfiniteScroll>
+                        
+                        </Card>
+                    </div>
+                    <div className="w-3/4">
+                        <Card>
+                        {
+                            listPoint.length ? <div className='space-y-3'>
+                                {
+                                    listPoint.map((point, index) => {
+                                        return (
+                                        <>
+                                        <div className='flex-row space-x-4 grid grid-cols-12'
+                                            key={index}
+                                            draggable
+                                            onDragStart={(e) => (dragItem.current = index)}
+                                            onDragEnter={(e) => (dragOverItem.current = index)}
+                                            onDragEnd={handleSort}
+                                            onDragOver={(e) => e.preventDefault()}
 
-                                            >
-                                                <div className='col-span-4 space-x-2'>
-                                                    <Checkbox onChange={e => handleChecked(e, point)} />
-                                                    <b>{point.address} :</b>
-                                                </div>
-                                               <div className='col-span-8 flex flex-row space-x-2'>
-                                                <Input onChange={(e) => {
-                                                    const tmp = {...point, description: e.target.value, isOffice: false}
-                                                    listPoint[index] = tmp
-                                                    }} placeholder={point.description} className='w-40'/>
-                                                <p>hoặc</p>
-                                                <Select className='w-40' onChange={(value) => {
-                                                    const tmp = {...point, officeIdList: value, isOffice: true}
-                                                    listPoint[index] = tmp
-                                                }} 
-                                                mode="multiple"
-                                                defaultValue={point.officeList}
-                                                >
-                                                    {
-                                                        mapOffice[point.locationId]?.map(({label, value}) => (
-                                                            <Select.Option key={value} value={value}>
-                                                                {label}
-                                                            </Select.Option>
-                                                        ))
-                                                    }
-                                                </Select>
-                                                </div>
+                                        >
+                                            <div className='col-span-4 space-x-2'>
+                                                <Checkbox onChange={e => handleChecked(e, point)} />
+                                                <b>{point.address} :</b>
                                             </div>
-                                               
-                                            </>
-                                        )})
-                                        
-                                    }
-                                </div> : null
-                            }
-                            <Row grid={12}>
-                                <Col span={4}>
-                                    <p className='mt-10'><Checkbox onChange={() => setChecked(!checked)}/> Chọn tất cả</p>
-                                </Col>
-                                <Col span={16}/>
-                                <Col span={4}>
-                                    <Button onClick={() => handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
-                                    <Button onClick={() => handleAddPoint(listPoint)} className='mt-10 text-white'>Lưu</Button>
-                                </Col>
-                            </Row>
-                            </Card>   
-                        </div>
+                                           <div className='col-span-8 flex flex-row space-x-2'>
+                                            <Input onChange={(e) => {
+                                                const tmp = {...point, description: e.target.value, isOffice: false}
+                                                listPoint[index] = tmp
+                                                }} placeholder={point.description} className='w-40'
+                                                disabled={!isEdit}
+                                                />
+                                            <p>hoặc</p>
+                                            <Select className='w-40' onChange={(value) => {
+                                                const tmp = {...point, officeIdList: value, isOffice: true}
+                                                listPoint[index] = tmp
+                                            }} 
+                                            mode="multiple"
+                                            defaultValue={point.officeList}
+                                            disabled={!isEdit}
+                                            >
+                                                {
+                                                    mapOffice[point.locationId]?.map(({label, value}) => (
+                                                        <Select.Option key={value} value={value}>
+                                                            {label}
+                                                        </Select.Option>
+                                                    ))
+                                                }
+                                            </Select>
+                                            </div>
+                                        </div>
+                                           
+                                        </>
+                                    )})
+                                    
+                                }
+                            </div> : null
+                        }
+                        <Row grid={12}>
+                            <Col span={4}>
+                                <p className='mt-10'><Checkbox onChange={() => setChecked(!checked)}/> Chọn tất cả</p>
+                            </Col>
+                            <Col span={16}/>
+                            <Col span={4}>
+                                <Button onClick={() => handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
+                                {
+                                    isEdit ? <Button onClick={() => handleAddPoint(listPoint)} className='mt-10 text-white'>Lưu</Button> : <Button onClick={() => setIsEdit(!isEdit)} className='mt-10 text-white'>Sửa</Button>
+                                }
+                            </Col>
+                        </Row>
+                        </Card>   
                     </div>
                 </div>
             </div>
+        </div>
+
         </>
     )
 }

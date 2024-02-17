@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiGetListRoute, apiGetRouteDetail, apiGetTravelPathList} from "../../api/services";
+import { apiCreateCoach, apiCreateCoachRoute, apiGetListRoute, apiGetRouteDetail, apiGetTravelPathList} from "../../api/services";
 
 const initialState = {
     loading: false,
@@ -8,6 +8,11 @@ const initialState = {
     currentListPoint: [],
     listPath: []
 };
+
+export const requestCreateRoute = createAsyncThunk("/company/create-route", async(payload) => {
+    const res = await apiCreateCoachRoute(payload)
+    return res.data
+})
 
 export const requestLoadListRoute = createAsyncThunk("/company/get-coach-route-list", async(companyId) => {
     const res = await apiGetListRoute(companyId)
@@ -33,6 +38,12 @@ export const routeSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(requestCreateRoute.pending, (state) => {
+            state.loading = true
+        })
+        builder.addCase(requestCreateRoute.fulfilled, (state) => {
+            state.loading = false
+        })
         builder.addCase(requestLoadListRoute.pending, (state) => {
             state.loading = true
         })

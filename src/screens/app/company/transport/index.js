@@ -4,12 +4,14 @@ import { PlusOutlined } from '@ant-design/icons'
 import { Button, Card } from 'antd'
 import { requestLoadCoach } from "../../../../redux/slices/companySlice"
 import { apiGetCoachList, apiGetCoaches } from "../../../../api/services"
+import LoadingPage from "../../../../utils/Loading"
 import { useEffect, useState } from "react"
 
 const Transport = () => {
     const dispatch = useAppDispatch()
     const id = useAppSelector(state => state.authState.userInfo.id)
     const listCoach = useAppSelector(state => state.companyState.listCoach)
+    const isLoading = useAppSelector(state => state.companyState.loading)
     const [isCreate, setIsCreate] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [options, setOptions] = useState([])
@@ -36,22 +38,24 @@ const Transport = () => {
     }
     return (
         <>
-            <div className="space-y-4 mx-16">
-                <Card>
-                    <Button icon={<PlusOutlined />} className="w-full border rounded-md h-10" onClick={() => setIsCreate(!isCreate)}>Tạo thêm xe</Button>
-                </Card>
-                {
-                    isCreate && <TransportForm setIsCreate={setIsCreate} options={options}/>
-                }
-                <div className="space-y-3">
-                {
-                    listCoach.map((coach, index) => (
-                        <TransportForm transport={coach} options={options}/>
-                    ))
-                } 
-                </div>
-              
+           {
+            isLoading ? <LoadingPage /> :  <div className="space-y-4 mx-16">
+            <Card>
+                <Button icon={<PlusOutlined />} className="w-full border rounded-md h-10" onClick={() => setIsCreate(!isCreate)}>Tạo thêm xe</Button>
+            </Card>
+            {
+                isCreate && <TransportForm setIsCreate={setIsCreate} options={options}/>
+            }
+            <div className="space-y-3">
+            {
+                listCoach.map((coach, index) => (
+                    <TransportForm transport={coach} options={options}/>
+                ))
+            } 
             </div>
+          
+        </div>
+           }
         </>
     )
 }

@@ -47,18 +47,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
         setListSection([...res.data.data])
     }
     const handleChooseTime = (e) => {
-        console.log(e.valueOf())
-        // console.log(dayjs(data))
         setTime(e.valueOf())
     }
 
     const handleUpdateTimeslot = async () => {
         const data = {...form.getFieldsValue(), departureTime: time}
-        // console.log(data)
         const res = await apiUpdateTimeslot(data)
-        // if(res.data.error == 0) {
-        //     setIsEdit(false)
-        // }
     } 
 
     return (
@@ -73,7 +67,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                 >
                 <Row className='space-x-4'>
                     <Form.Item name="departureTime">
-                        <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={handleChooseTime}/>
+                        <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)}/>
                     </Form.Item>
                    <Form.Item name="coachTypeId">
                         <Select defaultValue="Chọn loại xe" style={{width:260}} options={options}>

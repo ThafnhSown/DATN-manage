@@ -29,8 +29,11 @@ export const officeSlice = createSlice({
         
     },
     extraReducers: (builder) => {
+        builder.addCase(requestCreateOffice.pending, (state, action) => {
+            state.loading = true
+        })
         builder.addCase(requestCreateOffice.fulfilled, (state, action) => {
-            state.listOffice.push(action.payload)
+            state.loading = false
         })
         builder.addCase(requestLoadListOffice.pending, (state) => {
             state.loading = true

@@ -10,7 +10,9 @@ import { requestCreateOffice, requestLoadListOffice } from "../../../../../redux
 import OfficeCard from "../OfficeCard"
 import ImgUpload from "../../../../../components/layouts/components/ImgUpload"
 import { useNavigate } from 'react-router'
+import LoadingPage from "../../../../../utils/Loading"
 import './style.css'
+import { unwrapResult } from "@reduxjs/toolkit"
 
 const { Title } = Typography
 
@@ -20,6 +22,7 @@ const OfficeForm = () => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listOffice = useAppSelector(state => state.officeState.listOffice)
+    const isLoading = useAppSelector(state => state.officeState.loading)
     const listProvince = useAppSelector(state => state.globalState.listProvince)
     // const [listProvince, setListProvince] = useState([])
     const [listDistrict, setListDistrict] = useState([])
@@ -34,8 +37,9 @@ const OfficeForm = () => {
             data.name = `Văn phòng ${index}`
         }
         const payload = {...data, coachCompanyId: companyId, picture: avatar}
-        const res = await apiCreateOffice(payload)
-        if(res.data.error == 0) {
+        const res = await dispatch(requestCreateOffice(payload))
+        const tmp = unwrapResult(res)
+        if(tmp.error == 0) {
             handleLoadOffice()
             setModalShow(false)
             form.resetFields()
@@ -51,14 +55,6 @@ const OfficeForm = () => {
         }
     }
 
-    // async function loadProvince() {
-    //     const res = await apiGetListProvince()
-    //     const listP = res.data.data.map((p) => ({
-    //         value: p.id,
-    //         label: p.province
-    //     }))
-    //     setListProvince(listP)
-    // }
     async function loadDistrict(value) {
         if(value) {
             const res = await apiGetListDistrict(value)
@@ -74,13 +70,13 @@ const OfficeForm = () => {
     }
     
     useEffect(() => {
-        // loadProvince()
         handleLoadOffice()
     }, [])        
 
     return(
         <>
-            <div className="space-y-4 mx-16">
+            {
+                isLoading ? <LoadingPage /> :             <div className="space-y-4 mx-16">
                 <div>
                     <Card title={
                         <div className="flex flex-row space-x-2 items-center">
@@ -184,6 +180,7 @@ const OfficeForm = () => {
                     }
                 </div>
             </div>
+            }
         </>
     )
 }
