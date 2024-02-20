@@ -156,7 +156,6 @@ const AddPointToRoute = ({currentRoute}) => {
         <>
         {
             isLoading ? <LoadingPage /> :   <div>
-            <Button onClick={() => console.log(currentListPoint)}>son</Button>
             <div>
                 <div className="flex flex-row mt-6 space-x-4">
                     <div className="w-1/4" >
