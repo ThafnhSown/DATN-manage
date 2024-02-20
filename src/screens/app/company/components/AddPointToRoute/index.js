@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react' 
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Select, Card, Button, Input, Modal, Menu, Row, Form, List, Typography, Checkbox, Col } from 'antd'
-import { SaveOutlined, DeleteFilled, ArrowLeftOutlined, SearchOutlined } from '@ant-design/icons'
+import { Select, Card, Button, Input, Row, List, Typography, Checkbox, Col } from 'antd'
+import { ArrowLeftOutlined, SearchOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
-import { requestCreateRoute, requestLoadListRoute, requestDeleteRoute } from "../../../../../redux/slices/routeSlice"
-import { apiAddPointToRoute, apiGetListDistrict, apiGetListProvince, apiGetLocation, apiGetRouteDetail, apiOfficeInDistrict } from "../../../../../api/services"
-import { requestLoadListOffice } from '../../../../../redux/slices/officeSlice'
+import { apiAddPointToRoute, apiGetListDistrict, apiGetLocation, apiOfficeInDistrict, apiGetRouteDetail } from "../../../../../api/services"
 import './style.css'
 import LoadingPage from "../../../../../utils/Loading";
+import { requestLoadPoint } from '../../../../../redux/slices/routeSlice';
 const { Title } = Typography
 
 const AddPointToRoute = ({currentRoute}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listProvince = useAppSelector(state => state.globalState.listProvince)
-    const isLoading = useAppSelector((state) => state.routeState.loading)
+    const isLoading = useAppSelector((state) => state.routeState.pointLoading)
+    const currentListPoint = useAppSelector(state => state.routeState.currentListPoint)
     const [listDistrict, setListDistrict] = useState([])
     const [listPoint, setListPoint] = useState([])
     const [showP, setShowP] = useState(listProvince)
@@ -40,6 +40,7 @@ const AddPointToRoute = ({currentRoute}) => {
         // handleLoadRoutes()
     }, [])
     useEffect(() => {
+        // dispatch(requestLoadPoint(currentRoute))
         handleLoadPoint(currentRoute)
     }, [currentRoute])
 
@@ -55,6 +56,10 @@ const AddPointToRoute = ({currentRoute}) => {
     }
 
     async function handleChooseDistrict(value) {
+        let check = 0
+        listPoint.map(point => {
+            if(point.locationId === value) check = 1 
+        })
         let officeIndex = {}
         const res = await apiGetLocation(value)
         const tmp = {
@@ -67,7 +72,9 @@ const AddPointToRoute = ({currentRoute}) => {
             label: of.name
         }))
         setMapOffice({...mapOffice, ...officeIndex})
-        setListPoint([...listPoint, tmp])
+        if(isEdit && !check) {
+            setListPoint([...listPoint, tmp])
+        }
     }
     // async function handleLoadRoutes() {
     //     try{
@@ -79,6 +86,7 @@ const AddPointToRoute = ({currentRoute}) => {
     // }
 
     async function handleLoadPoint(id) {
+        dispatch(requestLoadPoint(id))
         setIsEdit(false)
         setListPoint([])
         let officeIndex = {}
@@ -146,7 +154,9 @@ const AddPointToRoute = ({currentRoute}) => {
 
     return (
         <>
-           <div>
+        {
+            isLoading ? <LoadingPage /> :   <div>
+            <Button onClick={() => console.log(currentListPoint)}>son</Button>
             <div>
                 <div className="flex flex-row mt-6 space-x-4">
                     <div className="w-1/4" >
@@ -215,7 +225,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                         <>
                                         <div className='flex-row space-x-4 grid grid-cols-12'
                                             key={index}
-                                            draggable
+                                            draggable={isEdit}
                                             onDragStart={(e) => (dragItem.current = index)}
                                             onDragEnter={(e) => (dragOverItem.current = index)}
                                             onDragEnd={handleSort}
@@ -230,7 +240,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                             <Input onChange={(e) => {
                                                 const tmp = {...point, description: e.target.value, isOffice: false}
                                                 listPoint[index] = tmp
-                                                }} placeholder={point.description} className='w-40'
+                                                }} value={point.description} className='w-40'
                                                 disabled={!isEdit}
                                                 />
                                             <p>hoặc</p>
@@ -239,20 +249,13 @@ const AddPointToRoute = ({currentRoute}) => {
                                                 listPoint[index] = tmp
                                             }} 
                                             mode="multiple"
-                                            defaultValue={point.officeList}
+                                            value={point.officeList}
                                             disabled={!isEdit}
+                                            options={mapOffice[point.locationId]}
                                             >
-                                                {
-                                                    mapOffice[point.locationId]?.map(({label, value}) => (
-                                                        <Select.Option key={value} value={value}>
-                                                            {label}
-                                                        </Select.Option>
-                                                    ))
-                                                }
                                             </Select>
                                             </div>
                                         </div>
-                                           
                                         </>
                                     )})
                                     
@@ -263,8 +266,11 @@ const AddPointToRoute = ({currentRoute}) => {
                             <Col span={4}>
                                 <p className='mt-10'><Checkbox onChange={() => setChecked(!checked)}/> Chọn tất cả</p>
                             </Col>
-                            <Col span={16}/>
-                            <Col span={4}>
+                            <Col span={14}/>
+                            <Col span={6}>
+                                {
+                                    isEdit && <Button onClick={() => setIsEdit(!isEdit)} className='mt-10 text-white pause-btn'>Hủy</Button>
+                                }
                                 <Button onClick={() => handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
                                 {
                                     isEdit ? <Button onClick={() => handleAddPoint(listPoint)} className='mt-10 text-white'>Lưu</Button> : <Button onClick={() => setIsEdit(!isEdit)} className='mt-10 text-white'>Sửa</Button>
@@ -275,7 +281,9 @@ const AddPointToRoute = ({currentRoute}) => {
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
+        }
+         
 
         </>
     )

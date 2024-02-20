@@ -6,7 +6,8 @@ const initialState = {
     listRoute: [],
     currentRoute: {},
     currentListPoint: [],
-    listPath: []
+    listPath: [],
+    pointLoading: false
 };
 
 export const requestCreateRoute = createAsyncThunk("/company/create-route", async(payload) => {
@@ -51,7 +52,11 @@ export const routeSlice = createSlice({
             state.loading = false;
             state.listRoute = action.payload;
         })
+        builder.addCase(requestLoadPoint.pending, (state) => {
+            state.pointLoading = true
+        })
         builder.addCase(requestLoadPoint.fulfilled, (state, action) => {
+            state.pointLoading = false
             state.currentListPoint = action.payload.pointList
         })
         builder.addCase(requestLoadTravelPath.fulfilled, (state, action) => {
