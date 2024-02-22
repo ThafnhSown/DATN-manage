@@ -119,7 +119,7 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
                             }
                         </Col>
                         <Col span={5}>
-                            <Select value={transport?.coachType.name ?? "Chọn loại xe"} onChange={(value) => setCoachType(value)} className='w-full'>
+                            <Select value={coachType ?? "Chọn loại xe"} onChange={(value) => setCoachType(value)} className='w-full'>
                                 {
                                     options.map(({label, value}) => (
                                         <Select.Option key={value} value={value}>
@@ -130,10 +130,10 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
                             </Select>
                         </Col>
                         <Col span={4}>
-                            <Input value={transport.vsc} onChange={(e) => setVsc(e.target.value)}/>
+                            <Input value={vsc} onChange={(e) => setVsc(e.target.value)}/>
                         </Col>
                        <Col span={4}>
-                            <Input value={transport.phoneNumber} onChange={(e) => setPhone(e.target.value)}/>
+                            <Input value={phone} onChange={(e) => setPhone(e.target.value)}/>
                        </Col>
                         <Col span={4}>
                         <Button onClick={() => {

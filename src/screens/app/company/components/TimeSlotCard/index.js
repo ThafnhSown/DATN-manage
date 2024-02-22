@@ -96,7 +96,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                 {
                     <p onClick={() => {
                         setListSection([...listSection, {}])
-                    }} style={{color: '#006D38'}}><PlusCircleOutlined />Thêm chặng</p>
+                    }} style={{color: '#006D38'}} className='w-28'><PlusCircleOutlined />Thêm chặng</p>
                 }
                 <div className='flex flex-row justify-center'>
                     {

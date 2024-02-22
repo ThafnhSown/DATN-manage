@@ -5,6 +5,7 @@ import { DeleteFilled } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
 const Section = ({section, index, listSection, setListSection, listTimeSlot, timeSlotIndex}) => {
+    console.log(section)
     const [time, setTime] = useState(0)
     const [form] = Form.useForm()
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -15,7 +16,7 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
     }))
 
     useEffect(() => {
-        if(section) {
+        if(section.id) {
             form.setFieldsValue({...section})
             form.setFieldValue("departureTime", dayjs(section.departureTime))
         }

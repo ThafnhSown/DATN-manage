@@ -185,8 +185,10 @@ const AddPointToRoute = ({currentRoute}) => {
                                     renderItem={(item) => (
                                         <List.Item key={item.value}
                                             onClick={() => {
-                                                setShowD(true)
-                                                loadDistrict(item.value)
+                                                if(isEdit) {
+                                                    setShowD(true)
+                                                    loadDistrict(item.value)
+                                                }
                                             }}
                                         >
                                             <div>{item.label}</div>
