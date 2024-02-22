@@ -153,7 +153,7 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
                             okButtonProps={okButtonProps}
                             onConfirm={() => handleDelCoach(transport.id)}
                             >
-                            <Button>Xóa</Button>
+                            <Button className='del-btn'>Xóa</Button>
                         </Popconfirm>
                         }
                         </Col>  

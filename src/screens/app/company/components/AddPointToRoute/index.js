@@ -112,6 +112,7 @@ const AddPointToRoute = ({currentRoute}) => {
             point.officeList = son
             return point
         })
+        tmp.length ? setIsEdit(false) : setIsEdit(true)
         setListPoint([...tmp])
     }
 
@@ -155,7 +156,7 @@ const AddPointToRoute = ({currentRoute}) => {
     return (
         <>
         {
-            isLoading ? <LoadingPage /> :   <div>
+            isLoading ? <LoadingPage /> : <div>
             <div>
                 <div className="flex flex-row mt-6 space-x-4">
                     <div className="w-1/4" >
@@ -200,7 +201,6 @@ const AddPointToRoute = ({currentRoute}) => {
                                     <List.Item key={item.value}
                                         onClick={() => {
                                             handleChooseDistrict(item.value)
-                                            // setShowD(false)
                                         }}
                                     >
                                         <div>{item.label}</div>
@@ -232,7 +232,7 @@ const AddPointToRoute = ({currentRoute}) => {
 
                                         >
                                             <div className='col-span-4 space-x-2'>
-                                                <Checkbox onChange={e => handleChecked(e, point)} />
+                                                <Checkbox onChange={e => handleChecked(e, point)} disabled={!isEdit}/>
                                                 <b>{point.address} :</b>
                                             </div>
                                            <div className='col-span-8 flex flex-row space-x-2'>
@@ -263,17 +263,25 @@ const AddPointToRoute = ({currentRoute}) => {
                         }
                         <Row grid={12}>
                             <Col span={4}>
-                                <p className='mt-10'><Checkbox onChange={() => setChecked(!checked)}/> Chọn tất cả</p>
+                                { listPoint.length ? <p className='mt-10'><Checkbox onChange={() => setChecked(!checked)} disabled={!isEdit}/> Chọn tất cả</p> : null}
                             </Col>
                             <Col span={14}/>
                             <Col span={6}>
                                 {
-                                    isEdit && <Button onClick={() => setIsEdit(!isEdit)} className='mt-10 text-white pause-btn'>Hủy</Button>
+                                    listPoint.length ? <div>
+                                {
+                                    isEdit && <Button onClick={() => {
+                                        handleLoadPoint(currentRoute)
+                                        setIsEdit(!isEdit)
+                                    }} className='mt-10 text-white pause-btn'>Hủy</Button>
                                 }
                                 <Button onClick={() => handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
                                 {
                                     isEdit ? <Button onClick={() => handleAddPoint(listPoint)} className='mt-10 text-white'>Lưu</Button> : <Button onClick={() => setIsEdit(!isEdit)} className='mt-10 text-white'>Sửa</Button>
                                 }
+                                    </div> : null
+                                }
+                               
                             </Col>
                         </Row>
                         </Card>   

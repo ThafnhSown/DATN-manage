@@ -32,7 +32,9 @@ const Location = () => {
     }))
 
     useEffect(() => {
-        handleLoadRoutes()
+        if(!listRoute.length) {
+            handleLoadRoutes()
+        }
         dispatch(setCurrentRoute(null))
     }, [])
 

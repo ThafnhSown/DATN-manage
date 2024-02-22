@@ -63,12 +63,11 @@ const Schedule = () => {
             endTime: 0,
             type: 1
         }
-        console.log(data)
-        // const res = await apiCreateSchedule(data)
-        // if(res.data.error == 0) {
-        //     setListTimeSlot([])
-        //     handleChooseRoute(currentRoute)
-        // }
+        const res = await apiCreateSchedule(data)
+        if(res.data.error == 0) {
+            setListTimeSlot([])
+            handleChooseRoute(currentRoute)
+        }
     }
 
     const handleChooseRoute = async (value) => {

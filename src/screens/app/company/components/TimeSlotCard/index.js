@@ -10,13 +10,18 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
     const listPath = useAppSelector(state => state.routeState.listPath)
+    const listCoach = useAppSelector((state) => state.companyState.listCoach)
     const [listTP, setListTP] = useState([])
     const [options, setOptions] = useState([])
     const [listSection, setListSection] = useState([])
     const [form] = Form.useForm()
     const [time, setTime] = useState(0)
     useEffect(() => {
-        handleLoadCoach()
+        let lc = listCoach.map((coach) => ({
+            value: coach.coachType.id,
+            label: coach.coachType.name
+        }))
+        setOptions(lc)
         if(schedule?.id) {
             handleLoadSection()
         }
@@ -28,19 +33,10 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
         }
         const tmp = listPath.map(p => ({
             value: p.id,
-            label: p.detail
+            label: p.name
         }))
         setListTP(tmp)
     }, [isEdit])
-
-    async function handleLoadCoach() {
-        const res = await apiGetCoaches()
-        const listCoach = res.data.data.map((coach) => ({
-            label: coach.name,
-            value: coach.id
-        }))
-        setOptions(listCoach)
-    }
 
     async function handleLoadSection () {
         const res = await apiGetSection(schedule.id)
