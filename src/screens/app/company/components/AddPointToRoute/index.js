@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Select, Card, Button, Input, Row, List, Typography, Checkbox, Col } from 'antd'
 import { ArrowLeftOutlined, SearchOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
-import { apiAddPointToRoute, apiGetListDistrict, apiGetLocation, apiOfficeInDistrict, apiGetRouteDetail } from "../../../../../api/services"
+import { apiAddPointToRoute, apiGetListDistrict, apiGetLocation, apiOfficeInDistrict, apiGetRouteDetail, apiOfficeInProvince } from "../../../../../api/services"
 import './style.css'
 import LoadingPage from "../../../../../utils/Loading";
 import { requestLoadPoint } from '../../../../../redux/slices/routeSlice';
@@ -66,7 +66,7 @@ const AddPointToRoute = ({currentRoute}) => {
             address: `${res.data.data.district} / ${res.data.data.province}`,
             locationId: value,
         }
-        const office = await apiOfficeInDistrict({companyId: companyId, districtId: value})
+        const office = await apiOfficeInProvince({companyId: companyId, locationId: res.data.data.provinceId})
         officeIndex[value] = office.data.data.map(of => ({
             value: of.id,
             label: of.name
@@ -93,7 +93,7 @@ const AddPointToRoute = ({currentRoute}) => {
         const res = await apiGetRouteDetail(id)
         await Promise.all(
             res.data.data.pointList.map(async point => {
-                const office = await apiOfficeInDistrict({companyId: companyId, districtId: point.locationId})
+                const office = await apiOfficeInProvince({companyId: companyId, locationId: point.location.provinceId})
                 officeIndex[point.locationId] = office.data.data.map(of => ({
                     value: of.id,
                     label: of.name

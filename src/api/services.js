@@ -105,6 +105,10 @@ export const apiOfficeInDistrict = async ({companyId, districtId}) => {
     return ApiAdminConfig(`${EndPoint.OFFICE_IN_DISTRICT}?companyId=${companyId}&locationId=${districtId}`, undefined, "GET")
 }
 
+export const apiOfficeInProvince = async ({companyId, locationId}) => {
+    return ApiAdminConfig(`/global/get-company-office-list-in-province?companyId=${companyId}&locationId=${locationId}`, undefined, "GET")
+}
+
 export const apiDeleteOffice = async(props) => {
     return ApiAdminConfig(EndPoint.DEL_OFFICE, props)
 }
