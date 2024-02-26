@@ -66,7 +66,14 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)}/>
                     </Form.Item>
                    <Form.Item name="coachTypeId">
-                        <Select defaultValue="Chọn loại xe" style={{width:260}} options={options}>
+                        <Select defaultValue="Chọn loại xe" style={{width:260}}>
+                            {
+                                options.map(({label, value}) => (
+                                    <Select.Option key={value} value={value}>
+                                        {label}
+                                    </Select.Option>
+                                ))
+                            }
                         </Select>
                    </Form.Item>
                     

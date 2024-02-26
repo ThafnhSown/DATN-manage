@@ -39,7 +39,15 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
                 <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)}/>
             </Form.Item>
             <Form.Item name="pickUpPointId">
-                <Select options={optionsListPoint} style={{width: 218}}></Select>
+                <Select style={{width: 218}}>
+                    {
+                        optionsListPoint.map(({label, value}) => (
+                            <Select.Option key={value} value={value}>
+                                {label}
+                            </Select.Option>
+                        ))
+                    }
+                </Select>
             </Form.Item>
             <Form.Item name="dropOffPointId">
                 <Select options={optionsListPoint} style={{width: 218}}></Select>
