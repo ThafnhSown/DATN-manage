@@ -49,18 +49,18 @@ const AppNav = () => {
                       status === 'operating' ? <div>
                           <Row className="bg-white rounded h-9 items-center">
                             <Col className="space-x-20">
-                              <Link to="/" className="hover:text-green-600 text-base ml-2" activeClassName="active-link">Địa điểm</Link>
-                              <Link to="/phuong-tien" className="hover:text-green-600 text-base">Phương tiện</Link>
-                              <Link to="/chinh-sach" className="hover:text-green-600 text-base">Chính sách</Link>
-                              <Link to="/lich-xuat-ben" className="hover:text-green-600 text-base">Lịch xuất bến</Link>
+                              <Link to="/" className="hover:text-green-600 focus:text-green-700 text-base ml-2">Địa điểm</Link>
+                              <Link to="/phuong-tien" className="hover:text-green-600 focus:text-green-700 text-base">Phương tiện</Link>
+                              <Link to="/chinh-sach" className="hover:text-green-600 focus:text-green-700 text-base">Chính sách</Link>
+                              <Link to="/lich-xuat-ben" className="hover:text-green-600 focus:text-green-700 text-base">Lịch xuất bến</Link>
                             </Col>
                           </Row>  
                       </div>
                       : <Row className="bg-white rounded h-9 items-center">
                           <Col className="space-x-20">
-                            <Link to="/nhan-vien" className="hover:text-green-600 text-base ml-20">Nhân viên</Link>
-                            <Link to="/thong-tin" className="hover:text-green-600 text-base">Thông tin hãng xe</Link>
-                            <Link to="/bao-cao" className="hover:text-green-600 text-base">Báo cáo</Link>
+                            <Link to="/nhan-vien" className="hover:text-green-600 focus:text-green-700 text-base ml-20">Nhân viên</Link>
+                            <Link to="/thong-tin" className="hover:text-green-600 focus:text-green-700 text-base">Thông tin hãng xe</Link>
+                            <Link to="/bao-cao" className="hover:text-green-600 focus:text-green-700 text-base">Báo cáo</Link>
                           </Col>
                       </Row>
 

@@ -37,10 +37,8 @@ const AddPointToRoute = ({currentRoute}) => {
 
     useEffect(() => {
         setDelPoint([])
-        // handleLoadRoutes()
     }, [])
     useEffect(() => {
-        // dispatch(requestLoadPoint(currentRoute))
         handleLoadPoint(currentRoute)
     }, [currentRoute])
 
@@ -121,11 +119,11 @@ const AddPointToRoute = ({currentRoute}) => {
             ...point,
             sequence: index+1
         }))
-        console.log(tmp)
         const res = await apiAddPointToRoute({
             coachRouteId: currentRoute,
             pointList: tmp
         })
+        setIsEdit(false)
     }
 
     async function handleDelPoint(listPoint) {
@@ -241,7 +239,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                             <Input onChange={(e) => {
                                                 const tmp = {...point, description: e.target.value, isOffice: false}
                                                 listPoint[index] = tmp
-                                                }} value={point.description} className='w-40'
+                                                }} defaultValue={point.description} className='w-40'
                                                 disabled={!isEdit}
                                                 />
                                             <p>hoặc</p>
@@ -250,7 +248,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                                 listPoint[index] = tmp
                                             }} 
                                             mode="multiple"
-                                            value={point.officeList}
+                                            defaultValue={point.officeList}
                                             disabled={!isEdit}
                                             options={mapOffice[point.locationId]}
                                             >
@@ -279,7 +277,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                 }
                                 <Button onClick={() => handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
                                 {
-                                    isEdit ? <Button onClick={() => handleAddPoint(listPoint)} className='mt-10 text-white'>Lưu</Button> : <Button onClick={() => setIsEdit(!isEdit)} className='mt-10 text-white'>Sửa</Button>
+                                    isEdit ? <Button onClick={() => handleAddPoint(listPoint)} className='mt-10 text-white'>Lưu</Button> : <Button onClick={() => setIsEdit(true)} className='mt-10 text-white'>Sửa</Button>
                                 }
                                     </div> : null
                                 }

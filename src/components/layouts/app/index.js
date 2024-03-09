@@ -20,7 +20,7 @@ function AppLayout({ children }) {
 
       <div className='bg-neutral-200'>
         <div className='min-h-screen'>
-          <div className='py-6 px-2 bg-neutral-200'>{children}</div>
+          <div className='py-6 px-10 bg-neutral-200'>{children}</div>
         </div>
       </div>
     </div>

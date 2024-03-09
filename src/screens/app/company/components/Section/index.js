@@ -5,7 +5,6 @@ import { DeleteFilled } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
 const Section = ({section, index, listSection, setListSection, listTimeSlot, timeSlotIndex}) => {
-    console.log(section)
     const [time, setTime] = useState(0)
     const [form] = Form.useForm()
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -30,7 +29,7 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
               form={form}
               onValuesChange={() => {
                 listSection[index] = {...form.getFieldsValue(), departureTime: time}
-                listTimeSlot[timeSlotIndex].sectionRequestList = listSection
+                listTimeSlot[timeSlotIndex].sectionList = listSection
             }}
             >
             <Row className='space-x-4'>
@@ -38,8 +37,8 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
             <Form.Item name="departureTime">
                 <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)}/>
             </Form.Item>
-            <Form.Item name="pickUpPointId">
-                <Select style={{width: 218}}>
+            <Form.Item name="pickUpPointIdList">
+                <Select style={{width: 218}} mode="multiple">
                     {
                         optionsListPoint.map(({label, value}) => (
                             <Select.Option key={value} value={value}>
@@ -49,16 +48,20 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
                     }
                 </Select>
             </Form.Item>
-            <Form.Item name="dropOffPointId">
-                <Select options={optionsListPoint} style={{width: 218}}></Select>
+            <Form.Item name="dropOffPointIdList">
+                <Select options={optionsListPoint} style={{width: 218}} mode="multiple"></Select>
             </Form.Item>
             <Form.Item name="price">
                 <InputNumber suffix="VND" style={{width:200}} type="number"></InputNumber>
             </Form.Item>
-            <Button className="del-btn" onClick={() => {
+            <Form.Item>
+            <Button className="del-btn" onClick={(e) => {
+                console.log(index)
                 listSection.splice(index, 1);
                 setListSection([...listSection])
             }} icon={<DeleteFilled />} />
+            </Form.Item>
+
             </Row>
             </Form>
 

@@ -16,7 +16,19 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const [listSection, setListSection] = useState([])
     const [form] = Form.useForm()
     const [time, setTime] = useState(0)
+ 
     useEffect(() => {
+        console.log("son", schedule)
+        schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
+        if(schedule.price) {
+            form.setFieldsValue(schedule)
+            form.setFieldValue("departureTime", dayjs(schedule.departureTime))
+        } else {
+            form.resetFields()
+        }
+    }, [schedule])
+    useEffect(() => {
+        
         let lc = listCoach.map((coach) => ({
             value: coach.coachType.id,
             label: coach.coachType.name
@@ -25,12 +37,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
         if(schedule?.id) {
             handleLoadSection()
         }
-        if(schedule.id) {
-            form.setFieldsValue({...schedule})
-            form.setFieldValue("departureTime", dayjs(schedule.departureTime))
-            form.setFieldValue("coachTypeId", schedule.coachType.id)
-            form.setFieldValue("travelPathId", schedule.travelPath.id)
-        }
+
+            // form.setFieldsValue({...schedule})
+            // form.setFieldValue("departureTime", dayjs(schedule.departureTime))
+            // form.setFieldValue("coachTypeId", schedule.coachTypeId)
+            // form.setFieldValue("travelPathId", schedule.travelPathId)
+        
         const tmp = listPath.map(p => ({
             value: p.id,
             label: p.name
@@ -48,7 +60,8 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
 
     const handleUpdateTimeslot = async () => {
         const data = {...form.getFieldsValue(), departureTime: time}
-        const res = await apiUpdateTimeslot(data)
+        console.log(data)
+        // const res = await apiUpdateTimeslot(data)
     } 
 
     return (
@@ -61,12 +74,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                     !isEdit ? listTimeSlot[index] = ({...form.getFieldsValue(), departureTime: time}) : null
                 }}
                 >
-                <Row className='space-x-4'>
-                    <Form.Item name="departureTime">
-                        <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)}/>
+                <Row className='space-x-4 grid grid-cols-12'>
+                    <Form.Item name="departureTime" className='col-span-2'>
+                        <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)} className='w-full'/>
                     </Form.Item>
-                   <Form.Item name="coachTypeId">
-                        <Select defaultValue="Chọn loại xe" style={{width:260}}>
+                   <Form.Item name="coachTypeId" className='col-span-3'>
+                        <Select defaultValue="Chọn loại xe" className='w-full'>
                             {
                                 options.map(({label, value}) => (
                                     <Select.Option key={value} value={value}>
@@ -77,13 +90,13 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         </Select>
                    </Form.Item>
                     
-                    <Form.Item name="travelPathId">
-                        <Select defaultValue="Chọn lộ trình" style={{width:260}} options={listTP}>
+                    <Form.Item name="travelPathId" className='col-span-3'>
+                        <Select defaultValue="Chọn lộ trình" className='w-full' options={listTP}>
                         </Select>
                     </Form.Item>
                     
-                    <Form.Item name="price">
-                        <InputNumber suffix="VND" style={{width:200}} min={0}></InputNumber>
+                    <Form.Item name="price" className='col-span-3'>
+                        <InputNumber suffix="VND" className='w-full' min={0}></InputNumber>
                     </Form.Item>
                     
                     <Button className="del-btn" onClick={() => {
@@ -93,6 +106,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                 </Row>
                 <Form.Item name="id" className='hidden'/>
                 </Form>
+                {/* <Button onClick={() => console.log(listSection)}>sss</Button> */}
                 <div>
                     {
                         listSection.length ? <>{
@@ -105,11 +119,11 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         setListSection([...listSection, {}])
                     }} style={{color: '#006D38'}} className='w-28'><PlusCircleOutlined />Thêm chặng</p>
                 }
-                <div className='flex flex-row justify-center'>
+                {/* <div className='flex flex-row justify-center'>
                     {
-                        isEdit && <Button onClick={() => handleUpdateTimeslot()}>Hoàn thành</Button>
+                        isEdit && <Button onClick={() => handleUpdateTimeslot()}>sonidabezt</Button>
                     }
-                </div>
+                </div> */}
            
             </Card>
         </div>

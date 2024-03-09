@@ -72,7 +72,7 @@ const SubSchedule = ({schedule, setListSchedule, setSubSchedule}) => {
         {
             listDay && listDay.length > 0 ? <div className="h-48 overflow-auto mt-6">
             
-            <InfiniteScroll
+            {/* <InfiniteScroll
                 dataLength={1}
             >
                 <List
@@ -94,7 +94,7 @@ const SubSchedule = ({schedule, setListSchedule, setSubSchedule}) => {
                 >
                 </List>
            
-        </InfiniteScroll>
+        </InfiniteScroll> */}
         <Divider />
             </div> : null
         }

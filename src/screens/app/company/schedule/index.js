@@ -1,12 +1,12 @@
  import TimeSlotCard from "../components/TimeSlotCard"
- import { Card, Button, Select, Divider, Typography, Row, List } from 'antd'
+ import { Card, Button, Select, Divider, Typography, Row, List, DatePicker } from 'antd'
  import InfiniteScroll from 'react-infinite-scroll-component';
  import { PlusCircleOutlined, EditFilled, ClockCircleFilled } from '@ant-design/icons'
  import { useAppDispatch, useAppSelector } from "../../../../redux/hook";
  import { requestLoadListRoute, requestLoadPoint, requestLoadTravelPath, setCurrentRoute } from "../../../../redux/slices/routeSlice";
  import { useEffect, useState } from "react";
 import SubSchedule from "../components/SubSchedule";
-import { apiCreateSchedule, apiGetSection, apiGetTimeSlot, apiListSchedule } from "../../../../api/services";
+import { apiCreateSchedule, apiGetListTimeslotByDate, apiGetSection, apiGetTimeSlot, apiListSchedule } from "../../../../api/services";
 import moment from 'moment'
 const { Title } = Typography
 import { convertDate } from "../../../../utils/convertTime";
@@ -22,6 +22,9 @@ const Schedule = () => {
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector((state) => state.routeState.listRoute)
     const currentRoute = useAppSelector((state) => state.routeState.currentRoute)
+    const [currentDate, setCurrentDate] = useState(dayjs(new Date()).startOf('day').valueOf())
+    const [currentTimeslot, setCurrentTimeslot] = useState()
+    const [currentIndex, setCurrentIndex] = useState(-1)
     const [listTimeSlot, setListTimeSlot] = useState([])
     const [mapTS, setMapTS] = useState({})
     const [mapEdit, setMapEdit] = useState()
@@ -51,6 +54,20 @@ const Schedule = () => {
             console.log(err)
         }
     }
+    async function handleLoadTimeslot(props) {
+        const res = await apiGetListTimeslotByDate(props)
+        if(res.data.error == 0) {
+            setCurrentTimeslot(res.data.data[0])
+            setCurrentIndex(0)
+            setListTimeSlot(res.data.data)
+        } else {
+            setCurrentTimeslot()
+            setCurrentIndex(-1)
+            setListTimeSlot([])
+        }
+        
+        console.log(res)
+    }
     const handleCreateMainSchedule = async (e) => {
         e.preventDefault()
         const time = moment().startOf('day').valueOf()
@@ -74,21 +91,22 @@ const Schedule = () => {
         await dispatch(setCurrentRoute(value))
         await dispatch(requestLoadTravelPath(companyId))
         await dispatch(requestLoadPoint(value))
+        handleLoadTimeslot({date: currentDate, coachRouteId: value})
         handleLoadSchedule(value)
         setIsCreate(false)
         setListTimeSlot([])
     }
 
-    const handleLoadTimeSlot = async (scheduleId) => {
-        let ts = {}
-        let ed = {}
-        const res = await apiGetTimeSlot(scheduleId)
-        if(res.data.error == 0) {
-            setMapEdit(scheduleId)
-            ts[scheduleId] = res.data.data
-            setMapTS({...mapTS , ...ts})
-        }
-    }
+    // const handleLoadTimeSlot = async (scheduleId) => {
+    //     let ts = {}
+    //     let ed = {}
+    //     const res = await apiGetTimeSlot(scheduleId)
+    //     if(res.data.error == 0) {
+    //         setMapEdit(scheduleId)
+    //         ts[scheduleId] = res.data.data
+    //         setMapTS({...mapTS , ...ts})
+    //     }
+    // }
 
     const selectOption = listRoute.map(route => ({
         value: route.id,
@@ -96,7 +114,9 @@ const Schedule = () => {
     }))
     return (
         <div className="mx-16 space-y-4">
-            <Card>
+            <Card
+                extra={<DatePicker format='DD/MM/YY' defaultValue={dayjs(new Date())} onChange={(e) => setCurrentDate(e.startOf('day').valueOf())}/>}
+            >
             <Row>
                 <Title level={3}>Lịch cố định</Title>
             </Row>
@@ -106,7 +126,29 @@ const Schedule = () => {
 
                 </Select>
             </Row>
-                {
+            
+            <Row className="grid grid-row items-center">
+            <p>{listTimeSlot.length} chuyến</p>
+            <div className="flex justify-end">
+            <Button
+            style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} 
+            icon={<PlusCircleOutlined />}
+            onClick={() => {
+                setIsCreate(true)
+                setCurrentIndex(currentIndex+1)
+                setCurrentTimeslot({})
+                setListTimeSlot([...listTimeSlot, {}])
+            }}
+            >
+                Thêm giờ xuất bến
+            </Button>
+            </div>
+            
+            </Row>
+           
+           
+            
+                {/* {
                     listSchedule && listSchedule.length > 0 ? <div className="h-80 overflow-auto mt-6">
                     <InfiniteScroll
                         dataLength={1}
@@ -145,28 +187,26 @@ const Schedule = () => {
                    
                 </InfiniteScroll>
                     </div> : null
-                }
+                } */}
 
                 {
-                    listTimeSlot?.map((sh, index) => <TimeSlotCard schedule={sh} index={index} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot}/>)
+                    listTimeSlot?.map((sh, index) => <Button onClick={() => {
+                        setCurrentTimeslot(sh)
+                        setCurrentIndex(index)
+                    }}
+                    className={index != currentIndex ? 'un-choose-btn' : ''}
+                    >{sh.departureTime ? dayjs(sh.departureTime).format("HH:mm") : '--:--'}</Button>)
                 }
-           
-               
-            <Button 
-            style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} 
-            icon={<PlusCircleOutlined />}
-            onClick={() => {
-                setIsCreate(true)
-                setListTimeSlot([...listTimeSlot, {}])
-            }}>
-                    Thêm giờ xuất bến
-            </Button>
-            
+                {
+                    (isCreate || currentTimeslot) && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false}/>
+                }
+       
             <Divider />
             <Row className="justify-center">
             {
                 isCreate && <Button onClick={e => handleCreateMainSchedule(e)}>Hoàn thành</Button>
             }
+            {/* <Button onClick={() => console.log(listTimeSlot)}>test</Button> */}
             </Row>
         </Card>
 
