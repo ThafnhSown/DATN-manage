@@ -8,7 +8,7 @@ import TimeSlotCard from "../TimeSlotCard";
 import { apiCreateSchedule } from "../../../../../api/services";
 import dayjs from 'dayjs';
 
-const SubSchedule = ({schedule, setListSchedule, setSubSchedule}) => {
+const SubSchedule = ({listSubTimeslot, schedule}) => {
    const dispatch = useAppDispatch()
    const [isCreate, setIsCreate] = useState(false)
    const [firstDate, setFirstDate] = useState()
@@ -20,6 +20,11 @@ const SubSchedule = ({schedule, setListSchedule, setSubSchedule}) => {
    const [currentTimeslot, setCurrentTimeslot] = useState()
    const [currentIndex, setCurrentIndex] = useState(-1)
 
+    useEffect(() => {
+        setListTimeSlot(listSubTimeslot)
+        setScheduleName(schedule.name)
+    }, [])
+
    const handleCreateSubSchedule = async () => {
     const data = {
         coachRouteId: currentRoute,
@@ -30,16 +35,31 @@ const SubSchedule = ({schedule, setListSchedule, setSubSchedule}) => {
         createTimeslotRequestList: listTimeSlot,
         name: scheduleName
     }
-    console.log(data)
-    // const res = await apiCreateSchedule(data)
+    const res = await apiCreateSchedule(data)
     // if(res.data.error == 0) {
+    //     setListTimeSlot(listTimeslot)
     //     // handleLoadSchedule(currentRoute)
     // }
    }
    return (
     <div>
       <div className="mt-4 space-y-4">
-           <Row>
+        {
+            schedule.id ? <div>
+                 <Row>
+               {
+                    <Title level={3}>{schedule.name}</Title>
+               }
+           </Row>
+           <Row className="items-center space-x-6">
+           <Title level={5}>Thời gian</Title>
+           <DatePicker value={dayjs(schedule.startTime)} style={{width: 300}}/>
+           <ArrowRightOutlined />
+           <DatePicker value={dayjs(schedule.endTime)} style={{width: 300}}/>
+           </Row>
+
+            </div> : <div>
+            <Row>
                {
                     changeName ? <Input onChange={(e) =>setScheduleName(e.target.value)} className="w-48" placeholder="Tên lịch phụ"/> : <Title level={3}>Lịch phụ</Title>
                }
@@ -49,10 +69,13 @@ const SubSchedule = ({schedule, setListSchedule, setSubSchedule}) => {
            </Row>
            <Row className="items-center space-x-6">
            <Title level={5}>Thời gian</Title>
-           <DatePicker onChange={(date) => setFirstDate(date.valueOf())} style={{width: 300}}/>
+           <DatePicker onChange={(date) => setFirstDate(date.startOf('day').valueOf())} style={{width: 300}}/>
            <ArrowRightOutlined />
-           <DatePicker onChange={(date) => setSecondDate(date.valueOf())} style={{width: 300}}/>
+           <DatePicker onChange={(date) => setSecondDate(date.startOf('day').valueOf())} style={{width: 300}}/>
            </Row>
+            </div>
+        }
+          
            {
                     listTimeSlot?.map((sh, index) => <Button onClick={() => {
                         setCurrentTimeslot(sh)

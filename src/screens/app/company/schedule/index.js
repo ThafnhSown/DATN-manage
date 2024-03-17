@@ -26,6 +26,7 @@ const Schedule = () => {
     const [currentTimeslot, setCurrentTimeslot] = useState()
     const [currentIndex, setCurrentIndex] = useState(-1)
     const [listTimeSlot, setListTimeSlot] = useState([])
+    const [listSubTimeslot, setListSubTimeslot] = useState([])
     const [mapTS, setMapTS] = useState({})
     const [mapEdit, setMapEdit] = useState()
     const [isEdit, setIsEdit] = useState(false)
@@ -58,9 +59,11 @@ const Schedule = () => {
         const res = await apiGetListTimeslotByDate(props)
         if(res.data.error == 0) {
             const tmp = res.data.data.filter(tl => tl.coachSchedule.type == 1)
+            const subTmp = res.data.data.filter(tl => tl.coachSchedule.type == 2)
             setCurrentTimeslot(tmp[0])
             setCurrentIndex(0)
             setListTimeSlot(tmp)
+            setListSubTimeslot(subTmp)
         } else {
             setCurrentTimeslot()
             setCurrentIndex(-1)
@@ -172,11 +175,18 @@ const Schedule = () => {
             </Row>
         </Card>
 
+        {
+            listSubTimeslot.length ? <Card className="space-y-4">
+                <SubSchedule listSubTimeslot={listSubTimeslot} schedule={listSubTimeslot[0].coachSchedule}/>
+            </Card> : null
+        }
+
         <Card className="space-y-4">
             {
-                subSchedule?.map(sc => <SubSchedule schedule={sc} setListSchedule={setListSchedule} setSubSchedule={setSubSchedule}/>)
+                subSchedule.map(sc => <SubSchedule listSubTimeslot={[]} schedule={{}}/>)
+               
             }
-            <Row className="justify-center">
+             <Row className="justify-center">
                 <Button 
                     onClick={() => setSubSchedule([...subSchedule, {}])}
                     style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} icon={<PlusCircleOutlined />}>Thêm lịch phụ</Button>
