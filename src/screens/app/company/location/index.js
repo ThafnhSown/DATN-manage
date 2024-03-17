@@ -6,6 +6,7 @@ import ModalRoute from "../components/ModalRoute";
 import AddPointToRoute from "../components/AddPointToRoute";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hook";
 import { requestLoadListRoute, setCurrentRoute } from "../../../../redux/slices/routeSlice";
+import { requestLoadCoach, requestLoadOrder } from "../../../../redux/slices/companySlice"
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../../../../utils/Loading";
@@ -35,6 +36,8 @@ const Location = () => {
         if(!listRoute.length) {
             handleLoadRoutes()
         }
+        dispatch(requestLoadOrder(companyId))
+        dispatch(requestLoadCoach(companyId))
         dispatch(setCurrentRoute(null))
     }, [])
 

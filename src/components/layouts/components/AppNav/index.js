@@ -1,13 +1,20 @@
 import { Dropdown, Space, Row, Col, Button } from "antd"
 import { DownOutlined, MenuOutlined } from '@ant-design/icons';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 import AvatarDropdown from "../AvatarDropdown";
 import './style.css'
 const AppNav = () => {
     const [status, setStatus] = useState("operating")
     const navigate = useNavigate()
+    const location = useLocation()
+    const pathName = location.pathname
+    useEffect(() => {
+      if(pathName == '/nhan-vien' | pathName == '/thong-tin' | pathName == '/thong-tin' | pathName == '/booking') {
+        setStatus("manage")
+      }
+    },[])
     const items = [
         {
           key: '1',
@@ -33,7 +40,7 @@ const AppNav = () => {
         }
       ];
     return (
-            <div className='flex-row items-center ml-4 grid grid-cols-12'>
+            <div className='flex-row items-center justify-center ml-4 grid grid-cols-12'>
                 <div className="col-span-2 text-white font-extrabold text-base">
                     <Dropdown menu={{ items }}>
                         <a onClick={(e) => e.preventDefault()}>
@@ -49,18 +56,19 @@ const AppNav = () => {
                       status === 'operating' ? <div>
                           <Row className="bg-white rounded h-9 items-center">
                             <Col className="space-x-20">
-                              <Link to="/" className="hover:text-green-600 focus:text-green-700 text-base ml-2">Địa điểm</Link>
-                              <Link to="/phuong-tien" className="hover:text-green-600 focus:text-green-700 text-base">Phương tiện</Link>
-                              <Link to="/chinh-sach" className="hover:text-green-600 focus:text-green-700 text-base">Chính sách</Link>
-                              <Link to="/lich-xuat-ben" className="hover:text-green-600 focus:text-green-700 text-base">Lịch xuất bến</Link>
+                              <Link to="/" className={`${pathName == '/' ? 'text-green-700' : null} hover:text-green-600 text-base ml-2`}>Địa điểm</Link>
+                              <Link to="/phuong-tien" className={`${pathName == '/phuong-tien' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Phương tiện</Link>
+                              <Link to="/chinh-sach" className={`${pathName == '/chinh-sach' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Chính sách</Link>
+                              <Link to="/lich-xuat-ben" className={`${pathName == '/lich-xuat-ben' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Lịch xuất bến</Link>
                             </Col>
                           </Row>  
                       </div>
                       : <Row className="bg-white rounded h-9 items-center">
                           <Col className="space-x-20">
-                            <Link to="/nhan-vien" className="hover:text-green-600 focus:text-green-700 text-base ml-20">Nhân viên</Link>
-                            <Link to="/thong-tin" className="hover:text-green-600 focus:text-green-700 text-base">Thông tin hãng xe</Link>
-                            <Link to="/bao-cao" className="hover:text-green-600 focus:text-green-700 text-base">Báo cáo</Link>
+                            <Link to="/nhan-vien" className={`${pathName == '/nhan-vien' ? 'text-green-700' : null} hover:text-green-600 text-base ml-2`}>Nhân viên</Link>
+                            <Link to="/thong-tin" className={`${pathName == '/thong-tin' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Thông tin hãng xe</Link>
+                            <Link to="/bao-cao" className={`${pathName == '/bao-cao' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Báo cáo</Link>
+                            <Link to="/booking" className={`${pathName == '/booking' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Booking</Link>
                           </Col>
                       </Row>
 

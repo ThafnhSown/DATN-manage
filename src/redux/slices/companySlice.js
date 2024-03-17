@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiCreateCoach, apiCreateCompany, apiCreatePolicy, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany, apiGetPolicyList } from "../../api/services";
+import { apiCreateCoach, apiCreateCompany, apiCreatePolicy, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany, apiGetListOrder, apiGetPolicyList } from "../../api/services";
 
 const initialState = {
     loading: false,
@@ -7,6 +7,7 @@ const initialState = {
     listCompany: [],
     listCoach: [],
     listPolicy: [],
+    listOrder: [],
     mapCoach: {}
 };
 
@@ -42,6 +43,11 @@ export const requestLoadPolicy = createAsyncThunk("/company/get-policy-list", as
 
 export const requestCreatePolicy = createAsyncThunk("/company/create-policy", async (props) => {
     const res = await apiCreatePolicy(props)
+    return res.data.data
+})
+
+export const requestLoadOrder = createAsyncThunk("/company/list-order", async(props) => {
+    const res = await apiGetListOrder(props)
     return res.data.data
 })
 
@@ -99,6 +105,9 @@ export const companySlice = createSlice({
         })
         builder.addCase(requestCreatePolicy.fulfilled, (state, action) => {
             state.listPolicy = [...state.listPolicy, action.payload]
+        })
+        builder.addCase(requestLoadOrder.fulfilled, (state, action) => {
+            state.listOrder = action.payload
         })
     }
 });

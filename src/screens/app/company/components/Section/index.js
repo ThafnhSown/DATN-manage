@@ -32,13 +32,13 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
                 listTimeSlot[timeSlotIndex].sectionList = listSection
             }}
             >
-            <Row className='space-x-4'>
-            <Typography.Title level={5}>{(index+1) ? (index < 9 ? `Chặng 0${index+1}` : `Chặng ${index+1}`) : null}</Typography.Title>
-            <Form.Item name="departureTime">
+            <Row className='space-x-4 grid grid-cols-12'>
+            <Typography.Title level={5} className='col-span-1'>{(index+1) ? (index < 9 ? `Chặng 0${index+1}` : `Chặng ${index+1}`) : null}</Typography.Title>
+            <Form.Item name="departureTime" className='col-span-2'>
                 <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)}/>
             </Form.Item>
-            <Form.Item name="pickUpPointIdList">
-                <Select style={{width: 218}} mode="multiple">
+            <Form.Item name="pickUpPointIdList" className='col-span-3'>
+                <Select className='w-full' mode="multiple">
                     {
                         optionsListPoint.map(({label, value}) => (
                             <Select.Option key={value} value={value}>
@@ -48,11 +48,11 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
                     }
                 </Select>
             </Form.Item>
-            <Form.Item name="dropOffPointIdList">
-                <Select options={optionsListPoint} style={{width: 218}} mode="multiple"></Select>
+            <Form.Item name="dropOffPointIdList" className='col-span-3'>
+                <Select options={optionsListPoint} className='w-full' mode="multiple"></Select>
             </Form.Item>
-            <Form.Item name="price">
-                <InputNumber suffix="VND" style={{width:200}} type="number"></InputNumber>
+            <Form.Item name="price" className='col-span-2'>
+                <InputNumber suffix="VND" type="number" className='w-full'></InputNumber>
             </Form.Item>
             <Form.Item>
             <Button className="del-btn" onClick={(e) => {

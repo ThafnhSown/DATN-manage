@@ -185,3 +185,11 @@ export const apiGetPolicyList = async (id) => {
 export const apiDelPolicy = async (props) => {
     return ApiAdminConfig(EndPoint.DEL_POLICY, props)
 }
+
+export const apiGetListOrder = async(props) => {
+    return ApiAdminConfig(`/company/get-all-user-order-list?companyId=${props}`, undefined, "GET")
+}
+
+export const apiChangeOrderState = async (props) => {
+    return ApiAdminConfig('/company/change-user-order-state', props)
+}

@@ -169,7 +169,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                 {
                                     !showD ? <div>
 
-                                <Title level={3}>Tỉnh / Thành</Title>
+                                <Title level={4}>Tỉnh / Thành</Title>
                                 <Input
                                     onChange={onSearch}
                                     placeholder='Tìm kiếm'

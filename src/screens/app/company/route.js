@@ -11,6 +11,7 @@ import Schedule from "./schedule";
 import OfficeForm from "./components/OfficeForm";
 import ModalRoute from "./components/ModalRoute";
 import TravelPath from "./travelPath";
+import Booking from "./booking";
 
 export const companyRouteList = [
     {
@@ -62,6 +63,10 @@ export const companyRouteList = [
             {
                 path: 'bao-cao',
                 element: <Report />
+            },
+            {
+                path: 'booking',
+                element: <Booking />
             }
         ]
     }

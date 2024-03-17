@@ -32,9 +32,9 @@ const Schedule = () => {
     useEffect(() => {
         handleLoadRoutes()
     }, [])
-    useEffect(() => {
-        handleLoadSchedule(currentRoute)
-    }, [currentRoute])
+    // useEffect(() => {
+    //     handleLoadSchedule(currentRoute)
+    // }, [currentRoute])
     async function handleLoadRoutes() {
         try{
             await dispatch(requestLoadListRoute(companyId))
@@ -42,24 +42,25 @@ const Schedule = () => {
             console.log(err)
         }
     }
-    async function handleLoadSchedule(id) {
-        let res= {}
-        try {
-            await Promise.all([
-                res = await apiListSchedule(id),
-                setListSchedule(res.data.data.filter(item => item.type == 1)),
-                setSubSchedule(res.data.data.filter(item => item.type == 2))
-            ])
-        } catch(err) {
-            console.log(err)
-        }
-    }
+    // async function handleLoadSchedule(id) {
+    //     let res= {}
+    //     try {
+    //         await Promise.all([
+    //             res = await apiListSchedule(id),
+    //             setListSchedule(res.data.data.filter(item => item.type == 1)),
+    //             setSubSchedule(res.data.data.filter(item => item.type == 2))
+    //         ])
+    //     } catch(err) {
+    //         console.log(err)
+    //     }
+    // }
     async function handleLoadTimeslot(props) {
         const res = await apiGetListTimeslotByDate(props)
         if(res.data.error == 0) {
-            setCurrentTimeslot(res.data.data[0])
+            const tmp = res.data.data.filter(tl => tl.coachSchedule.type == 1)
+            setCurrentTimeslot(tmp[0])
             setCurrentIndex(0)
-            setListTimeSlot(res.data.data)
+            setListTimeSlot(tmp)
         } else {
             setCurrentTimeslot()
             setCurrentIndex(-1)
@@ -92,9 +93,8 @@ const Schedule = () => {
         await dispatch(requestLoadTravelPath(companyId))
         await dispatch(requestLoadPoint(value))
         handleLoadTimeslot({date: currentDate, coachRouteId: value})
-        handleLoadSchedule(value)
+        // handleLoadSchedule(value)
         setIsCreate(false)
-        setListTimeSlot([])
     }
 
     // const handleLoadTimeSlot = async (scheduleId) => {
@@ -115,7 +115,13 @@ const Schedule = () => {
     return (
         <div className="mx-16 space-y-4">
             <Card
-                extra={<DatePicker format='DD/MM/YY' defaultValue={dayjs(new Date())} onChange={(e) => setCurrentDate(e.startOf('day').valueOf())}/>}
+                extra={<DatePicker format='DD/ MM/ YY' defaultValue={dayjs(new Date())} onChange={(e) => {
+                    setCurrentDate(e.startOf('day').valueOf())
+                    handleLoadTimeslot({
+                        date: e.startOf('day').valueOf(), 
+                        coachRouteId: currentRoute
+                    })
+                }}/>}
             >
             <Row>
                 <Title level={3}>Lịch cố định</Title>
@@ -145,50 +151,6 @@ const Schedule = () => {
             </div>
             
             </Row>
-           
-           
-            
-                {/* {
-                    listSchedule && listSchedule.length > 0 ? <div className="h-80 overflow-auto mt-6">
-                    <InfiniteScroll
-                        dataLength={1}
-                    >
-                        <List
-                            dataSource={listSchedule}
-                            renderItem={(item) => (
-                                <div>
-                                <List.Item className="li-schedule">
-                                    <div className="w-full">
-                                    <div className="font-extrabold text-md grid grid-cols-12 w-full">
-                                        <p className="ml-4 col-span-4">
-                                        {`${convertDate(item.date)} | ${item.totalSlot} nốt`}
-                                        </p>
-                                        <p className="col-span-6"/>
-                                        <a className="col-span-1 text-green-700"
-                                            onClick={() => {
-                                                setIsEdit(!isEdit)
-                                                handleLoadTimeSlot(item.id)
-                                            }}
-                                        ><EditFilled /> Sửa</a>
-                                        <a className="col-span-1 text-red-700"><ClockCircleFilled /> Dừng</a>
-                                        
-                                    </div>
-
-                                    </div>
-                                </List.Item>
-                                    {
-                                        mapEdit == item.id & isEdit ? mapTS[item.id]?.map((ts, index) => <TimeSlotCard schedule={ts} index={index} isEdit={isEdit} setIsEdit={setIsEdit}/> ) : null
-                                    }
-                                </div>
-                             
-                            )}
-                        >
-                        </List>
-                   
-                </InfiniteScroll>
-                    </div> : null
-                } */}
-
                 {
                     listTimeSlot?.map((sh, index) => <Button onClick={() => {
                         setCurrentTimeslot(sh)
@@ -198,7 +160,7 @@ const Schedule = () => {
                     >{sh.departureTime ? dayjs(sh.departureTime).format("HH:mm") : '--:--'}</Button>)
                 }
                 {
-                    (isCreate || currentTimeslot) && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false}/>
+                   currentTimeslot && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false}/>
                 }
        
             <Divider />
