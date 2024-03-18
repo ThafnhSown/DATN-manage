@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import Section from '../Section'
 import dayjs from 'dayjs'
-const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit}) => {
+const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot}) => {
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -18,7 +18,6 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const [time, setTime] = useState(0)
  
     useEffect(() => {
-        console.log("son", schedule)
         schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
         if(schedule.price) {
             form.setFieldsValue(schedule)
@@ -53,7 +52,10 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const handleDeleteTimeslot = async (id) => {
         const res = await apiDeleteTimeslot(id)
         if(res.data.error == 0) {
-            console.log("tes")
+            delete listTimeSlot[index]
+            setCurrentTimeslot(listTimeSlot[index-1])
+            let tmp = listTimeSlot.filter(tl => tl)
+            setListTimeSlot([...tmp])
         }
     }
 
@@ -107,14 +109,13 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                     </Form.Item>
                     
                     <Button className="del-btn" onClick={() => {
-                            handleChooseTime(schedule.id)
+                            handleDeleteTimeslot(schedule.id)
                             // listTimeSlot.splice(index, 1);
                             // setListTimeSlot([...listTimeSlot])
                         }} icon={<DeleteFilled />} />
                 </Row>
                 <Form.Item name="id" className='hidden'/>
                 </Form>
-                {/* <Button onClick={() => console.log(listSection)}>sss</Button> */}
                 <div>
                     {
                         listSection.length ? <>{

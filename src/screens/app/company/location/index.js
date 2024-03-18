@@ -47,10 +47,10 @@ const Location = () => {
             isLoading ? <LoadingPage /> : <div>
                 <div>
             <Card>
-                <Select className="mr-4" defaultValue="Chọn tuyến xe" options={selectOption} style={{width: 550, height:50}} onSelect={(value) => dispatch(setCurrentRoute(value))}/>
-                <Button onClick={() => navigate("/van-phong")} className="office-btn h-10 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-md mx-1 mt-4" icon={<PlusOutlined />}>Văn phòng</Button>
-                <Button onClick={() => navigate("/lo-trinh")} className="route-btn h-10 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-md mx-1 mt-4" icon={<PlusOutlined />}>Lộ trình</Button>
-                <Button onClick={() => navigate("/tuyen")} className="h-10 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-md mx-1 mt-4" icon={<PlusOutlined />}>Tuyến</Button>
+                <Select className="mr-4 w-1/2" defaultValue="Chọn tuyến xe" options={selectOption} onSelect={(value) => dispatch(setCurrentRoute(value))}/>
+                <Button onClick={() => navigate("/van-phong")} className="w-1/8 office-btn h-10 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-md mx-1 mt-4" icon={<PlusOutlined />}>Văn phòng</Button>
+                <Button onClick={() => navigate("/lo-trinh")} className="w-1/8 route-btn h-10 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-md mx-1 mt-4" icon={<PlusOutlined />}>Lộ trình</Button>
+                <Button onClick={() => navigate("/tuyen")} className="w-1/8 h-10 bg-green-700 hover:bg-white text-white text-base font-medium border rounded-md mx-1 mt-4" icon={<PlusOutlined />}>Tuyến</Button>
             </Card>
         </div>
         <div>

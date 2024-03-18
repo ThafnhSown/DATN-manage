@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import UserOrder from "../components/UserOrder"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Button, Checkbox } from 'antd'
-import { PlusOutlined, EditFilled, DeleteFilled, PauseOutlined } from '@ant-design/icons';
+import { DeleteFilled } from '@ant-design/icons';
 import "./style.css"
 import { apiChangeOrderState } from "../../../../api/services"
 
@@ -32,6 +32,8 @@ const Booking = () => {
             state: -1
         })
         if(res.data.error == 0) {
+            let tmp = currentOrder.filter(order => !listId.includes(order.id))
+            setCurrentOrder([...tmp])
             dispatch(requestLoadOrder(companyId))
         }
     }
@@ -43,6 +45,8 @@ const Booking = () => {
             state: 1
         })
         if(res.data.error == 0) {
+            let tmp = currentOrder.filter(order => !listId.includes(order.id))
+            setCurrentOrder([...tmp])
             dispatch(requestLoadOrder(companyId))
         }
     }
@@ -77,7 +81,24 @@ const Booking = () => {
                     <p>{listOrder.filter(or => or.state == 1).length} đã liên lạc</p>
                 </div>
                 <div className="grid grid-cols-2 mr-6">
-                    <Checkbox className="items-center">Tất cả</Checkbox>
+                    <Checkbox className="items-center mx-2" onClick={(e) => {
+                        if(e.target.checked) {
+                            setListOrderPick(currentOrder)
+                            // let tmp = currentOrder.map(order => ({
+                            //     ...order,
+                            //     isPhoned: true
+                            // }))
+                            // setCurrentOrder(tmp)
+                        } else {
+                            setListOrderPick([])
+                            // let tmp = currentOrder.map(order => ({
+                            //     ...order,
+                            //     isPhoned: false
+                            // }))
+                            // setCurrentOrder(tmp)
+                        }
+                        // console.log(currentOrder)
+                    }}>Tất cả</Checkbox>
                     <div className="flex justify-end">
                         <Button className="del-btn" onClick={() => {
                             handleDeleteOrder()

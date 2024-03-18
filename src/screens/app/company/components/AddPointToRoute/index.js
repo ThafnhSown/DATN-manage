@@ -129,7 +129,14 @@ const AddPointToRoute = ({currentRoute}) => {
     async function handleDelPoint(listPoint) {
         const tmp = listPoint.filter(item => !delPoint.includes(item.locationId))
         setListPoint([...tmp])
-        // setListDataPoint([...tmp])
+        // console.log(listPoint.length)
+        if(!tmp.length) {
+            const res = await apiAddPointToRoute({
+                coachRouteId: currentRoute,
+                pointList: []
+            })
+            setIsEdit(false)
+        }
     }
 
     const onSearch = (e) => {
@@ -232,7 +239,7 @@ const AddPointToRoute = ({currentRoute}) => {
 
                                         >
                                             <div className='col-span-4 space-x-2'>
-                                                <Checkbox onChange={e => handleChecked(e, point)} disabled={!isEdit}/>
+                                                <Checkbox checked={delPoint.includes(point.locationId)} onChange={e => handleChecked(e, point)} disabled={!isEdit}/>
                                                 <b>{point.address} :</b>
                                             </div>
                                            <div className='col-span-8 flex flex-row space-x-2'>
@@ -263,7 +270,13 @@ const AddPointToRoute = ({currentRoute}) => {
                         }
                         <Row grid={12}>
                             <Col span={4}>
-                                { listPoint.length ? <p className='mt-10'><Checkbox onChange={() => setChecked(!checked)} disabled={!isEdit}/> Chọn tất cả</p> : null}
+                                { listPoint.length ? <p className='mt-10'><Checkbox onChange={(e) => {
+                                    if(e.target.checked) {
+                                        setDelPoint(listPoint.map(point => point.locationId))
+                                    } else {
+                                        setDelPoint([])
+                                    }
+                                }} disabled={!isEdit}/> Chọn tất cả</p> : null}
                             </Col>
                             <Col span={14}/>
                             <Col span={6}>

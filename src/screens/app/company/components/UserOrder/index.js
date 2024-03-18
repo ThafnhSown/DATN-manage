@@ -2,16 +2,22 @@ import { IconCar, IconTP, IconTicket, IconMoney } from "../../../../../assets/sv
 import { EnvironmentFilled, UserOutlined, PhoneFilled, FormOutlined } from "@ant-design/icons"
 import { Checkbox } from 'antd'
 import dayjs from 'dayjs'
+import { useEffect, useState } from "react"
 import './style.css'
 
 const UserOrder = ({ order, listOrder, setListOrder }) => {
+    const [isChecked, setIsChecked] = useState(false)
+    useEffect(() => {
+        listOrder.includes(order) ? setIsChecked(true) : setIsChecked(false)
+    }, [listOrder])
 
     const handleCheckbox = (e) => {
         if(e.target.checked) {
+            setIsChecked(true)
             setListOrder([...listOrder, order])
-            console.log(order)
         } else {
-            const tmp = listOrder.filter(order => order.id != order.id)
+            setIsChecked(false)
+            const tmp = listOrder.filter(od => od.id != order.id)
             setListOrder([...tmp])
         }
     }
@@ -20,7 +26,7 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
         <div className="w-full flex flex-col border-1 bg-white border-black shadow-xl p-2">
             <div className="grid grid-cols-2 text-lg space-x-2 items-center">
                 <div className="flex flex-row mx-2 space-x-2">
-                    <Checkbox onChange={handleCheckbox}>
+                    <Checkbox onChange={handleCheckbox}  checked={isChecked}>
 
                     </Checkbox>
                     <div className="text-xl text-green-700">{dayjs(order.departureTime).format("HH:mm")}</div>
