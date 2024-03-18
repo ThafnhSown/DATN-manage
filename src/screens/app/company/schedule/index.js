@@ -57,7 +57,7 @@ const Schedule = () => {
     // }
     async function handleLoadTimeslot(props) {
         const res = await apiGetListTimeslotByDate(props)
-        if(res.data.error == 0) {
+        if(res.data.error == 0 && res.data.data.length != 0) {
             const tmp = res.data.data.filter(tl => tl.coachSchedule.type == 1)
             const subTmp = res.data.data.filter(tl => tl.coachSchedule.type == 2)
             setCurrentTimeslot(tmp[0])

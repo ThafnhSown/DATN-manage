@@ -162,6 +162,10 @@ export const apiUpdateTimeslot = async (props) => {
     return ApiAdminConfig(EndPoint.UPDATE_TIMESLOT, props)
 }
 
+export const apiDeleteTimeslot = async (id) => {
+    return ApiAdminConfig("/company/delete-timeslot", {id: id})
+}
+
 export const apiCreateTravelPath = async (props) => {
     return ApiAdminConfig(EndPoint.CREATE_TP, props)
 }

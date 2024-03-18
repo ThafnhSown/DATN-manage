@@ -1,6 +1,6 @@
 import { Card, Input, Select, Row, Form, Button, Typography, TimePicker, InputNumber } from 'antd'
 import { PlusCircleOutlined, DeleteFilled } from '@ant-design/icons'
-import { apiGetCoaches, apiGetSection, apiUpdateTimeslot } from '../../../../../api/services'
+import { apiDeleteTimeslot, apiGetCoaches, apiGetSection, apiUpdateTimeslot } from '../../../../../api/services'
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import Section from '../Section'
@@ -50,6 +50,13 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
         setListTP(tmp)
     }, [isEdit])
 
+    const handleDeleteTimeslot = async (id) => {
+        const res = await apiDeleteTimeslot(id)
+        if(res.data.error == 0) {
+            console.log("tes")
+        }
+    }
+
     async function handleLoadSection () {
         const res = await apiGetSection(schedule.id)
         setListSection([...res.data.data])
@@ -59,9 +66,9 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     }
 
     const handleUpdateTimeslot = async () => {
-        const data = {...form.getFieldsValue(), departureTime: time}
+        const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection}
         console.log(data)
-        // const res = await apiUpdateTimeslot(data)
+        const res = await apiUpdateTimeslot(data)
     } 
 
     return (
@@ -100,8 +107,9 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                     </Form.Item>
                     
                     <Button className="del-btn" onClick={() => {
-                            listTimeSlot.splice(index, 1);
-                            setListTimeSlot([...listTimeSlot])
+                            handleChooseTime(schedule.id)
+                            // listTimeSlot.splice(index, 1);
+                            // setListTimeSlot([...listTimeSlot])
                         }} icon={<DeleteFilled />} />
                 </Row>
                 <Form.Item name="id" className='hidden'/>
@@ -119,11 +127,11 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         setListSection([...listSection, {}])
                     }} style={{color: '#006D38'}} className='w-28'><PlusCircleOutlined />Thêm chặng</p>
                 }
-                {/* <div className='flex flex-row justify-center'>
+                <div className='flex flex-row justify-center'>
                     {
-                        isEdit && <Button onClick={() => handleUpdateTimeslot()}>sonidabezt</Button>
+                        schedule.id && <Button onClick={() => handleUpdateTimeslot()} className='w-1/6'>Lưu</Button>
                     }
-                </div> */}
+                </div>
            
             </Card>
         </div>
