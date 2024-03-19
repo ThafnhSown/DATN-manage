@@ -290,6 +290,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                     isEdit && <Button onClick={() => {
                                         handleLoadPoint(currentRoute)
                                         setIsEdit(!isEdit)
+                                        setPickPoint([])
                                     }} className='mt-10 text-white pause-btn'>Hủy</Button>
                                 }
                                 <Button onClick={() => handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
