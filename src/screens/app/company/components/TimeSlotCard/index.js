@@ -4,8 +4,10 @@ import { apiDeleteTimeslot, apiGetCoaches, apiGetSection, apiUpdateTimeslot } fr
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import Section from '../Section'
+import { useSnackbar } from "notistack"
 import dayjs from 'dayjs'
 const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot}) => {
+    const { enqueueSnackbar } = useSnackbar()
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -19,7 +21,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
  
     useEffect(() => {
         schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
-        if(schedule.price) {
+        if(schedule.id) {
             form.setFieldsValue(schedule)
             form.setFieldValue("departureTime", dayjs(schedule.departureTime))
         } else {
@@ -27,15 +29,14 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
         }
     }, [schedule])
     useEffect(() => {
-        
         let lc = listCoach.map((coach) => ({
             value: coach.coachType.id,
             label: coach.coachType.name
         }))
         setOptions(lc)
-        if(schedule?.id) {
-            handleLoadSection()
-        }
+        // if(schedule?.id) {
+        //     handleLoadSection()
+        // }
 
             // form.setFieldsValue({...schedule})
             // form.setFieldValue("departureTime", dayjs(schedule.departureTime))
@@ -50,6 +51,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     }, [isEdit])
 
     const handleDeleteTimeslot = async (id) => {
+        if(!id) {
+            delete listTimeSlot[index]
+            setCurrentTimeslot(listTimeSlot[index-1])
+            let tmp = listTimeSlot.filter(tl => tl)
+            setListTimeSlot([...tmp])
+        }
         const res = await apiDeleteTimeslot(id)
         if(res.data.error == 0) {
             delete listTimeSlot[index]
@@ -59,18 +66,22 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
         }
     }
 
-    async function handleLoadSection () {
-        const res = await apiGetSection(schedule.id)
-        setListSection([...res.data.data])
-    }
+    // async function handleLoadSection () {
+    //     const res = await apiGetSection(schedule.id)
+    //     setListSection([...res.data.data])
+    // }
     const handleChooseTime = (e) => {
         setTime(e.valueOf())
     }
 
     const handleUpdateTimeslot = async () => {
         const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection}
-        console.log(data)
         const res = await apiUpdateTimeslot(data)
+        if(res.data.error) {
+            enqueueSnackbar("Cập nhật thành công", {
+                variant: "success"
+            })
+        }
     } 
 
     return (
@@ -110,8 +121,6 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                     
                     <Button className="del-btn" onClick={() => {
                             handleDeleteTimeslot(schedule.id)
-                            // listTimeSlot.splice(index, 1);
-                            // setListTimeSlot([...listTimeSlot])
                         }} icon={<DeleteFilled />} />
                 </Row>
                 <Form.Item name="id" className='hidden'/>
@@ -119,7 +128,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                 <div>
                     {
                         listSection.length ? <>{
-                            listSection.map((t, sectionIndex) => <Section section={t} index={sectionIndex} listSection={listSection} setListSection={setListSection} listTimeSlot={listTimeSlot} timeSlotIndex={index}/> )
+                            listSection.map((t, sectionIndex) => <Section section={t} index={sectionIndex} listSection={listSection} setListSection={setListSection}/> )
                         }</> : null
                     }
                 </div>
@@ -133,7 +142,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         schedule.id && <Button onClick={() => handleUpdateTimeslot()} className='w-1/6'>Lưu</Button>
                     }
                 </div>
-           
+                    <Button onClick={() => console.log(listTimeSlot)}>sss</Button>
             </Card>
         </div>
     )

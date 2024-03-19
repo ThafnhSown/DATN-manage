@@ -6,7 +6,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useSnackbar } from "notistack"
 import { useAppDispatch, useAppSelector } from '../../../../redux/hook'
-import { requestCreatePolicy, requestLoadPolicy } from "../../../../redux/slices/companySlice"
+import { requestCreatePolicy } from "../../../../redux/slices/companySlice"
 const { Title } = Typography
 const { TextArea } = Input
 
@@ -18,13 +18,6 @@ const Policy = () => {
     const listPolicy = useAppSelector(state => state.companyState.listPolicy)
     const [form] = Form.useForm()
 
-    useEffect(() => {
-        handleLoadPolicy()
-    }, [])
-
-    const handleLoadPolicy = async () => {
-        await dispatch(requestLoadPolicy(id))
-    }
     const handleCreatePolicy = async () => {
         const data = {...form.getFieldsValue(), coachCompanyId: id}
         const res = await dispatch(requestCreatePolicy(data))
@@ -68,7 +61,7 @@ const Policy = () => {
 
             <div className="mt-6 space-y-2">
                 {
-                    listPolicy.map(p => <PolicyCard policy={p}/>)
+                    listPolicy ?? listPolicy.map(p => <PolicyCard policy={p}/>)
                 }
             </div>
         </div>

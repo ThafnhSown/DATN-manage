@@ -37,7 +37,7 @@ const AddPointToRoute = ({currentRoute}) => {
 
     useEffect(() => {
         setDelPoint([])
-    }, [])
+    }, [listPoint])
     useEffect(() => {
         handleLoadPoint(currentRoute)
     }, [currentRoute])
@@ -130,13 +130,13 @@ const AddPointToRoute = ({currentRoute}) => {
         const tmp = listPoint.filter(item => !delPoint.includes(item.locationId))
         setListPoint([...tmp])
         // console.log(listPoint.length)
-        if(!tmp.length) {
-            const res = await apiAddPointToRoute({
-                coachRouteId: currentRoute,
-                pointList: []
-            })
-            setIsEdit(false)
-        }
+        // if(!tmp.length) {
+        //     const res = await apiAddPointToRoute({
+        //         coachRouteId: currentRoute,
+        //         pointList: []
+        //     })
+        //     setIsEdit(false)
+        // }
     }
 
     const onSearch = (e) => {
@@ -229,7 +229,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                     listPoint.map((point, index) => {
                                         return (
                                         <>
-                                        <div className='flex-row space-x-4 grid grid-cols-12'
+                                        <div className='flex-row grid grid-cols-3'
                                             key={index}
                                             draggable={isEdit}
                                             onDragStart={(e) => (dragItem.current = index)}
@@ -238,19 +238,19 @@ const AddPointToRoute = ({currentRoute}) => {
                                             onDragOver={(e) => e.preventDefault()}
 
                                         >
-                                            <div className='col-span-4 space-x-2'>
+                                            <div className='space-x-2 col-span-1'>
                                                 <Checkbox checked={delPoint.includes(point.locationId)} onChange={e => handleChecked(e, point)} disabled={!isEdit}/>
                                                 <b>{point.address} :</b>
                                             </div>
-                                           <div className='col-span-8 flex flex-row space-x-2'>
+                                           <div className='flex flex-row space-x-2 justify-end col-span-2'>
                                             <Input onChange={(e) => {
                                                 const tmp = {...point, description: e.target.value, isOffice: false}
                                                 listPoint[index] = tmp
-                                                }} defaultValue={point.description} className='w-40'
+                                                }} defaultValue={point.description} className='w-1/2'
                                                 disabled={!isEdit}
                                                 />
                                             <p>hoặc</p>
-                                            <Select className='w-40' onChange={(value) => {
+                                            <Select className='w-1/2' onChange={(value) => {
                                                 const tmp = {...point, officeIdList: value, isOffice: true}
                                                 listPoint[index] = tmp
                                             }} 
@@ -268,8 +268,8 @@ const AddPointToRoute = ({currentRoute}) => {
                                 }
                             </div> : null
                         }
-                        <Row grid={12}>
-                            <Col span={4}>
+                        <div className='grid grid-cols-2'>
+                            <div>
                                 { listPoint.length ? <p className='mt-10'><Checkbox onChange={(e) => {
                                     if(e.target.checked) {
                                         setDelPoint(listPoint.map(point => point.locationId))
@@ -277,11 +277,10 @@ const AddPointToRoute = ({currentRoute}) => {
                                         setDelPoint([])
                                     }
                                 }} disabled={!isEdit}/> Chọn tất cả</p> : null}
-                            </Col>
-                            <Col span={14}/>
-                            <Col span={6}>
+                            </div>
+                            <div className='flex justify-end'>
                                 {
-                                    listPoint.length ? <div>
+                                    listPoint.length | isEdit ? <div>
                                 {
                                     isEdit && <Button onClick={() => {
                                         handleLoadPoint(currentRoute)
@@ -295,8 +294,8 @@ const AddPointToRoute = ({currentRoute}) => {
                                     </div> : null
                                 }
                                
-                            </Col>
-                        </Row>
+                            </div>
+                        </div>
                         </Card>   
                     </div>
                 </div>

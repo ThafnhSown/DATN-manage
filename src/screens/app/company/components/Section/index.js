@@ -1,10 +1,10 @@
-import { Row, Input, Select, Typography, Form, TimePicker, Button, InputNumber } from 'antd'
+import { Row, Select, Typography, Form, TimePicker, Button, InputNumber } from 'antd'
 import { useAppSelector } from '../../../../../redux/hook'
 import { useEffect, useState } from 'react'
 import { DeleteFilled } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
-const Section = ({section, index, listSection, setListSection, listTimeSlot, timeSlotIndex}) => {
+const Section = ({section, index, listSection, setListSection}) => {
     const [time, setTime] = useState(0)
     const [form] = Form.useForm()
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
@@ -16,8 +16,10 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
 
     useEffect(() => {
         if(section.id) {
-            form.setFieldsValue({...section})
+            form.setFieldsValue(section)
             form.setFieldValue("departureTime", dayjs(section.departureTime))
+        } else {
+            form.resetFields()
         }
 
     }, [currentRoute])
@@ -29,7 +31,6 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
               form={form}
               onValuesChange={() => {
                 listSection[index] = {...form.getFieldsValue(), departureTime: time}
-                listTimeSlot[timeSlotIndex].sectionList = listSection
             }}
             >
             <Row className='space-x-4 grid grid-cols-12'>
@@ -56,7 +57,6 @@ const Section = ({section, index, listSection, setListSection, listTimeSlot, tim
             </Form.Item>
             <Form.Item>
             <Button className="del-btn" onClick={(e) => {
-                console.log(index)
                 listSection.splice(index, 1);
                 setListSection([...listSection])
             }} icon={<DeleteFilled />} />

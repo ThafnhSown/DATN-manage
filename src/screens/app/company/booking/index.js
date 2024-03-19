@@ -15,6 +15,7 @@ const Booking = () => {
     const [orderState, setOrderState] = useState(0)
     const [listOrderPick, setListOrderPick] = useState([])
     const [currentOrder, setCurrentOrder] = useState([])
+    console.log("first", listOrder)
     useEffect(() => {
         dispatch(requestLoadOrder(companyId))
         setCurrentOrder(listOrder.filter(order => order.state == 0))
