@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react' 
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Select, Card, Button, Input, Row, List, Typography, Checkbox, Col } from 'antd'
-import { ArrowLeftOutlined, SearchOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, SearchOutlined, CheckOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
 import { apiAddPointToRoute, apiGetListDistrict, apiGetLocation, apiOfficeInDistrict, apiGetRouteDetail, apiOfficeInProvince } from "../../../../../api/services"
 import './style.css'
@@ -20,6 +20,7 @@ const AddPointToRoute = ({currentRoute}) => {
     const [showP, setShowP] = useState(listProvince)
     const [showD, setShowD] = useState(false)
     const [delPoint, setDelPoint] = useState([])
+    const [pickPoint, setPickPoint] = useState([])
     const [checked, setChecked] = useState(false)
     const dragItem = React.useRef(null)
     const dragOverItem = React.useRef(null)
@@ -34,12 +35,10 @@ const AddPointToRoute = ({currentRoute}) => {
         dragOverItem.current = null
         setListPoint(_pointItems)
     }
-
-    useEffect(() => {
-        setDelPoint([])
-    }, [listPoint])
     useEffect(() => {
         handleLoadPoint(currentRoute)
+        setDelPoint([])
+        setPickPoint([])
     }, [currentRoute])
 
     async function loadDistrict(value) {
@@ -54,6 +53,7 @@ const AddPointToRoute = ({currentRoute}) => {
     }
 
     async function handleChooseDistrict(value) {
+        setPickPoint([...pickPoint, value])
         let check = 0
         listPoint.map(point => {
             if(point.locationId === value) check = 1 
@@ -164,7 +164,7 @@ const AddPointToRoute = ({currentRoute}) => {
             isLoading ? <LoadingPage /> : <div>
             <div>
                 <div className="flex flex-row mt-6 space-x-4">
-                    <div className="w-1/4" >
+                    <div className={`w-1/4 ${isEdit ? '' : 'opacity-35'}`} >
                         <Card style={{
                             height: 400,
                             overflow: 'auto',
@@ -196,7 +196,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                                 }
                                             }}
                                         >
-                                            <div>{item.label}</div>
+                                            <div className='cursor-pointer'>{item.label}</div>
                                         </List.Item>
                                     )}
                                 />
@@ -209,8 +209,13 @@ const AddPointToRoute = ({currentRoute}) => {
                                         onClick={() => {
                                             handleChooseDistrict(item.value)
                                         }}
+                                    className={`${pickPoint.includes(item.value) ? 'bg-neutral-200' : ''}`}
                                     >
-                                        <div>{item.label}</div>
+                                        <div className='grid grid-cols-2 w-full'>
+                                            <div className='cursor-pointer'>{item.label}</div>
+                                            <div className={`flex justify-end ${pickPoint.includes(item.value) ? 'opacity-100' : 'opacity-0'}`}><CheckOutlined style={{color: 'green'}}/></div>
+                                        </div>
+                                        
                                     </List.Item>
                                 )}
                             />
@@ -240,7 +245,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                         >
                                             <div className='space-x-2 col-span-1'>
                                                 <Checkbox checked={delPoint.includes(point.locationId)} onChange={e => handleChecked(e, point)} disabled={!isEdit}/>
-                                                <b>{point.address} :</b>
+                                                <b className='cursor-default'>{point.address} :</b>
                                             </div>
                                            <div className='flex flex-row space-x-2 justify-end col-span-2'>
                                             <Input onChange={(e) => {
