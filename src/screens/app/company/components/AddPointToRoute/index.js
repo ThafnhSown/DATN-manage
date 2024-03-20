@@ -129,6 +129,7 @@ const AddPointToRoute = ({currentRoute}) => {
     async function handleDelPoint(listPoint) {
         const tmp = listPoint.filter(item => !delPoint.includes(item.locationId))
         setListPoint([...tmp])
+        setPickPoint([])
         // console.log(listPoint.length)
         // if(!tmp.length) {
         //     const res = await apiAddPointToRoute({
@@ -227,7 +228,14 @@ const AddPointToRoute = ({currentRoute}) => {
                         </Card>
                     </div>
                     <div className="w-3/4">
+
                         <Card>
+                        <InfiniteScroll
+                            dataLength={10}
+                        >
+
+                        </InfiniteScroll>
+                        <div>
                         {
                             listPoint.length ? <div className='space-y-3'>
                                 {
@@ -302,6 +310,8 @@ const AddPointToRoute = ({currentRoute}) => {
                                
                             </div>
                         </div>
+                        </div>
+ 
                         </Card>   
                     </div>
                 </div>

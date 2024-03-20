@@ -18,12 +18,13 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const [listSection, setListSection] = useState([])
     const [form] = Form.useForm()
     const [time, setTime] = useState(0)
- 
+
     useEffect(() => {
         schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
         if(schedule.id) {
             form.setFieldsValue(schedule)
             form.setFieldValue("departureTime", dayjs(schedule.departureTime))
+            setTime(schedule.departureTime)
         } else {
             form.resetFields()
         }

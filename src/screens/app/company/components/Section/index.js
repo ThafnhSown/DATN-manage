@@ -18,6 +18,7 @@ const Section = ({section, index, listSection, setListSection}) => {
         if(section.id) {
             form.setFieldsValue(section)
             form.setFieldValue("departureTime", dayjs(section.departureTime))
+            setTime(section.departureTime)
         } else {
             form.resetFields()
         }
