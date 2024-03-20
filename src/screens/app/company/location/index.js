@@ -20,6 +20,16 @@ const Location = () => {
     const currentRoute = useAppSelector((state) => state.routeState.currentRoute)
     const navigate = useNavigate()
 
+    useEffect(() => {
+        if(!listRoute.length) {
+            handleLoadRoutes()
+        }
+        dispatch(requestLoadOrder(companyId))
+        dispatch(requestLoadCoach(companyId))
+        dispatch(requestLoadPolicy(companyId))
+        dispatch(setCurrentRoute(null))
+    }, [])
+
     async function handleLoadRoutes() {
         try{
             await dispatch(requestLoadListRoute(companyId))
@@ -31,16 +41,6 @@ const Location = () => {
         value: route.id,
         label: `${route?.startPoint.district}/${route?.startPoint.province} - ${route?.endPoint.district}/${route?.endPoint.province}`
     }))
-
-    useEffect(() => {
-        if(!listRoute.length) {
-            handleLoadRoutes()
-        }
-        dispatch(requestLoadOrder(companyId))
-        dispatch(requestLoadCoach(companyId))
-        dispatch(requestLoadPolicy(companyId))
-        dispatch(setCurrentRoute(null))
-    }, [])
 
     return (
         <div className="px-24 space-y-4">

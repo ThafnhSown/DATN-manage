@@ -34,7 +34,28 @@ const AddPointToRoute = ({currentRoute}) => {
         dragItem.current = null
         dragOverItem.current = null
         setListPoint(_pointItems)
+        // setListPoint(list)
     }
+    const list = [{
+        id: 2,
+        description: "son de4p trai",
+        address: "test khong duoc",
+        isOffice: true,
+        location: {
+            district: "H. Chợ Mới",
+            id: 1541,
+            province: "An Giang",
+            provinceId: 55,
+            type: 2
+        },
+        officeList: [
+            {
+                value:1,
+                label: "sonssss"
+            }
+        ],
+        sequence: 1
+    }]
     useEffect(() => {
         handleLoadPoint(currentRoute)
         setDelPoint([])
@@ -74,14 +95,6 @@ const AddPointToRoute = ({currentRoute}) => {
             setListPoint([...listPoint, tmp])
         }
     }
-    // async function handleLoadRoutes() {
-    //     try{
-    //         await dispatch(requestLoadListRoute(companyId))
-    //         await dispatch(requestLoadListOffice(companyId))
-    //     } catch(err) {
-    //         console.log(err)
-    //     }
-    // }
 
     async function handleLoadPoint(id) {
         dispatch(requestLoadPoint(id))
@@ -123,21 +136,15 @@ const AddPointToRoute = ({currentRoute}) => {
             coachRouteId: currentRoute,
             pointList: tmp
         })
-        setIsEdit(false)
+        if(res.data.error) {
+            setIsEdit(false)
+        }
     }
 
     async function handleDelPoint(listPoint) {
         const tmp = listPoint.filter(item => !delPoint.includes(item.locationId))
         setListPoint([...tmp])
         setPickPoint([])
-        // console.log(listPoint.length)
-        // if(!tmp.length) {
-        //     const res = await apiAddPointToRoute({
-        //         coachRouteId: currentRoute,
-        //         pointList: []
-        //     })
-        //     setIsEdit(false)
-        // }
     }
 
     const onSearch = (e) => {
@@ -249,13 +256,15 @@ const AddPointToRoute = ({currentRoute}) => {
                                             onDragEnter={(e) => (dragOverItem.current = index)}
                                             onDragEnd={handleSort}
                                             onDragOver={(e) => e.preventDefault()}
-
                                         >
                                             <div className='space-x-2 col-span-1'>
                                                 <Checkbox checked={delPoint.includes(point.locationId)} onChange={e => handleChecked(e, point)} disabled={!isEdit}/>
                                                 <b className='cursor-default'>{point.address} :</b>
                                             </div>
-                                           <div className='flex flex-row space-x-2 justify-end col-span-2'>
+                                           <div className='flex flex-row space-x-2 justify-end col-span-2'
+                                           draggable={true}
+                                           onDragStart={(e) => e.preventDefault()}
+                                           >
                                             <Input onChange={(e) => {
                                                 const tmp = {...point, description: e.target.value, isOffice: false}
                                                 listPoint[index] = tmp
@@ -311,7 +320,7 @@ const AddPointToRoute = ({currentRoute}) => {
                             </div>
                         </div>
                         </div>
- 
+                                <Button onClick={() => console.log(listPoint)}>sss</Button>
                         </Card>   
                     </div>
                 </div>

@@ -7,8 +7,7 @@ const initialState = {
     listCompany: [],
     listCoach: [],
     listPolicy: [],
-    listOrder: [],
-    mapCoach: {}
+    listOrder: []
 };
 
 export const requestLoadCompany = createAsyncThunk('admin/get-list-company', async () => {
