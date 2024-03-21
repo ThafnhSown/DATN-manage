@@ -141,6 +141,10 @@ export const apiListSchedule = async(id) => {
     return ApiAdminConfig(`${EndPoint.LIST_SCHEDULE}?coachRouteId=${id}`, undefined, "GET")
 }
 
+export const apiCreateTimeslot = async(props) => {
+    return ApiAdminConfig("/company/create-timeslot", props)
+}
+
 export const apiGetListTimeslotByDate = async(props) => {
     const { date, coachRouteId } = props
     return ApiAdminConfig(`/company/get-timeslot-list-by-date?coachRouteId=${coachRouteId}&date=${date}`, undefined, "GET")

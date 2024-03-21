@@ -27,9 +27,7 @@ const Schedule = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
     const [listTimeSlot, setListTimeSlot] = useState([])
     const [listSubTimeslot, setListSubTimeslot] = useState([])
-    const [mapTS, setMapTS] = useState({})
-    const [mapEdit, setMapEdit] = useState()
-    const [isEdit, setIsEdit] = useState(false)
+    const [scheduleId, setScheduleId] = useState()
     useEffect(() => {
         handleLoadRoutes()
     }, [])
@@ -64,13 +62,13 @@ const Schedule = () => {
             setCurrentIndex(0)
             setListTimeSlot(tmp)
             setListSubTimeslot(subTmp)
+            // setScheduleId(tmp[0].coachSchedule.id)
         } else {
             setCurrentTimeslot()
             setCurrentIndex(-1)
             setListTimeSlot([])
+            setListSubTimeslot([])
         }
-        
-        console.log(res)
     }
     const handleCreateMainSchedule = async (e) => {
         e.preventDefault()
@@ -96,7 +94,6 @@ const Schedule = () => {
         await dispatch(requestLoadTravelPath(companyId))
         await dispatch(requestLoadPoint(value))
         handleLoadTimeslot({date: currentDate, coachRouteId: value})
-        // handleLoadSchedule(value)
         setIsCreate(false)
     }
 
@@ -144,7 +141,7 @@ const Schedule = () => {
             icon={<PlusCircleOutlined />}
             onClick={() => {
                 setIsCreate(true)
-                setCurrentIndex(currentIndex+1)
+                setCurrentIndex(listTimeSlot.length)
                 setCurrentTimeslot({})
                 setListTimeSlot([...listTimeSlot, {}])
             }}

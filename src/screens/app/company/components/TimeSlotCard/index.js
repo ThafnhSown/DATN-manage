@@ -20,7 +20,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const [time, setTime] = useState(0)
 
     useEffect(() => {
-        schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
+        setListSection(schedule.sectionList)
         if(schedule.id) {
             form.setFieldsValue(schedule)
             form.setFieldValue("departureTime", dayjs(schedule.departureTime))
@@ -57,20 +57,17 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
             setCurrentTimeslot(listTimeSlot[index-1])
             let tmp = listTimeSlot.filter(tl => tl)
             setListTimeSlot([...tmp])
-        }
-        const res = await apiDeleteTimeslot(id)
-        if(res.data.error == 0) {
-            delete listTimeSlot[index]
-            setCurrentTimeslot(listTimeSlot[index-1])
-            let tmp = listTimeSlot.filter(tl => tl)
-            setListTimeSlot([...tmp])
+        } else {
+            const res = await apiDeleteTimeslot(id)
+            if(res.data.error == 0) {
+                delete listTimeSlot[index]
+                setCurrentTimeslot(listTimeSlot[index-1])
+                let tmp = listTimeSlot.filter(tl => tl)
+                setListTimeSlot([...tmp])
+            }
         }
     }
 
-    // async function handleLoadSection () {
-    //     const res = await apiGetSection(schedule.id)
-    //     setListSection([...res.data.data])
-    // }
     const handleChooseTime = (e) => {
         setTime(e.valueOf())
     }
@@ -78,15 +75,17 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const handleUpdateTimeslot = async () => {
         const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection}
         const res = await apiUpdateTimeslot(data)
-        if(res.data.error) {
+        if(!res.data.error) {
             enqueueSnackbar("Cập nhật thành công", {
                 variant: "success"
             })
+            listTimeSlot[index] = data
         }
     } 
 
     return (
         <div >
+            {/* <Button onClick={() => console.log(schedule)}>abcv</Button> */}
             <Card className='bg-neutral-200 my-6'>
                 <Typography.Title level={4}>{(index+1) ? (index < 9 ? `0${index+1}` : `${index+1}`) : null}</Typography.Title>
                 <Form
@@ -128,9 +127,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                 </Form>
                 <div>
                     {
-                        listSection.length ? <>{
-                            listSection.map((t, sectionIndex) => <Section section={t} index={sectionIndex} listSection={listSection} setListSection={setListSection}/> )
-                        }</> : null
+                        listSection?.map((t, sectionIndex) => <Section section={t} index={sectionIndex} listSection={listSection} setListSection={setListSection}/> )
                     }
                 </div>
                 {
@@ -143,7 +140,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         schedule.id && <Button onClick={() => handleUpdateTimeslot()} className='w-1/6'>Lưu</Button>
                     }
                 </div>
-                    <Button onClick={() => console.log(listTimeSlot)}>sss</Button>
+                    {/* <Button onClick={() => console.log(listTimeSlot)}>sss</Button> */}
             </Card>
         </div>
     )

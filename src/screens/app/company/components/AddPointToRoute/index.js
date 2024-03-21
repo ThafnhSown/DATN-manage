@@ -320,7 +320,7 @@ const AddPointToRoute = ({currentRoute}) => {
                             </div>
                         </div>
                         </div>
-                                <Button onClick={() => console.log(listPoint)}>sss</Button>
+                                {/* <Button onClick={() => console.log(listPoint)}>sss</Button> */}
                         </Card>   
                     </div>
                 </div>
