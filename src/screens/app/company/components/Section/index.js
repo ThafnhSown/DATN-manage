@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { DeleteFilled } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
-const Section = ({section, index, listSection, setListSection}) => {
+const Section = ({section, index, listSection, setListSection, listTimeslot, timeslotIndex}) => {
     const [time, setTime] = useState(0)
     const [form] = Form.useForm()
     const optionsListPoint = useAppSelector(state => state.routeState.currentListPoint)
@@ -14,9 +14,15 @@ const Section = ({section, index, listSection, setListSection}) => {
     // }))
 
     useEffect(() => {
+        form.resetFields()
         form.setFieldsValue(section)
-        form.setFieldValue("departureTime", dayjs(section.departureTime))
-        setTime(section.departureTime)
+        if(section.departureTime) {
+            form.setFieldValue("departureTime", dayjs(section.departureTime))
+            setTime(section.departureTime)
+        } else {
+            form.setFieldValue("departureTime")
+        }
+
     }, [section])
     const handleChooseTime = (e) => {
         setTime(e.valueOf())
@@ -26,9 +32,9 @@ const Section = ({section, index, listSection, setListSection}) => {
               form={form}
               onValuesChange={() => {
                 listSection[index] = {...form.getFieldsValue(), departureTime: time}
+                listTimeslot[timeslotIndex].sectionList = listSection
             }}
             >
-                {/* <Button onClick={() => console.log(section)}>sss</Button> */}
             <Row className='space-x-4 grid grid-cols-12'>
             <Typography.Title level={5} className='col-span-1'>{(index+1) ? (index < 9 ? `Chặng 0${index+1}` : `Chặng ${index+1}`) : null}</Typography.Title>
             <Form.Item name="departureTime" className='col-span-2'>

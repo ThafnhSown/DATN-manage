@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import Section from '../Section'
 import { useSnackbar } from "notistack"
 import dayjs from 'dayjs'
-const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot}) => {
+const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot, scheduleId}) => {
     const { enqueueSnackbar } = useSnackbar()
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
@@ -20,13 +20,14 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const [time, setTime] = useState(0)
 
     useEffect(() => {
-        setListSection(schedule.sectionList)
-        if(schedule.id) {
-            form.setFieldsValue(schedule)
+        form.resetFields()
+        schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
+        form.setFieldsValue(schedule)
+        if(schedule.departureTime) {
             form.setFieldValue("departureTime", dayjs(schedule.departureTime))
             setTime(schedule.departureTime)
         } else {
-            form.resetFields()
+            form.setFieldValue("departureTime")
         }
     }, [schedule])
     useEffect(() => {
@@ -85,13 +86,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
 
     return (
         <div >
-            {/* <Button onClick={() => console.log(schedule)}>abcv</Button> */}
             <Card className='bg-neutral-200 my-6'>
                 <Typography.Title level={4}>{(index+1) ? (index < 9 ? `0${index+1}` : `${index+1}`) : null}</Typography.Title>
                 <Form
                 form={form}
                 onValuesChange={() => {
-                    !isEdit ? listTimeSlot[index] = ({...form.getFieldsValue(), departureTime: time}) : null
+                    listTimeSlot[index] = ({...form.getFieldsValue(), departureTime: time, sectionList: listSection})
                 }}
                 >
                 <Row className='space-x-4 grid grid-cols-12'>
@@ -127,7 +127,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                 </Form>
                 <div>
                     {
-                        listSection?.map((t, sectionIndex) => <Section section={t} index={sectionIndex} listSection={listSection} setListSection={setListSection}/> )
+                        listSection?.map((t, sectionIndex) => <Section section={t} index={sectionIndex} listSection={listSection} setListSection={setListSection} listTimeslot={listTimeSlot} timeslotIndex={index}/> )
                     }
                 </div>
                 {

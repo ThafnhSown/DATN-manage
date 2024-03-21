@@ -6,7 +6,7 @@
  import { requestLoadListRoute, requestLoadPoint, requestLoadTravelPath, setCurrentRoute } from "../../../../redux/slices/routeSlice";
  import { useEffect, useState } from "react";
 import SubSchedule from "../components/SubSchedule";
-import { apiCreateSchedule, apiGetListTimeslotByDate, apiGetSection, apiGetTimeSlot, apiListSchedule } from "../../../../api/services";
+import { apiCreateSchedule, apiCreateTimeslot, apiGetListTimeslotByDate, apiGetSection, apiGetTimeSlot, apiListSchedule } from "../../../../api/services";
 import moment from 'moment'
 const { Title } = Typography
 import { convertDate } from "../../../../utils/convertTime";
@@ -62,7 +62,7 @@ const Schedule = () => {
             setCurrentIndex(0)
             setListTimeSlot(tmp)
             setListSubTimeslot(subTmp)
-            // setScheduleId(tmp[0].coachSchedule.id)
+            setScheduleId(tmp[0].coachSchedule.id)
         } else {
             setCurrentTimeslot()
             setCurrentIndex(-1)
@@ -84,6 +84,16 @@ const Schedule = () => {
         }
         const res = await apiCreateSchedule(data)
         if(res.data.error == 0) {
+            setListTimeSlot([])
+            handleChooseRoute(currentRoute)
+        }
+    }
+
+    const handleCreateTimeslot = async () => {
+        let tmp = listTimeSlot.length - 1
+        const data = {...listTimeSlot[tmp], coachScheduleId: listTimeSlot[0].coachSchedule.id}
+        const res = await apiCreateTimeslot(data)
+        if(!res.data.error) {
             setListTimeSlot([])
             handleChooseRoute(currentRoute)
         }
@@ -160,15 +170,14 @@ const Schedule = () => {
                     >{sh.departureTime ? dayjs(sh.departureTime).format("HH:mm") : '--:--'}</Button>)
                 }
                 {
-                   currentTimeslot && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false} setCurrentTimeslot={setCurrentTimeslot}/>
+                   currentTimeslot && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false} setCurrentTimeslot={setCurrentTimeslot} scheduleId={scheduleId}/>
                 }
        
             <Divider />
             <Row className="justify-center">
             {
-                isCreate && <Button onClick={e => handleCreateMainSchedule(e)}>Hoàn thành</Button>
+                isCreate && <Button onClick={e => listTimeSlot[0]?.coachSchedule ? handleCreateTimeslot() : handleCreateMainSchedule(e)}>Hoàn thành</Button>
             }
-            {/* <Button onClick={() => console.log(listTimeSlot)}>test</Button> */}
             </Row>
         </Card>
 
