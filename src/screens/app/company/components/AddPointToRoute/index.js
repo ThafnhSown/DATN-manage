@@ -219,9 +219,9 @@ const AddPointToRoute = ({currentRoute}) => {
                                         }}
                                     className={`${pickPoint.includes(item.value) ? 'bg-neutral-200' : ''}`}
                                     >
-                                        <div className='grid grid-cols-2 w-full'>
-                                            <div className='cursor-pointer'>{item.label}</div>
-                                            <div className={`flex justify-end ${pickPoint.includes(item.value) ? 'opacity-100' : 'opacity-0'}`}><CheckOutlined style={{color: 'green'}}/></div>
+                                        <div className='grid grid-cols-6 w-full'>
+                                            <div className='cursor-pointer col-span-5'>{item.label}</div>
+                                            <div className={`flex justify-end col-span-1 ${pickPoint.includes(item.value) ? 'opacity-100' : 'opacity-0'}`}><CheckOutlined style={{color: 'green'}}/></div>
                                         </div>
                                         
                                     </List.Item>
@@ -266,7 +266,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                            onDragStart={(e) => e.preventDefault()}
                                            >
                                             <Input onChange={(e) => {
-                                                const tmp = {...point, description: e.target.value, isOffice: false}
+                                                const tmp = {...point, description: e.target.value}
                                                 listPoint[index] = tmp
                                                 }} defaultValue={point.description} className='w-1/2'
                                                 disabled={!isEdit}
@@ -310,7 +310,10 @@ const AddPointToRoute = ({currentRoute}) => {
                                         setPickPoint([])
                                     }} className='mt-10 text-white pause-btn'>Hủy</Button>
                                 }
-                                <Button onClick={() => handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
+                                {
+                                    isEdit && <Button onClick={() => handleDelPoint(listPoint)} className='mt-10 text-white del-btn'>Xóa</Button>
+                                    
+                                }
                                 {
                                     isEdit ? <Button onClick={() => handleAddPoint(listPoint)} className='mt-10 text-white'>Lưu</Button> : <Button onClick={() => setIsEdit(true)} className='mt-10 text-white'>Sửa</Button>
                                 }
