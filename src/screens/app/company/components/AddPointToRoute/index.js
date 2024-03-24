@@ -36,26 +36,7 @@ const AddPointToRoute = ({currentRoute}) => {
         setListPoint(_pointItems)
         // setListPoint(list)
     }
-    const list = [{
-        id: 2,
-        description: "son de4p trai",
-        address: "test khong duoc",
-        isOffice: true,
-        location: {
-            district: "H. Chợ Mới",
-            id: 1541,
-            province: "An Giang",
-            provinceId: 55,
-            type: 2
-        },
-        officeList: [
-            {
-                value:1,
-                label: "sonssss"
-            }
-        ],
-        sequence: 1
-    }]
+
     useEffect(() => {
         handleLoadPoint(currentRoute)
         setDelPoint([])
@@ -113,14 +94,8 @@ const AddPointToRoute = ({currentRoute}) => {
             })
         )
         const tmp = res.data.data.pointList.map(point => {
-            const son = point.officeList.map(of => {
-                const index = {
-                    value: of.id,
-                    label: of.name
-                }
-                return index
-            })
-            point.officeList = son
+            const son = point.officeIdList
+            point.officeIdList = son
             return point
         })
         tmp.length ? setIsEdit(false) : setIsEdit(true)
@@ -277,7 +252,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                                 listPoint[index] = tmp
                                             }} 
                                             mode="multiple"
-                                            defaultValue={point.officeList}
+                                            defaultValue={point.officeIdList}
                                             disabled={!isEdit}
                                             options={mapOffice[point.locationId]}
                                             >
@@ -323,7 +298,7 @@ const AddPointToRoute = ({currentRoute}) => {
                             </div>
                         </div>
                         </div>
-                                {/* <Button onClick={() => console.log(listPoint)}>sss</Button> */}
+                            <Button onClick={() => console.log(listPoint)}>sss</Button> 
                         </Card>   
                     </div>
                 </div>

@@ -79,7 +79,7 @@ const TravelPath = () => {
                 listTP.map((tp, index) => (
                     <Card>
                         <div className="grid grid-cols-12">
-                            <p className="col-span-10">{`${tp.name} : ${tp.detail}`} </p>
+                            <p className="col-span-10 truncate">{`${tp.name} : ${tp.detail}`} </p>
                             <div className="col-span-1"/>
                             <div className="col-span-1 flex flex-row items-center justify-center">
                             <Popconfirm title={<p className='text-green-700 font-bold'>Bạn muốn xóa lộ trình này?</p>}
