@@ -3,10 +3,11 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Select, Card, Button, Input, Row, List, Typography, Checkbox, Col } from 'antd'
 import { ArrowLeftOutlined, SearchOutlined, CheckOutlined } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook"
-import { apiAddPointToRoute, apiGetListDistrict, apiGetLocation, apiOfficeInDistrict, apiGetRouteDetail, apiOfficeInProvince } from "../../../../../api/services"
+import { apiAddPointToRoute, apiGetListDistrict, apiGetLocation, apiGetRouteDetail, apiOfficeInProvince } from "../../../../../api/services"
 import './style.css'
 import LoadingPage from "../../../../../utils/Loading";
 import { requestLoadPoint } from '../../../../../redux/slices/routeSlice';
+import { requestLoadProvince } from '../../../../../redux/slices/globalSlice';
 const { Title } = Typography
 
 const AddPointToRoute = ({currentRoute}) => {
@@ -36,6 +37,10 @@ const AddPointToRoute = ({currentRoute}) => {
         setListPoint(_pointItems)
         // setListPoint(list)
     }
+
+    useEffect(() => {
+        dispatch(requestLoadProvince())
+    }, [])
 
     useEffect(() => {
         handleLoadPoint(currentRoute)
@@ -103,6 +108,7 @@ const AddPointToRoute = ({currentRoute}) => {
     }
 
     async function handleAddPoint(listPoint) {
+        console.log(listPoint)
         const tmp = listPoint.map((point, index) => ({
             ...point,
             sequence: index+1
@@ -111,7 +117,7 @@ const AddPointToRoute = ({currentRoute}) => {
             coachRouteId: currentRoute,
             pointList: tmp
         })
-        if(res.data.error) {
+        if(!res.data.error) {
             setIsEdit(false)
         }
     }
@@ -248,7 +254,7 @@ const AddPointToRoute = ({currentRoute}) => {
                                                 />
                                             <p>hoặc</p>
                                             <Select className='w-1/2' onChange={(value) => {
-                                                const tmp = {...point, officeIdList: value, isOffice: true}
+                                                const tmp = {...point, officeIdList: value}
                                                 listPoint[index] = tmp
                                             }} 
                                             mode="multiple"

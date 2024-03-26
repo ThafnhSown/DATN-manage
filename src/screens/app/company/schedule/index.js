@@ -136,30 +136,26 @@ const Schedule = () => {
             <Row>
                 <Title level={3}>Lịch cố định</Title>
             </Row>
-            <Row className="items-center space-x-6">
+            <Row className="items-center space-x-6 mb-4">
                 <Title level={5}>Tuyến xe</Title>
-                <Select defaultValue="Chọn tuyến xe" options={selectOption} style={{width: 800, height:40}} onSelect={(value) => handleChooseRoute(value)}>
-
+                <Select defaultValue="Chọn tuyến xe" options={selectOption} style={{width: 500, height:40}} onSelect={(value) => handleChooseRoute(value)}>
                 </Select>
-            </Row>
-            
-            <Row className="grid grid-row items-center">
-            <p>{listTimeSlot.length} chuyến</p>
-            <div className="flex justify-end">
-            <Button
-            style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} 
-            icon={<PlusCircleOutlined />}
-            onClick={() => {
-                setIsCreate(true)
-                setCurrentIndex(listTimeSlot.length)
-                setCurrentTimeslot({})
-                setListTimeSlot([...listTimeSlot, {}])
-            }}
-            >
-                Thêm giờ xuất bến
-            </Button>
-            </div>
-            
+                
+                <div className="flex justify-end">
+                    <Button
+                        style={{backgroundColor:"white", color: "#006D38", borderRadius: 4}} 
+                        icon={<PlusCircleOutlined />}
+                        onClick={() => {
+                            setIsCreate(true)
+                            setCurrentIndex(listTimeSlot.length)
+                            setCurrentTimeslot({})
+                            setListTimeSlot([...listTimeSlot, {}])
+                    }}
+                    >
+                        Thêm giờ xuất bến
+                    </Button>
+                </div>
+                <p className="text-lg">{listTimeSlot.length} chuyến</p>
             </Row>
                 {
                     listTimeSlot?.map((sh, index) => <Button onClick={() => {
