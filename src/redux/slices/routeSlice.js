@@ -58,7 +58,7 @@ export const routeSlice = createSlice({
         builder.addCase(requestLoadPoint.fulfilled, (state, action) => {
             state.pointLoading = false
             state.currentListPoint = action.payload.pointList.map(point => ({
-                value: point.id,
+                value: point.locationId,
                 label: point.address
             }))
         })

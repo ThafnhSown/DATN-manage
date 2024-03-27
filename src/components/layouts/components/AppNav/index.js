@@ -11,8 +11,11 @@ const AppNav = () => {
     const location = useLocation()
     const pathName = location.pathname
     useEffect(() => {
-      if(pathName == '/nhan-vien' | pathName == '/thong-tin' | pathName == '/thong-tin' | pathName == '/booking') {
+      if(pathName == '/nhan-vien' | pathName == '/bao-cao' | pathName == '/thong-tin' | pathName == '/booking') {
         setStatus("manage")
+      }
+      if(pathName == '/booking') {
+        setStatus('ticket')
       }
     },[])
     const items = [
@@ -37,6 +40,17 @@ const AppNav = () => {
               Quản lý
             </a>
           )
+        },
+        {
+          key: '3',
+          label: (
+            <a onClick={() => {
+              setStatus('ticket')
+              navigate("/booking")
+              }} className="text-sm font-quicksand">
+              Bán vé
+            </a>
+          )
         }
       ];
     return (
@@ -53,7 +67,7 @@ const AppNav = () => {
                 </div>
                 <div className="col-span-9">
                     {
-                      status === 'operating' ? <div>
+                      status === 'operating' ? 
                           <Row className="bg-white rounded h-9 items-center">
                             <Col className="space-x-20">
                               <Link to="/" className={`${pathName == '/' ? 'text-green-700' : null} hover:text-green-600 text-base ml-2`}>Địa điểm</Link>
@@ -62,13 +76,15 @@ const AppNav = () => {
                               <Link to="/lich-xuat-ben" className={`${pathName == '/lich-xuat-ben' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Lịch xuất bến</Link>
                             </Col>
                           </Row>  
-                      </div>
-                      : <Row className="bg-white rounded h-9 items-center">
+                      : status === 'manage' ? <Row className="bg-white rounded h-9 items-center">
                           <Col className="space-x-20">
-                            <Link to="/nhan-vien" className={`${pathName == '/nhan-vien' ? 'text-green-700' : null} hover:text-green-600 text-base ml-2`}>Nhân viên</Link>
+                            <Link to="/nhan-vien" className={`${pathName == '/nhan-vien' ? 'text-green-700' : null} hover:text-green-600 text-base ml-20`}>Nhân viên</Link>
                             <Link to="/thong-tin" className={`${pathName == '/thong-tin' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Thông tin hãng xe</Link>
                             <Link to="/bao-cao" className={`${pathName == '/bao-cao' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Báo cáo</Link>
-                            <Link to="/booking" className={`${pathName == '/booking' ? 'text-green-700' : null} hover:text-green-600 text-base`}>Booking</Link>
+                          </Col>
+                      </Row> : <Row className="bg-white rounded h-9 items-center">
+                          <Col className="space-x-20">
+                            <Link to="/booking" className={`${pathName == '/booking' ? 'text-green-700' : null} hover:text-green-600 text-base ml-10`}>Booking</Link>
                           </Col>
                       </Row>
 
