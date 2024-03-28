@@ -31,9 +31,10 @@ const Booking = () => {
             state: -1
         })
         if(res.data.error == 0) {
+            dispatch(requestLoadOrder(companyId))
+            setListOrderPick([])
             let tmp = currentOrder.filter(order => !listId.includes(order.id))
             setCurrentOrder([...tmp])
-            dispatch(requestLoadOrder(companyId))
         }
     }
 
@@ -44,9 +45,10 @@ const Booking = () => {
             state: 1
         })
         if(res.data.error == 0) {
+            dispatch(requestLoadOrder(companyId))
+            setListOrderPick([])
             let tmp = currentOrder.filter(order => !listId.includes(order.id))
             setCurrentOrder([...tmp])
-            dispatch(requestLoadOrder(companyId))
         }
     }
 
@@ -83,20 +85,9 @@ const Booking = () => {
                     <Checkbox className="items-center mx-2" onClick={(e) => {
                         if(e.target.checked) {
                             setListOrderPick(currentOrder)
-                            // let tmp = currentOrder.map(order => ({
-                            //     ...order,
-                            //     isPhoned: true
-                            // }))
-                            // setCurrentOrder(tmp)
                         } else {
                             setListOrderPick([])
-                            // let tmp = currentOrder.map(order => ({
-                            //     ...order,
-                            //     isPhoned: false
-                            // }))
-                            // setCurrentOrder(tmp)
                         }
-                        // console.log(currentOrder)
                     }}>Tất cả</Checkbox>
                     <div className="flex justify-end">
                         <Button className="del-btn" onClick={() => {
