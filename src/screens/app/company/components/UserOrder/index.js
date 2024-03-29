@@ -1,13 +1,15 @@
-import { IconCar, IconTP, IconTicket, IconMoney } from "../../../../../assets/svgs"
+import { IconCar, IconTP, IconTicket, IconMoney, MiniBlue, MiniRed } from "../../../../../assets/svgs"
 import { EnvironmentFilled, UserOutlined, PhoneFilled, FormOutlined } from "@ant-design/icons"
 import { Checkbox } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from "react"
 import './style.css'
+import { regexNumber } from "../../../../../utils/convertTime"
 
 const UserOrder = ({ order, listOrder, setListOrder }) => {
     const [isChecked, setIsChecked] = useState(false)
     useEffect(() => {
+        console.log(order)
         listOrder.includes(order) ? setIsChecked(true) : setIsChecked(false)
     }, [listOrder])
 
@@ -38,26 +40,37 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
             <div className="flex flex-row space-x-6">
                 <div/>
                 <p className="flex flex-row items-center space-x-2"><IconTicket /><p>{order.quantity} vé</p></p>
-                <p className="flex flex-row items-center space-x-2"><IconMoney /> <p>{order.price}đ</p></p>
+                <p className="flex flex-row items-center space-x-2"><IconMoney /> <p>{regexNumber(order.price)}đ</p></p>
                 <p className="flex flex-row items-center space-x-2"><IconCar /> <p>{order.coachType.name}</p></p>
             </div>
             <div className="flex flex-row text-xs mx-6 space-x-4">
                 <p className="flex flex-row space-x-1 note"><FormOutlined/>
                     <p className="font-extralight">Ghi chú</p>
-                    <p className="font-extralight text-xs note-detail">{order.note}</p>
+                    <p className="text-xs note-detail font-extrabold">{order.note}</p>
                 </p>
                
              </div>
             <div class="w-full mt-2 h-1 border-t border-dashed border-black"></div>
             <div className="flex flex-col mx-2">
-                <div className="flex flex-row space-x-2 items-center">
-                    <IconTP /> <div className="font-light truncate">Lộ trình: {order.travelPath.detail}</div>
+                <div className="flex flex-row space-x-1 items-center">
+                    <IconTP /> 
+                    <div className="font-light flex flex-row w-full space-x-1">
+                        <p>Lộ trình: </p>
+                        <p className="font-light">{order.travelPath.name}</p>
+                    </div>
                 </div>
-                <div className="font-light">
-                    <EnvironmentFilled style={{color: "blue"}}/> {order.pickUpPoint.district} = Trung chuyển đón
+                <div className="font-light flex flex-row items-center space-x-1">
+                    <MiniBlue />
+                    <div>
+                        {order.pickUpPoint.district}
+                    </div>: Trung chuyển đón
                 </div>
-                <div className="font-light">
-                    <EnvironmentFilled style={{color: "red"}}/> {order.dropOffPoint.district} = Trung chuyển trả
+                <div className="font-light flex flex-row items-center space-x-1">
+                    <MiniRed />
+                    <div>
+                        {order.dropOffPoint.district}
+                    </div>
+                      : Trung chuyển trả
                 </div>
             </div>
             <div className="mx-2 grid grid-cols-2">
