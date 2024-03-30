@@ -31,20 +31,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
         }
     }, [schedule])
     useEffect(() => {
+        console.log(listCoach)
         let lc = listCoach.map((coach) => ({
-            value: coach.coachType.id,
+            value: coach.id,
             label: coach.coachType.name
         }))
         setOptions(lc)
-        // if(schedule?.id) {
-        //     handleLoadSection()
-        // }
-
-            // form.setFieldsValue({...schedule})
-            // form.setFieldValue("departureTime", dayjs(schedule.departureTime))
-            // form.setFieldValue("coachTypeId", schedule.coachTypeId)
-            // form.setFieldValue("travelPathId", schedule.travelPathId)
-        
         const tmp = listPath.map(p => ({
             value: p.id,
             label: p.name
