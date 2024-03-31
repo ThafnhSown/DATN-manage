@@ -54,7 +54,7 @@ const Booking = () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center min-h-screen">
             <div className="w-3/4 h-12 flex flex-row items-center space-x-4 rounded-md" style={{backgroundColor: '#006D38'}}>
                 <div className={`w-1/3 h-10 flex items-center justify-center rounded-md ml-1 ${orderState == 0 ? 'text-black bg-white' : 'text-white'}`} onClick={() => handleChangeState(0)}>
                     Vé mới
@@ -66,9 +66,10 @@ const Booking = () => {
                     Đã hủy
                 </div>
             </div>
-            <div className="flex overflow-auto w-3/4 mt-6" style={{height: '400px'}}>
+           
+            <div className="flex overflow-auto mobile:w-full desktop:w-3/4 mt-6" style={{height: '600px'}}>
                 <InfiniteScroll className="order-list" dataLength={10}>
-                    <div className="grid grid-cols-2 gap-4 w-full">
+                    <div className="gap-4 w-full mobile:flex mobile:flex-col desktop:grid desktop:grid-cols-2">
                         {
                             currentOrder.map(order => <UserOrder order={order} listOrder={listOrderPick} setListOrder={setListOrderPick}/>)
                         }
@@ -77,7 +78,7 @@ const Booking = () => {
                 </InfiniteScroll>
              
             </div>
-            <div className="flex flex-col mt-2 w-3/4 bg-white">
+            <div className="flex flex-col mt-2 mobile:w-full desktop:w-3/4 bg-white absolute bottom-20">
                 <div className="flex justify-end mr-6 space-x-2">
                     <p>{listOrder.filter(or => or.state == 0).length} chưa xác nhận |</p>
                     <p>{listOrder.filter(or => or.state == 1).length} đã liên lạc</p>

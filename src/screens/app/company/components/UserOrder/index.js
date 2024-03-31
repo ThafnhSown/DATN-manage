@@ -9,7 +9,6 @@ import { regexNumber } from "../../../../../utils/convertTime"
 const UserOrder = ({ order, listOrder, setListOrder }) => {
     const [isChecked, setIsChecked] = useState(false)
     useEffect(() => {
-        console.log(order)
         listOrder.includes(order) ? setIsChecked(true) : setIsChecked(false)
     }, [listOrder])
 

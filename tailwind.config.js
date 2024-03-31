@@ -3,11 +3,16 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+
   theme: {
     extend: {
       fontFamily: {
         'quicksand': ['Quicksand', 'sans-serif'],
       },
+    },
+    screens: {
+      'mobile': '300px',
+      'desktop': '900px'
     },
   },
   plugins: [],

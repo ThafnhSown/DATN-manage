@@ -18,7 +18,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const [listSection, setListSection] = useState([])
     const [form] = Form.useForm()
     const [time, setTime] = useState(0)
-
+    console.log(schedule)
     useEffect(() => {
         form.resetFields()
         schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
@@ -90,7 +90,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                     <Form.Item name="departureTime" className='col-span-2'>
                         <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)} className='w-full'/>
                     </Form.Item>
-                   <Form.Item name="coachTypeId" className='col-span-3'>
+                   <Form.Item name="coachId" className='col-span-3'>
                         <Select defaultValue="Chọn loại xe" className='w-full'>
                             {
                                 options.map(({label, value}) => (

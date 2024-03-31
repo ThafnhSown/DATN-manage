@@ -11,7 +11,7 @@ function AppLayout({ children }) {
 
   return (
     <div className='flex-col flex'>
-      <div className='grid grid-cols-12'>
+      <div className='grid grid-cols-12 mobile:hidden desktop:grid'>
         <div className='col-span-11'>
           <Header />
         </div>
@@ -20,7 +20,7 @@ function AppLayout({ children }) {
 
       <div className='bg-neutral-200'>
         <div className='min-h-screen'>
-          <div className='py-6 px-10 bg-neutral-200'>{children}</div>
+          <div className='py-6 desktop:px-10 bg-neutral-200'>{children}</div>
         </div>
       </div>
     </div>
