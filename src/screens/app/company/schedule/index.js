@@ -172,7 +172,7 @@ const Schedule = () => {
             <Divider />
             <Row className="justify-center">
             {
-                isCreate && <Button onClick={e => listTimeSlot[0]?.coachSchedule ? handleCreateTimeslot() : handleCreateMainSchedule(e)}>Hoàn thành</Button>
+                isCreate && <Button onClick={(e) => listTimeSlot[0]?.coachSchedule ? handleCreateTimeslot() : handleCreateMainSchedule(e)}>Hoàn thành</Button>
             }
             </Row>
         </Card>

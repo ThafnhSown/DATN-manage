@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import Section from '../Section'
 import { useSnackbar } from "notistack"
 import dayjs from 'dayjs'
+import { regexNumber } from '../../../../../utils/convertTime'
+
 const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot, scheduleId}) => {
     const { enqueueSnackbar } = useSnackbar()
     const dispatch = useAppDispatch()
@@ -18,11 +20,13 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const [listSection, setListSection] = useState([])
     const [form] = Form.useForm()
     const [time, setTime] = useState(0)
-    console.log(schedule)
     useEffect(() => {
         form.resetFields()
         schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
         form.setFieldsValue(schedule)
+        if(schedule.price) {
+            form.setFieldValue('price', regexNumber(schedule.price))
+        }
         if(schedule.departureTime) {
             form.setFieldValue("departureTime", dayjs(schedule.departureTime))
             setTime(schedule.departureTime)
@@ -31,7 +35,6 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
         }
     }, [schedule])
     useEffect(() => {
-        console.log(listCoach)
         let lc = listCoach.map((coach) => ({
             value: coach.id,
             label: coach.coachType.name
@@ -87,8 +90,8 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                 }}
                 >
                 <Row className='space-x-4 grid grid-cols-12'>
-                    <Form.Item name="departureTime" className='col-span-2'>
-                        <TimePicker format="HH:mm" placeholder="Nhập giờ" onChange={(e) => handleChooseTime(e)} className='w-full'/>
+                    <Form.Item name="departureTime" className='col-span-1'>
+                        <TimePicker showNow={false} needConfirm={false} format="HH:mm" placeholder="Giờ" onChange={(e) => handleChooseTime(e)} className='w-full'/>
                     </Form.Item>
                    <Form.Item name="coachId" className='col-span-3'>
                         <Select defaultValue="Chọn loại xe" className='w-full'>
@@ -102,13 +105,16 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         </Select>
                    </Form.Item>
                     
-                    <Form.Item name="travelPathId" className='col-span-3'>
+                    <Form.Item name="travelPathId" className='col-span-4'>
                         <Select defaultValue="Chọn lộ trình" className='w-full' options={listTP}>
                         </Select>
                     </Form.Item>
                     
                     <Form.Item name="price" className='col-span-3'>
-                        <InputNumber suffix="VND" className='w-full' min={0}></InputNumber>
+                        <Input suffix="VND" className='w-full' onBlur={(e) => {
+                            const tmp = e.target.value
+                            if(tmp) form.setFieldValue('price', regexNumber(tmp))
+                        }}></Input>
                     </Form.Item>
                     
                     <Button className="del-btn" onClick={() => {
