@@ -18,11 +18,11 @@ export const IconTP = () => (
 
 export const IconCar = () => (
   <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M11.2667 15.1667H4.73342C3.60009 15.1667 2.66675 14.24 2.66675 13.1V3.90004C2.66675 2.76671 3.59342 1.83337 4.73342 1.83337H11.2667C12.4001 1.83337 13.3334 2.76004 13.3334 3.90004V13.1C13.3334 14.24 12.4067 15.1667 11.2667 15.1667Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M12.3334 9.16671H3.66675C3.11341 9.16671 2.66675 8.72004 2.66675 8.16671V6.83337C2.66675 6.28004 3.11341 5.83337 3.66675 5.83337H12.3334C12.8867 5.83337 13.3334 6.28004 13.3334 6.83337V8.16671C13.3334 8.72004 12.8867 9.16671 12.3334 9.16671Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M5.66292 12.3H5.66891" stroke="#292D32" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M10.3297 12.3H10.3357" stroke="#292D32" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M6.33325 3.83337H9.66659" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M11.2667 15.1667H4.73342C3.60009 15.1667 2.66675 14.24 2.66675 13.1V3.90004C2.66675 2.76671 3.59342 1.83337 4.73342 1.83337H11.2667C12.4001 1.83337 13.3334 2.76004 13.3334 3.90004V13.1C13.3334 14.24 12.4067 15.1667 11.2667 15.1667Z" stroke="#006D38" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12.3334 9.16671H3.66675C3.11341 9.16671 2.66675 8.72004 2.66675 8.16671V6.83337C2.66675 6.28004 3.11341 5.83337 3.66675 5.83337H12.3334C12.8867 5.83337 13.3334 6.28004 13.3334 6.83337V8.16671C13.3334 8.72004 12.8867 9.16671 12.3334 9.16671Z" stroke="#006D38" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5.66292 12.3H5.66891" stroke="#006D38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.3297 12.3H10.3357" stroke="#006D38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.33325 3.83337H9.66659" stroke="#006D38" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
 )

@@ -36,12 +36,11 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
                 
                 <div className="text-xs flex justify-end">{order.state == 0 ? <p className="text-red-600">Chưa liên hệ</p> : order.state == 1 ? <p className="text-green-700">Đã liên hệ</p> : <p>Đã hủy</p>}</div>
             </div>
-            <div className="flex flex-row space-x-6">
-                <div/>
-                <p className="flex flex-row items-center space-x-2"><IconTicket /><p>{order.quantity} vé</p></p>
-                <p className="flex flex-row items-center space-x-2"><IconMoney /> <p>{regexNumber(order.price)}đ</p></p>
-                <p className="flex flex-row items-center space-x-2"><IconCar /> <p>{order.coachType.name}</p></p>
+            <div className="flex flex-row ml-5">
+                <p className="flex flex-row items-center space-x-2 w-1/2"><IconTicket /><p>{order.quantity} vé</p></p>
+                <p className="flex flex-row items-center space-x-2 w-1/2"><IconMoney /> <p>{regexNumber(order.price)}đ</p></p>
             </div>
+            <p className="flex flex-row items-center space-x-2 ml-5"><IconCar /> <p>{order.coachType.name}</p></p>
             <div className="flex flex-row text-xs mx-6 space-x-4">
                 <p className="flex flex-row space-x-1 note"><FormOutlined/>
                     <p className="font-extralight">Ghi chú</p>

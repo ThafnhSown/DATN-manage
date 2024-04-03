@@ -78,7 +78,7 @@ const Booking = () => {
                 </InfiniteScroll>
              
             </div>
-            <div className="flex flex-col mt-2 mobile:w-full desktop:w-3/4 bg-white absolute bottom-20">
+            <div className="flex flex-col mt-2 mobile:w-full desktop:w-3/4 bg-white absolute bottom-2">
                 <div className="flex justify-end mr-6 space-x-2">
                     <p>{listOrder.filter(or => or.state == 0).length} chưa xác nhận |</p>
                     <p>{listOrder.filter(or => or.state == 1).length} đã liên lạc</p>
