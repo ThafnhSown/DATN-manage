@@ -108,7 +108,6 @@ const AddPointToRoute = ({currentRoute}) => {
     }
 
     async function handleAddPoint(listPoint) {
-        console.log(listPoint)
         const tmp = listPoint.map((point, index) => ({
             ...point,
             sequence: index+1
