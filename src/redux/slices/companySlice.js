@@ -64,6 +64,9 @@ export const companySlice = createSlice({
             const id = action.payload
             const tmp = state.listCoach.filter(item => item.id != id)
             state.listCoach = tmp
+        },
+        addNewOrder: (state, action) => {
+            state.listOrder.push(action.payload)
         }
     },
     extraReducers: (builder) => {
@@ -113,7 +116,8 @@ export const companySlice = createSlice({
 export const {
     setCurrentCompany,
     setCurrentListCoach,
-    deleteCoach
+    deleteCoach,
+    addNewOrder
 } = companySlice.actions
 
 export const companyState = (state) => state.companyState;

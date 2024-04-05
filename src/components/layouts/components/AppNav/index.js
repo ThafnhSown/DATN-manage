@@ -59,7 +59,7 @@ const AppNav = () => {
                     <Dropdown menu={{ items }}>
                         <a onClick={(e) => e.preventDefault()}>
                             <Space>
-                                {status === 'operating' ? "Điều hành" : "Quản lý"}
+                                {status === 'operating' ? "Điều hành" : status == "ticket" ? "Bán vé" : "Quản lý"}
                                 <DownOutlined />
                             </Space>
                         </a>

@@ -246,16 +246,16 @@ const AddPointToRoute = ({currentRoute}) => {
                                            onDragStart={(e) => e.preventDefault()}
                                            >
                                             <Input onChange={(e) => {
-                                                const tmp = {...point, description: e.target.value}
+                                                const tmp = {...listPoint[index], description: e.target.value}
                                                 listPoint[index] = tmp
                                                 }} defaultValue={point.description} className='w-1/2'
                                                 disabled={!isEdit}
                                                 />
                                             <p>hoặc</p>
                                             <Select className='w-1/2' onChange={(value) => {
-                                                const tmp = {...point, officeIdList: value}
+                                                const tmp = {...listPoint[index], officeIdList: value}
                                                 listPoint[index] = tmp
-                                            }} 
+                                            }}
                                             mode="multiple"
                                             defaultValue={point.officeIdList}
                                             disabled={!isEdit}

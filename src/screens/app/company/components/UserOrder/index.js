@@ -43,8 +43,8 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
             <p className="flex flex-row items-center space-x-2 ml-5"><IconCar /> <p>{order.coachType.name}</p></p>
             <div className="flex flex-row text-xs mx-6 space-x-4">
                 <p className="flex flex-row space-x-1 note"><FormOutlined/>
-                    <p className="font-extralight">Ghi chú</p>
-                    <p className="text-xs note-detail font-extrabold">{order.note}</p>
+                    <p className="font-extralight">Ghi chú:</p>
+                    <p className="text-xs font-extrabold">{order.note}</p>
                 </p>
                
              </div>
