@@ -38,13 +38,13 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
             </div>
             <div className="flex flex-row ml-5">
                 <p className="flex flex-row items-center space-x-2 w-1/2"><IconTicket /><p>{order.quantity} vé</p></p>
-                <p className="flex flex-row items-center space-x-2 w-1/2"><IconMoney /> <p>{regexNumber(order.price)}đ</p></p>
+                <p className="flex flex-row items-center space-x-2 w-1/2"><IconMoney /> <p>{regexNumber(order.price*order.quantity)}đ</p></p>
             </div>
             <p className="flex flex-row items-center space-x-2 ml-5"><IconCar /> <p>{order.coachType.name}</p></p>
             <div className="flex flex-row text-xs mx-6 space-x-4">
-                <p className="flex flex-row space-x-1 note"><FormOutlined/>
-                    <p className="font-extralight">Ghi chú:</p>
-                    <p className="text-xs font-extrabold">{order.note}</p>
+                <p className="flex flex-row space-x-1 items-center"><FormOutlined/>
+                    <p className="font-extralight text-base">Ghi chú:</p>
+                    <p className="font-extrabold text-base">{order.note}</p>
                 </p>
                
              </div>

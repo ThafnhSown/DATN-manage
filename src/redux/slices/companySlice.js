@@ -66,7 +66,10 @@ export const companySlice = createSlice({
             state.listCoach = tmp
         },
         addNewOrder: (state, action) => {
-            state.listOrder.push(action.payload)
+            let length = state.listOrder.length
+            if(action.payload.id != state.listOrder[length-1].id) {
+                state.listOrder.push(action.payload)
+            }
         }
     },
     extraReducers: (builder) => {

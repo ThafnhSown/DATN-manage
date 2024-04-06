@@ -21,11 +21,12 @@ const Booking = () => {
     const [listOrderPick, setListOrderPick] = useState([])
     const [currentOrder, setCurrentOrder] = useState([])
     function connect(companyId, currentOrder, setCurrentOrder, orderState) {
-        let socket = new SockJS("http://localhost:8080/bookings");
+        let socket = new SockJS(`${process.env.REACT_APP_ENDPOINT}/bookings`);
         let stompClient = Stomp.over(socket);
       
         stompClient.connect({}, function (frame) {
           stompClient.subscribe("/topic/bookings", function (message) {
+            
             let tmp = JSON.parse(message?.body)
             if(tmp.companyId == companyId && orderState == 0) {
                 dispatch(addNewOrder(tmp))
@@ -39,6 +40,11 @@ const Booking = () => {
         connect(companyId, currentOrder, setCurrentOrder, orderState)
     }, [])
 
+    useEffect(() => {
+        if(!orderState) {
+            setCurrentOrder(listOrder.filter(order => order.state == 0))
+        }
+    }, [listOrder])
 
     const handleChangeState = (state) => {
         const tmp = listOrder.filter(order => order.state == state)
@@ -76,7 +82,7 @@ const Booking = () => {
 
     return (
         <div className="flex flex-col items-center max-h-screen">
-            <div className="w-3/4 h-12 flex flex-row items-center space-x-4 rounded-md" style={{backgroundColor: '#006D38'}}>
+            <div className="w-3/4 h-12 p-2 flex flex-row items-center space-x-4 rounded-md sticky top-4" style={{backgroundColor: '#006D38'}}>
                 <div className={`w-1/3 h-10 flex items-center justify-center rounded-md ml-1 ${orderState == 0 ? 'text-black bg-white' : 'text-white'}`} onClick={() => handleChangeState(0)}>
                     Vé mới
                 </div>
