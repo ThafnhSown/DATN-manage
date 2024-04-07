@@ -132,15 +132,15 @@ const Booking = () => {
                     <p>{listOrder.filter(or => or.state == 0).length} chưa xác nhận |</p>
                     <p>{listOrder.filter(or => or.state == 1).length} đã liên lạc</p>
                 </div>
-                <div className="grid grid-cols-2 mr-6">
-                    <Checkbox className="items-center mx-2" onClick={(e) => {
+                <div className="grid grid-cols-3 mr-6">
+                    <Checkbox className="items-center mx-2 col-span-1" onClick={(e) => {
                         if(e.target.checked) {
                             setListOrderPick(currentOrder)
                         } else {
                             setListOrderPick([])
                         }
                     }}>Tất cả</Checkbox>
-                    <div className="flex justify-end">
+                    <div className="flex col-span-2 justify-end">
                         <Button className="del-btn" onClick={() => {
                             handleDeleteOrder()
                         }} icon={<DeleteFilled />} />
