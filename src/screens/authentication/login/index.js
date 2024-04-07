@@ -21,8 +21,10 @@ export const LoginScreen = () => {
             const res = unwrapResult(result);
             const userInfo = res.data
             if(res.error == 0) {
-              if(userInfo.role.includes("ROLE_COMPANY") || userInfo.role.includes("ROLE_MODERATOR_EMPLOYEE")) {
+              if(userInfo.role.includes("ROLE_MODERATOR_EMPLOYEE")) {
                 navigate("/")
+              } else if(userInfo.role.includes("ROLE_COMPANY") || userInfo.role.includes("ROLE_SELLER_EMPLOYEE")) {
+                 navigate("/booking") 
               }
               await dispatch(requestLoadProvince())
             }
@@ -33,11 +35,11 @@ export const LoginScreen = () => {
 
     return (
       <div className="flex">
-        <div className="w-1/2 h-screen flex items-center justify-center">
+        <div className="w-1/2 h-screen items-center justify-center mobile:hidden desktop:flex">
           <img src={background} alt="background" className="max-h-full max-w-full"/>
         </div>
 
-        <div className="w-1/2 p-4 flex flex-col items-center justify-center h-screen">
+        <div className="w-1/2 p-4 flex flex-col items-center justify-center h-screen mobile:w-full desktop:flex">
           <div>
           <img src={logo} alt="logo" height='100vh'/>
           <b className="text-2xl">Đăng nhập</b>

@@ -63,11 +63,23 @@ export const companyRouteList = [
             {
                 path: 'bao-cao',
                 element: <Report />
-            },
+            }
+        ]
+    },
+    {
+        path: '/',
+        element: (
+            <AppLayout>
+                <RequireAuth allowedRoles={["ROLE_COMPANY", "ROLE_SELLER_EMPLOYEE"]}>
+                    <Outlet />
+                </RequireAuth>
+            </AppLayout>
+        ),
+        children: [
             {
                 path: 'booking',
                 element: <Booking />
             }
         ]
-    }
+    },
 ]

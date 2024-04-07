@@ -5,6 +5,7 @@ import { Navigate, useLocation } from 'react-router'
 function AppLayout({ children }) {
   const userInfo = useAppSelector((state) => state.authState.userInfo)
   const location = useLocation()
+  const pathName = location.pathname
   if(userInfo && userInfo.role === "ROLE_COMPANY") {
     <Navigate to='/' state={{ from: location }} replace />
   }
@@ -19,8 +20,8 @@ function AppLayout({ children }) {
       </div>
 
       <div className='bg-neutral-200'>
-        <div className='min-h-screen'>
-          <div className='py-6 desktop:px-10 bg-neutral-200'>{children}</div>
+        <div className='max-h-screen'>
+          <div className={`${pathName=="/booking" ? '' : 'py-6'} desktop:px-10 bg-neutral-200`}>{children}</div>
         </div>
       </div>
     </div>

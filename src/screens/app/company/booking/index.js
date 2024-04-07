@@ -2,24 +2,39 @@ import { requestLoadOrder } from "../../../../redux/slices/companySlice"
 import { useAppDispatch, useAppSelector } from '../../../../redux/hook'
 import { addNewOrder } from "../../../../redux/slices/companySlice"
 import { useEffect, useState } from "react"
+import { useNavigate } from 'react-router-dom'
 import UserOrder from "../components/UserOrder"
 import InfiniteScroll from "react-infinite-scroll-component"
-import { Button, Checkbox } from 'antd'
-import { DeleteFilled } from '@ant-design/icons';
+import { Button, Checkbox, Dropdown } from 'antd'
+import { DeleteFilled, MenuOutlined, AvatarOutlined } from '@ant-design/icons';
 import "./style.css"
 import { apiChangeOrderState } from "../../../../api/services"
 import SockJS from "sockjs-client"
 import Stomp from 'stompjs'
-
-
+import AvatarDropdown from "../../../../components/layouts/components/AvatarDropdown"
+import logo from '../../../../assets/logo.png'
 
 const Booking = () => {
     const dispatch = useAppDispatch()
-    const companyId = useAppSelector(state => state.authState.userInfo.id)
+    const navigate = useNavigate()
+    const check = useAppSelector(state => state.authState.userInfo.companyId)
+    const companyId = check ? useAppSelector(state => state.authState.userInfo.companyId) : useAppSelector(state => state.authState.userInfo.id)
     const listOrder = useAppSelector(state => state.companyState.listOrder)
     const [orderState, setOrderState] = useState(0)
     const [listOrderPick, setListOrderPick] = useState([])
     const [currentOrder, setCurrentOrder] = useState([])
+    const items = [
+        {
+          key: '1',
+          label: (
+            <a onClick={() => {
+              navigate("/booking")
+              }} className="text-sm font-quicksand">
+              Bán vé
+            </a>
+          ),
+        },
+    ]
     function connect(companyId, currentOrder, setCurrentOrder, orderState) {
         let socket = new SockJS(`${process.env.REACT_APP_ENDPOINT}/bookings`);
         let stompClient = Stomp.over(socket);
@@ -82,7 +97,14 @@ const Booking = () => {
 
     return (
         <div className="flex flex-col items-center max-h-screen">
-            <div className="w-3/4 h-12 p-2 flex flex-row items-center space-x-4 rounded-md sticky top-4" style={{backgroundColor: '#006D38'}}>
+            <div className="flex flex-row items-center space-x-20 desktop:hidden">
+                <Dropdown menu={{items}}>
+                  <MenuOutlined style={{color: 'black', size:'40px'}}/>
+                </Dropdown >
+                <img src={logo} className="h-12"/>
+                <AvatarDropdown />
+            </div>
+            <div className="mobile:w-full desktop:w-3/4 h-12 p-2 flex flex-row items-center space-x-4 rounded-md sticky" style={{backgroundColor: '#006D38'}}>
                 <div className={`w-1/3 h-10 flex items-center justify-center rounded-md ml-1 ${orderState == 0 ? 'text-black bg-white' : 'text-white'}`} onClick={() => handleChangeState(0)}>
                     Vé mới
                 </div>

@@ -1,5 +1,5 @@
 import { unwrapResult } from "@reduxjs/toolkit";
-import { apiCreateStaff, apiDelStaff } from "../../../../../api/services";
+import { apiCreateStaff, apiDelStaff, apiUpdateStaff } from "../../../../../api/services";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook";
 import { requestCreateStaff, requestLoadStaff } from "../../../../../redux/slices/staffSlice";
 import {
@@ -48,6 +48,16 @@ const ModalStaff = (props) => {
         setModalShow(false)
     }
 
+    async function handleUpdateStaff () {
+        const data = form.getFieldsValue()
+        const res = await apiUpdateStaff(data)
+        if(!res.data.error) {
+            dispatch(requestLoadStaff(companyId))
+        }
+        setModalShow(false)
+        // console.log(data)
+    }
+
     return (
     <div>
         <Modal
@@ -90,7 +100,6 @@ const ModalStaff = (props) => {
                     <Col span={24} xs={12}>
                         <span>Email</span>
                         <Form.Item name="email">
-                           
                             <Input />
                         </Form.Item>
                     </Col>
@@ -101,6 +110,7 @@ const ModalStaff = (props) => {
                             <Input />
                         </Form.Item>  
                     </Col>
+                    <Form.Item name="id"></Form.Item>
                 </Row>  
                 
                 <Row>  
@@ -117,7 +127,7 @@ const ModalStaff = (props) => {
                     </Col>         
                 </Row>
                 <Row className="space-x-4">
-                    <Button className="w-30 h-10 text-white font-medium border rounded-xl" htmlType="submit" onClick={handleCreateStaff}>Lưu</Button>
+                    <Button className="w-30 h-10 text-white font-medium border rounded-xl" htmlType="submit" onClick={currentStaff?.id ? handleUpdateStaff : handleCreateStaff}>Lưu</Button>
                     <Button className="w-30 h-10 text-white font-medium border rounded-xl" onClick={handleCancel}>Hủy</Button>
                 </Row>
                 

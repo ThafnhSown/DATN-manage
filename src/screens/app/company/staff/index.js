@@ -79,7 +79,7 @@ const Staff = () => {
                     <Table.Column title="Số điện thoại" dataIndex="phoneNumber" />
                     <Table.Column title="Phân quyền" render={(_, item) => (<div>
                         {
-                            item.roleList.map(role => <p>{StaffRole[role].label}</p>)
+                            item.roleList.map(role => <p>{role == "ROLE_SELLER_EMPLOYEE" ? 'Bán vé' : role == 'ROLE_GOODS_EMPLOYEE' ? 'Hàng hóa' : 'Điều hành'}</p>)
                         }
                     </div>)} />
                     <Table.Column title="" render={(_, item) => (

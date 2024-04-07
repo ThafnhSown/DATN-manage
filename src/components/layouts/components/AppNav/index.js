@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom'
 import { useNavigate, useLocation } from 'react-router'
 import AvatarDropdown from "../AvatarDropdown";
 import './style.css'
+import useRoles from "../../../../hooks/useRoles";
 const AppNav = () => {
     const [status, setStatus] = useState("operating")
+    const role = useRoles()
     const navigate = useNavigate()
     const location = useLocation()
     const pathName = location.pathname
@@ -40,7 +42,9 @@ const AppNav = () => {
               Quản lý
             </a>
           )
-        },
+        }
+      ];
+      const itemsSeller = [
         {
           key: '3',
           label: (
@@ -53,10 +57,18 @@ const AppNav = () => {
           )
         }
       ];
+
+      const checkRole = () => {
+        if(!role) return items
+        if(role.includes("ROLE_COMPANY")) return items.concat(itemsSeller)
+        if(role.includes("ROLE_MODERATOR_EMPLOYEE") && role.includes("ROLE_SELLER_EMPLOYEE")) return items.concat(itemsSeller)
+        if(role.includes("ROLE_SELLER_EMPLOYEE")) return itemsSeller
+        if(role.includes("ROLE_MODERATOR_EMPLOYEE")) return items
+      }
     return (
             <div className='flex-row items-center justify-center ml-4 grid grid-cols-12'>
                 <div className="col-span-2 text-white font-extrabold text-base">
-                    <Dropdown menu={{ items }}>
+                    <Dropdown menu={{ items: checkRole() }}>
                         <a onClick={(e) => e.preventDefault()}>
                             <Space>
                                 {status === 'operating' ? "Điều hành" : status == "ticket" ? "Bán vé" : "Quản lý"}
