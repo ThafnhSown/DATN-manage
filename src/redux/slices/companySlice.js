@@ -67,7 +67,11 @@ export const companySlice = createSlice({
         },
         addNewOrder: (state, action) => {
             let length = state.listOrder.length
-            if(action.payload.id != state.listOrder[length-1].id) {
+            if(length > 0) {
+                if(action.payload.id != state.listOrder[length-1].id) {
+                    state.listOrder.push(action.payload)
+                }
+            } else {
                 state.listOrder.push(action.payload)
             }
         }
@@ -112,11 +116,9 @@ export const companySlice = createSlice({
             state.listPolicy = [...state.listPolicy, action.payload]
         })
         builder.addCase(requestLoadOrder.fulfilled, (state, action) => {
-            console.log("first")
             state.listOrder = action.payload
         })
         builder.addCase(requestLoadOrder.rejected, (state, action) => {
-            console.log("second")
             state.listOrder = []
         })
     }

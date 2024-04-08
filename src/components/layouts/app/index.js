@@ -20,7 +20,7 @@ function AppLayout({ children }) {
       </div>
 
       <div className='bg-neutral-200'>
-        <div className='max-h-screen'>
+        <div className='min-h-screen'>
           <div className={`${pathName=="/booking" ? '' : 'py-6'} desktop:px-10 bg-neutral-200`}>{children}</div>
         </div>
       </div>

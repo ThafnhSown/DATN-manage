@@ -75,9 +75,9 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
                 <div>
                     <UserOutlined /> {order.passengerName}
                 </div>
-                <div>
+                <a href={`tel:${order.phoneNumber}`}>
                     <PhoneFilled /> {order.phoneNumber}
-                </div>
+                </a>
             </div>
         </div>
     )
