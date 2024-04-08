@@ -7,11 +7,13 @@ import background from "../../../assets/background-login.png"
 import logo from "../../../assets/logo.png"
 import { requestLoadProvince } from "../../../redux/slices/globalSlice";
 import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
 
 export const LoginScreen = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const authState = useAppSelector((state) => state.authState)
+    const isError = useAppSelector(state => state.authState.isError)
     const handleLogin = async (data) => {
         try {
             const result = await dispatch(requestLogin({
@@ -35,11 +37,11 @@ export const LoginScreen = () => {
 
     return (
       <div className="flex">
-        <div className="w-1/2 h-screen items-center justify-center mobile:hidden desktop:flex">
+        <div className="w-3/4 h-screen items-center justify-center mobile:hidden desktop:flex">
           <img src={background} alt="background" className="max-h-full max-w-full"/>
         </div>
 
-        <div className="w-1/2 p-4 flex flex-col items-center justify-center h-screen mobile:w-full desktop:flex">
+        <div className="w-1/4 p-4 flex flex-col items-center justify-center h-screen mobile:w-full desktop:flex">
           <div>
           <img src={logo} alt="logo" height='100vh'/>
           <b className="text-2xl">Đăng nhập</b>
@@ -82,6 +84,9 @@ export const LoginScreen = () => {
                 Đăng nhập
               </Button>
             </Form.Item>
+            {
+              isError && <p className="text-red-700">Tài khoản/ mật khẩu của quý khách không hợp lệ. Vui lòng thử lại.</p>
+            }
           </Form>
           </div>
         </div>

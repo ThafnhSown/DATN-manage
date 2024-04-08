@@ -17,8 +17,7 @@ import logo from '../../../../assets/logo.png'
 const Booking = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const check = useAppSelector(state => state.authState.userInfo.companyId)
-    const companyId = check ? useAppSelector(state => state.authState.userInfo.companyId) : useAppSelector(state => state.authState.userInfo.id)
+    const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listOrder = useAppSelector(state => state.companyState.listOrder)
     const [orderState, setOrderState] = useState(0)
     const [listOrderPick, setListOrderPick] = useState([])
@@ -93,7 +92,6 @@ const Booking = () => {
             setCurrentOrder([...tmp])
         }
     }
-
 
     return (
         <div className="flex flex-col items-center max-h-screen">

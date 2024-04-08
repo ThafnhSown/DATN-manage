@@ -112,7 +112,12 @@ export const companySlice = createSlice({
             state.listPolicy = [...state.listPolicy, action.payload]
         })
         builder.addCase(requestLoadOrder.fulfilled, (state, action) => {
+            console.log("first")
             state.listOrder = action.payload
+        })
+        builder.addCase(requestLoadOrder.rejected, (state, action) => {
+            console.log("second")
+            state.listOrder = []
         })
     }
 });

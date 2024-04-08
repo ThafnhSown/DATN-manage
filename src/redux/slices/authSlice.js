@@ -4,7 +4,8 @@ import { apiLogin } from "../../api/services";
 const initialState = {
     userInfo: null,
     isLogin: false,
-    loading: false
+    loading: false,
+    isError: false
 };
 
 export const requestLogin = createAsyncThunk('auth/login', async (props) => {
@@ -28,13 +29,19 @@ export const authSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(requestLogin.fulfilled, (state, action) => {
+            if(action.payload.error) {
+                state.isError = true
+            }
             state.loading = false;
-            state.isLogin = true
-            if(action.payload.data.role.includes("ROLE_MODERATOR_EMPLOYEE")) {
+            state.isLogin = true;
+            if(action.payload.data?.role.includes("ROLE_MODERATOR_EMPLOYEE") || action.payload.data?.role.includes("ROLE_SELLER_EMPLOYEE")) {
                 state.userInfo = {...action.payload.data, id: action.payload.data.companyId }
             } else {
                 state.userInfo = action.payload.data;
             }
+        }),
+        builder.addCase(requestLogin.rejected, (state, action) => {
+            state.isError = true
         })
     }
 });
