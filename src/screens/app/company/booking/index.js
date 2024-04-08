@@ -114,7 +114,7 @@ const Booking = () => {
                 </div>
             </div>
            
-            <div className="flex overflow-auto mobile:w-full desktop:w-3/4" style={{height: '800px'}}>
+            <div className="flex overflow-auto mobile:w-full desktop:w-3/4 desktop:mt-6" style={{height: '800px'}}>
                 <InfiniteScroll className="order-list" dataLength={10}>
                     <div className="gap-4 w-full mobile:flex mobile:flex-col desktop:grid desktop:grid-cols-2">
                         {
