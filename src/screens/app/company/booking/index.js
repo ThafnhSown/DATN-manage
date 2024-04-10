@@ -128,7 +128,7 @@ const Booking = () => {
             <div className="flex flex-col mt-4 mobile:w-full desktop:w-3/4 bg-white sticky bottom-0">
                 <div className="flex justify-end mr-6 space-x-2">
                     <p>{listOrder.filter(or => or.state == 0).length} chưa xác nhận |</p>
-                    <p>{listOrder.filter(or => or.state == 1).length} đã liên lạc</p>
+                    <p>{listOrder.filter(or => or.state == 1).length} đã liên hệ</p>
                 </div>
                 <div className="grid grid-cols-3 mr-6">
                     <Checkbox className="items-center mx-2 col-span-1" onClick={(e) => {
@@ -144,7 +144,7 @@ const Booking = () => {
                         }} icon={<DeleteFilled />} />
                         <Button
                          onClick={() => handleAcceptOrder()}
-                        >Đã liên lạc với khách</Button>
+                        >Đã liên hệ</Button>
                     </div>
                 </div>
             </div>

@@ -70,13 +70,14 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
 
     const handleUpdateTimeslot = async () => {
         const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection}
-        const res = await apiUpdateTimeslot(data)
-        if(!res.data.error) {
-            enqueueSnackbar("Cập nhật thành công", {
-                variant: "success"
-            })
-            listTimeSlot[index] = data
-        }
+        // const res = await apiUpdateTimeslot(data)
+        // if(!res.data.error) {
+        //     enqueueSnackbar("Cập nhật thành công", {
+        //         variant: "success"
+        //     })
+        //     listTimeSlot[index] = data
+        // }
+        console.log(data)
     } 
 
     return (
@@ -114,7 +115,8 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         <Input suffix="VND" className='w-full' onBlur={(e) => {
                             const tmp = e.target.value
                             if(tmp) form.setFieldValue('price', regexNumber(tmp))
-                        }}></Input>
+                        }}
+                        ></Input>
                     </Form.Item>
                     
                     <Button className="del-btn" onClick={() => {

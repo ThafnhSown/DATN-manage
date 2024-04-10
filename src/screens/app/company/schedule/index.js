@@ -87,6 +87,7 @@ const Schedule = () => {
             setListTimeSlot([])
             handleChooseRoute(currentRoute)
         }
+        console.log(data)
     }
 
     const handleCreateTimeslot = async () => {

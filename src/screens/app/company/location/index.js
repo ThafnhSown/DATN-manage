@@ -21,9 +21,7 @@ const Location = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(!listRoute.length) {
-            handleLoadRoutes()
-        }
+        handleLoadRoutes()
         dispatch(requestLoadOrder(companyId))
         dispatch(requestLoadCoach(companyId))
         dispatch(requestLoadPolicy(companyId))

@@ -6,3 +6,11 @@
 .note:hover .note-detail {
     opacity: 1;
 }
+.chi-tiet {
+    max-width: 75%;
+}
+@media only screen and (max-width: 500px) {
+    .chi-tiet {
+        max-width: 70%;
+    }
+}

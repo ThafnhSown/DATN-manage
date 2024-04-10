@@ -58,7 +58,7 @@ const Section = ({section, index, listSection, setListSection, listTimeslot, tim
                 <Input onBlur={(e) => {
                     const tmp = e.target.value
                     if(tmp) form.setFieldValue('price', regexNumber(tmp))
-                }} suffix="VND" type="number" className='w-full'></Input>
+                }} suffix="VND" className='w-full'></Input>
             </Form.Item>
             <Form.Item className='col-span-1'>
             <Button className="del-btn" onClick={(e) => {
@@ -69,7 +69,6 @@ const Section = ({section, index, listSection, setListSection, listTimeslot, tim
 
             </Row>
             </Form>
-
     )
 }
 

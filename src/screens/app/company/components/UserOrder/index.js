@@ -1,13 +1,17 @@
 import { IconCar, IconTP, IconTicket, IconMoney, MiniBlue, MiniRed } from "../../../../../assets/svgs"
-import { EnvironmentFilled, UserOutlined, PhoneFilled, FormOutlined } from "@ant-design/icons"
+import { UserOutlined, PhoneFilled, FormOutlined } from "@ant-design/icons"
 import { Checkbox } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from "react"
 import './style.css'
 import { regexNumber } from "../../../../../utils/convertTime"
+import OfficeAtPoint from "../OfficeAtPoint"
 
 const UserOrder = ({ order, listOrder, setListOrder }) => {
     const [isChecked, setIsChecked] = useState(false)
+    const [startPointOffice, setStartPointOffice] = useState(false)
+    const [endPointOffice, setEndPointOffice] = useState(false)
+    console.log(order)
     useEffect(() => {
         listOrder.includes(order) ? setIsChecked(true) : setIsChecked(false)
     }, [listOrder])
@@ -59,16 +63,19 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
                 </div>
                 <div className="font-light flex flex-row items-center space-x-1">
                     <MiniBlue />
-                    <div>
-                        {order.pickUpPoint.district}
-                    </div>: Trung chuyển đón
+                    <p className='truncate flex flex-row space-x-2 chi-tiet'>
+                        <p className='font-extrabold'>{order.startPoint.location.district}:</p>                      
+                        <p className='font-light'>{order.startPoint.description} </p>
+                    </p>
+                    <a className='text-green-700 cursor-pointer' onClick={() => setStartPointOffice(true)}>Xem thêm</a>
                 </div>
                 <div className="font-light flex flex-row items-center space-x-1">
                     <MiniRed />
-                    <div>
-                        {order.dropOffPoint.district}
-                    </div>
-                      : Trung chuyển trả
+                    <p className='truncate flex flex-row space-x-2 chi-tiet'>
+                        <p className='font-extrabold'>{order.endPoint.location.district}:</p>
+                        <p className='font-light'>{order.endPoint.description}</p>
+                    </p>
+                    <a className='text-green-700 cursor-pointer' onClick={() => setEndPointOffice(true)}>Xem thêm</a>
                 </div>
             </div>
             <div className="mx-2 grid grid-cols-2">
@@ -79,6 +86,12 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
                     <PhoneFilled /> {order.phoneNumber}
                 </a>
             </div>
+            {
+                startPointOffice && <OfficeAtPoint data={order.startPoint} modalShow={startPointOffice} setModalShow={setStartPointOffice}/>
+            }
+            {
+                endPointOffice && <OfficeAtPoint data={order.endPoint} modalShow={endPointOffice} setModalShow={setEndPointOffice}/>
+            }
         </div>
     )
 }
