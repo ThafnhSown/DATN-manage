@@ -70,14 +70,13 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
 
     const handleUpdateTimeslot = async () => {
         const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection}
-        // const res = await apiUpdateTimeslot(data)
-        // if(!res.data.error) {
-        //     enqueueSnackbar("Cập nhật thành công", {
-        //         variant: "success"
-        //     })
-        //     listTimeSlot[index] = data
-        // }
-        console.log(data)
+        const res = await apiUpdateTimeslot(data)
+        if(!res.data.error) {
+            enqueueSnackbar("Cập nhật thành công", {
+                variant: "success"
+            })
+            listTimeSlot[index] = data
+        }
     } 
 
     return (
@@ -140,7 +139,6 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         schedule.id && <Button onClick={() => handleUpdateTimeslot()} className='w-1/6'>Lưu</Button>
                     }
                 </div>
-                    {/* <Button onClick={() => console.log(listTimeSlot)}>sss</Button> */}
             </Card>
         </div>
     )

@@ -130,10 +130,10 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
                             </Select>
                         </Col>
                         <Col span={4}>
-                            <Input value={vsc} onChange={(e) => setVsc(e.target.value)}/>
+                            <Input value={vsc} placeholder='Nhập biển xe' onChange={(e) => setVsc(e.target.value)}/>
                         </Col>
                        <Col span={4}>
-                            <Input value={phone} onChange={(e) => setPhone(e.target.value)}/>
+                            <Input value={phone} placeholder='Nhập số điện thoại' onChange={(e) => setPhone(e.target.value)}/>
                        </Col>
                         <Col span={4}>
                         <Button onClick={() => {

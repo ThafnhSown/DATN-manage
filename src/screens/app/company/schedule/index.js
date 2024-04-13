@@ -108,17 +108,6 @@ const Schedule = () => {
         setIsCreate(false)
     }
 
-    // const handleLoadTimeSlot = async (scheduleId) => {
-    //     let ts = {}
-    //     let ed = {}
-    //     const res = await apiGetTimeSlot(scheduleId)
-    //     if(res.data.error == 0) {
-    //         setMapEdit(scheduleId)
-    //         ts[scheduleId] = res.data.data
-    //         setMapTS({...mapTS , ...ts})
-    //     }
-    // }
-
     const selectOption = listRoute.map(route => ({
         value: route.id,
         label: `${route?.startPoint.district} ${route?.startPoint.province} - ${route?.endPoint.district} ${route?.endPoint.province}`
@@ -173,7 +162,7 @@ const Schedule = () => {
             <Divider />
             <Row className="justify-center">
             {
-                isCreate && <Button onClick={(e) => listTimeSlot[0]?.coachSchedule ? handleCreateTimeslot() : handleCreateMainSchedule(e)}>Hoàn thành</Button>
+                isCreate && !currentTimeslot?.id && <Button onClick={(e) => listTimeSlot[0]?.coachSchedule ? handleCreateTimeslot() : handleCreateMainSchedule(e)}>Hoàn thành</Button>
             }
             </Row>
         </Card>

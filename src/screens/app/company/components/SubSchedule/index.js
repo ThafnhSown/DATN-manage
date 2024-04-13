@@ -1,11 +1,11 @@
 import { Card, Button, Typography, Row, DatePicker, Divider, Input, List } from 'antd'
-import { PlusCircleOutlined, ArrowRightOutlined, EditFilled, ClockCircleFilled } from '@ant-design/icons'
+import { PlusCircleOutlined, ArrowRightOutlined, EditFilled, DeleteFilled } from '@ant-design/icons'
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hook";
-import { requestLoadListRoute, setCurrentRoute } from "../../../../../redux/slices/routeSlice";
+import { requestLoadListRoute, setCurrentRoute, requestLoadTravelPath, requestLoadPoint } from "../../../../../redux/slices/routeSlice";
 import { useEffect, useState } from "react";
 const { Title } = Typography
 import TimeSlotCard from "../TimeSlotCard";
-import { apiCreateSchedule } from "../../../../../api/services";
+import { apiCreateSchedule, apiCreateTimeslot, apiDeleteSchedule } from "../../../../../api/services";
 import dayjs from 'dayjs';
 
 const SubSchedule = ({listSubTimeslot, schedule}) => {
@@ -15,6 +15,8 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
    const [secondDate, setSecondDate] = useState()
    const [listTimeSlot, setListTimeSlot] = useState([])
    const currentRoute = useAppSelector((state) => state.routeState.currentRoute)
+   const companyId = useAppSelector(state => state.authState.userInfo.id)
+   const [currentDate, setCurrentDate] = useState(dayjs(new Date()).startOf('day').valueOf())
    const [changeName, setChangeName] = useState(false) 
    const [scheduleName, setScheduleName] = useState('Lịch phụ')
    const [currentTimeslot, setCurrentTimeslot] = useState()
@@ -25,7 +27,16 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
         setScheduleName(schedule.name)
     }, [])
 
-   const handleCreateSubSchedule = async () => {
+    const handleChooseRoute = async (value) => {
+        await dispatch(setCurrentRoute(value))
+        await dispatch(requestLoadTravelPath(companyId))
+        await dispatch(requestLoadPoint(value))
+        handleLoadTimeslot({date: currentDate, coachRouteId: value})
+        setIsCreate(false)
+    }
+
+   const handleCreateSubSchedule = async (e) => {
+    e.preventDefault()
     const data = {
         coachRouteId: currentRoute,
         startTime: firstDate,
@@ -36,29 +47,50 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
         name: scheduleName
     }
     const res = await apiCreateSchedule(data)
-    // if(res.data.error == 0) {
-    //     setListTimeSlot(listTimeslot)
-    //     // handleLoadSchedule(currentRoute)
-    // }
+    if(!res.data.error) {
+        setListTimeSlot([])
+    }
    }
+
+   const handleCreateTimeslot = async () => {
+    let tmp = listTimeSlot.length - 1
+    const data = {...listTimeSlot[tmp], coachScheduleId: listTimeSlot[0].coachSchedule.id}
+    const res = await apiCreateTimeslot(data)
+    if(!res.data.error) {
+        setListTimeSlot(listTimeSlot)
+        // handleChooseRoute(currentRoute)
+    }
+    }   
+
+    const handleDelSchedule = async () => {
+        let tmp = schedule.id
+        const res = await apiDeleteSchedule({
+            id: tmp
+        })
+        if(!res.data.error) {
+            handleChooseRoute(currentRoute)
+        }
+    }
+
    return (
     <div>
       <div className="mt-4 space-y-4">
         {
             schedule.id ? <div>
-                 <Row>
-               {
-                    <Title level={3}>{schedule.name}</Title>
-               }
-           </Row>
-           <Row className="items-center space-x-6">
-           <Title level={5}>Thời gian</Title>
-           <DatePicker value={dayjs(schedule.startTime)} style={{width: 300}}/>
-           <ArrowRightOutlined />
-           <DatePicker value={dayjs(schedule.endTime)} style={{width: 300}}/>
-           </Row>
+                 <Row className='space-x-3'>
+                    <Title level={3}>{schedule.name ?? "Lịch phụ"}</Title>
+                    <Button className="del-btn" onClick={() => {
+                            handleDelSchedule()
+                        }} icon={<DeleteFilled />} />
+                </Row>
+                <Row className="items-center space-x-6">
+                <Title level={5}>Thời gian</Title>
+                <DatePicker value={dayjs(schedule.startTime)} style={{width: 300}}/>
+                <ArrowRightOutlined />
+                <DatePicker value={dayjs(schedule.endTime)} style={{width: 300}}/>
+                </Row>
 
-            </div> : <div>
+            </div> : <div className='space-y-4'>
             <Row>
                {
                     changeName ? <Input onChange={(e) =>setScheduleName(e.target.value)} className="w-48" placeholder="Tên lịch phụ"/> : <Title level={3}>Lịch phụ</Title>
@@ -69,9 +101,9 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
            </Row>
            <Row className="items-center space-x-6">
            <Title level={5}>Thời gian</Title>
-           <DatePicker onChange={(date) => setFirstDate(date.startOf('day').valueOf())} style={{width: 300}}/>
+           <DatePicker onChange={(date) => setFirstDate(date.startOf('day').valueOf())}/>
            <ArrowRightOutlined />
-           <DatePicker onChange={(date) => setSecondDate(date.startOf('day').valueOf())} style={{width: 300}}/>
+           <DatePicker onChange={(date) => setSecondDate(date.startOf('day').valueOf())}/>
            </Row>
             </div>
         }
@@ -85,7 +117,7 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
                     >{sh.departureTime ? dayjs(sh.departureTime).format("HH:mm") : '--:--'}</Button>)
                 }
                 {
-                    (isCreate || currentTimeslot) && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false}/>
+                    (isCreate || currentTimeslot) && <TimeSlotCard schedule={currentTimeslot} setCurrentTimeslot={setCurrentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false}/>
                 }
             <Button 
             style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} 
@@ -94,11 +126,17 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
                 setCurrentIndex(currentIndex+1)
                 setCurrentTimeslot({})
                 setListTimeSlot([...listTimeSlot, {}])
+                setIsCreate(true)
             }}>
                     Thêm giờ xuất bến
             </Button>
             <Row className="justify-center">  
-                <Button onClick={() => handleCreateSubSchedule()}>Hoàn thành</Button>
+                {/* {   
+                    isCreate && <Button onClick={() => handleCreateSubSchedule()}>Hoàn thành</Button>
+                } */}
+                {
+                    isCreate && !currentTimeslot?.id && <Button onClick={(e) => listTimeSlot[0]?.id ? handleCreateTimeslot() : handleCreateSubSchedule(e)}>Hoàn thành</Button>
+                }
             </Row>
             <Divider />
         </div>

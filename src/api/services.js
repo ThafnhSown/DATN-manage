@@ -145,6 +145,10 @@ export const apiListSchedule = async(id) => {
     return ApiAdminConfig(`${EndPoint.LIST_SCHEDULE}?coachRouteId=${id}`, undefined, "GET")
 }
 
+export const apiDeleteSchedule = async (props) => {
+    return ApiAdminConfig("/company/delete-coach-schedule", props)
+}
+
 export const apiCreateTimeslot = async(props) => {
     return ApiAdminConfig("/company/create-timeslot", props)
 }
