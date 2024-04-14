@@ -5,7 +5,7 @@ import { requestLoadListRoute, setCurrentRoute, requestLoadTravelPath, requestLo
 import { useEffect, useState } from "react";
 const { Title } = Typography
 import TimeSlotCard from "../TimeSlotCard";
-import { apiCreateSchedule, apiCreateTimeslot, apiDeleteSchedule } from "../../../../../api/services";
+import { apiCreateSchedule, apiCreateTimeslot, apiDeleteSubSchedule } from "../../../../../api/services";
 import dayjs from 'dayjs';
 
 const SubSchedule = ({listSubTimeslot, schedule}) => {
@@ -64,8 +64,10 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
 
     const handleDelSchedule = async () => {
         let tmp = schedule.id
-        const res = await apiDeleteSchedule({
-            id: tmp
+        const res = await apiDeleteSubSchedule({
+            coachRouteId: tmp,
+            startTime: schedule.startTime,
+            endTime: schedule.endTime
         })
         if(!res.data.error) {
             handleChooseRoute(currentRoute)

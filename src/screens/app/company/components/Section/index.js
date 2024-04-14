@@ -55,10 +55,7 @@ const Section = ({section, index, listSection, setListSection, listTimeslot, tim
                 <Select maxTagCount={1} options={optionsListPoint} className='w-full' mode="multiple"></Select>
             </Form.Item>
             <Form.Item name="price" className='col-span-2'>
-                <Input onBlur={(e) => {
-                    const tmp = e.target.value
-                    if(tmp) form.setFieldValue('price', regexNumber(tmp))
-                }} suffix="VND" className='w-full'></Input>
+                <Input suffix="VND" className='w-full'></Input>
             </Form.Item>
             <Form.Item className='col-span-1'>
             <Button className="del-btn" onClick={(e) => {

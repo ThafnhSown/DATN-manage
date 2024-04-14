@@ -111,10 +111,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                     </Form.Item>
                     
                     <Form.Item name="price" className='col-span-3'>
-                        <Input suffix="VND" className='w-full' onBlur={(e) => {
-                            const tmp = e.target.value
-                            if(tmp) form.setFieldValue('price', regexNumber(tmp))
-                        }}
+                        <Input suffix="VND" className='w-full'
                         ></Input>
                     </Form.Item>
                     
