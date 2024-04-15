@@ -63,9 +63,8 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
     }   
 
     const handleDelSchedule = async () => {
-        let tmp = schedule.id
         const res = await apiDeleteSubSchedule({
-            coachRouteId: tmp,
+            coachRouteId: currentRoute,
             startTime: schedule.startTime,
             endTime: schedule.endTime
         })
