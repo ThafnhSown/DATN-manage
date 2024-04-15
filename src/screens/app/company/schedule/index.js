@@ -87,7 +87,6 @@ const Schedule = () => {
             setListTimeSlot([])
             handleChooseRoute(currentRoute)
         }
-        console.log(data)
     }
 
     const handleCreateTimeslot = async () => {
@@ -169,7 +168,7 @@ const Schedule = () => {
 
         {
             listSubTimeslot.length ? <Card className="space-y-4">
-                <SubSchedule listSubTimeslot={listSubTimeslot} schedule={listSubTimeslot[0].coachSchedule}/>
+                <SubSchedule listSubTimeslot={listSubTimeslot} schedule={listSubTimeslot[0].coachSchedule} setSubSchedule={setListSubTimeslot}/>
             </Card> : null
         }
 

@@ -5,10 +5,10 @@ import { requestLoadListRoute, setCurrentRoute, requestLoadTravelPath, requestLo
 import { useEffect, useState } from "react";
 const { Title } = Typography
 import TimeSlotCard from "../TimeSlotCard";
-import { apiCreateSchedule, apiCreateTimeslot, apiDeleteSubSchedule } from "../../../../../api/services";
+import { apiCreateSchedule, apiCreateTimeslot, apiDeleteSubSchedule, apiGetListTimeslotByDate } from "../../../../../api/services";
 import dayjs from 'dayjs';
 
-const SubSchedule = ({listSubTimeslot, schedule}) => {
+const SubSchedule = ({listSubTimeslot, schedule, setSubSchedule}) => {
    const dispatch = useAppDispatch()
    const [isCreate, setIsCreate] = useState(false)
    const [firstDate, setFirstDate] = useState()
@@ -26,14 +26,6 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
         setListTimeSlot(listSubTimeslot)
         setScheduleName(schedule.name)
     }, [])
-
-    const handleChooseRoute = async (value) => {
-        await dispatch(setCurrentRoute(value))
-        await dispatch(requestLoadTravelPath(companyId))
-        await dispatch(requestLoadPoint(value))
-        handleLoadTimeslot({date: currentDate, coachRouteId: value})
-        setIsCreate(false)
-    }
 
    const handleCreateSubSchedule = async (e) => {
     e.preventDefault()
@@ -69,7 +61,7 @@ const SubSchedule = ({listSubTimeslot, schedule}) => {
             endTime: schedule.endTime
         })
         if(!res.data.error) {
-            handleChooseRoute(currentRoute)
+            setSubSchedule([])
         }
     }
 
