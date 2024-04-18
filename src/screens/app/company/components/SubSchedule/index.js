@@ -84,13 +84,16 @@ const SubSchedule = ({listSubTimeslot, schedule, setSubSchedule}) => {
                 </Row>
 
             </div> : <div className='space-y-4'>
-            <Row>
+            <Row className='space-x-2'>
                {
                     changeName ? <Input onChange={(e) =>setScheduleName(e.target.value)} className="w-48" placeholder="Tên lịch phụ"/> : <Title level={3}>Lịch phụ</Title>
                }
                 <div onClick={() => setChangeName(!changeName)} className="mt-2 text-green-900">
                     <EditFilled/> Sửa tên lịch phụ
                 </div>
+                <Button className="del-btn" onClick={() => {
+                    handleDelSchedule()
+                }} icon={<DeleteFilled />} />
            </Row>
            <Row className="items-center space-x-6">
            <Title level={5}>Thời gian</Title>
