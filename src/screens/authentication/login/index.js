@@ -7,13 +7,21 @@ import background from "../../../assets/background-login.png"
 import logo from "../../../assets/logo.png"
 import { requestLoadProvince } from "../../../redux/slices/globalSlice";
 import { useNavigate } from 'react-router-dom'
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export const LoginScreen = () => {
+ 
+
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const authState = useAppSelector((state) => state.authState)
     const isError = useAppSelector(state => state.authState.isError)
+    const inputRef = useRef(null);
+
+    const handleFocus = () => {
+      inputRef.current.blur(); // Gọi blur để loại bỏ focus
+    };
+
     const handleLogin = async (data) => {
         try {
             const result = await dispatch(requestLogin({
@@ -59,7 +67,7 @@ export const LoginScreen = () => {
                 },
               ]}
             >
-              <Input placeholder="Tài khoản" prefix={<MailFilled />} className="w-80 p-2 border rounded-xl mt-4"/>
+              <Input ref={inputRef} onFocus={handleFocus} placeholder="Tài khoản" prefix={<MailFilled />} className="w-80 p-2 border rounded-xl mt-4"/>
             </Form.Item>
     
             <Form.Item
@@ -71,7 +79,7 @@ export const LoginScreen = () => {
                   },
                 ]}
             >
-              <Input.Password placeholder="Mật khẩu" prefix={<LockFilled />} className="w-80 border rounded-xl"/>
+              <Input.Password ref={inputRef} onFocus={handleFocus} placeholder="Mật khẩu" prefix={<LockFilled />} className="w-80 border rounded-xl"/>
             </Form.Item>
             <Row>
               <Checkbox>Ghi nhớ đăng nhập</Checkbox>
