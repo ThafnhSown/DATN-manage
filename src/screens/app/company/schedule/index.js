@@ -9,7 +9,7 @@ import SubSchedule from "../components/SubSchedule";
 import { apiCreateSchedule, apiCreateTimeslot, apiGetListTimeslotByDate, apiGetSection, apiGetTimeSlot, apiListSchedule } from "../../../../api/services";
 import moment from 'moment'
 const { Title } = Typography
-import { convertDate } from "../../../../utils/convertTime";
+import { convertDate, convertSecondsToDayjs } from "../../../../utils/convertTime";
 import './style.css'
 import dayjs from 'dayjs'
 
@@ -41,18 +41,6 @@ const Schedule = () => {
             console.log(err)
         }
     }
-    // async function handleLoadSchedule(id) {
-    //     let res= {}
-    //     try {
-    //         await Promise.all([
-    //             res = await apiListSchedule(id),
-    //             setListSchedule(res.data.data.filter(item => item.type == 1)),
-    //             setSubSchedule(res.data.data.filter(item => item.type == 2))
-    //         ])
-    //     } catch(err) {
-    //         console.log(err)
-    //     }
-    // }
     async function handleLoadTimeslot(props) {
         const res = await apiGetListTimeslotByDate(props)
         if(res.data.error == 0 && res.data.data.length != 0) {
@@ -152,10 +140,10 @@ const Schedule = () => {
                         setCurrentIndex(index)
                     }}
                     className={index != currentIndex ? 'un-choose-btn' : ''}
-                    >{sh.departureTime ? dayjs(sh.departureTime).format("HH:mm") : '--:--'}</Button>)
+                    >{sh.departureTime ? dayjs(convertSecondsToDayjs(sh.departureTime)).format("HH:mm") : '--:--'}</Button>)
                 }
                 {
-                   currentTimeslot && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false} setCurrentTimeslot={setCurrentTimeslot} scheduleId={scheduleId}/>
+                   currentTimeslot && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false} setCurrentTimeslot={setCurrentTimeslot} scheduleId={scheduleId} currentDate={currentDate}/>
                 }
        
             <Divider />

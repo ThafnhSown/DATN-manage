@@ -6,9 +6,10 @@ import { useAppDispatch, useAppSelector } from '../../../../../redux/hook'
 import Section from '../Section'
 import { useSnackbar } from "notistack"
 import dayjs from 'dayjs'
-import { regexNumber } from '../../../../../utils/convertTime'
+import { regexNumber, convertSecondsToDayjs } from '../../../../../utils/convertTime'
+import { UpdateMulti } from '../UpdateMulti'
 
-const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot, scheduleId}) => {
+const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot, scheduleId, currentDate}) => {
     const { enqueueSnackbar } = useSnackbar()
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
@@ -20,6 +21,9 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const [listSection, setListSection] = useState([])
     const [form] = Form.useForm()
     const [time, setTime] = useState(0)
+    const [multi, setMulti] = useState(false)
+    const [dataMulti, setDataMulti] = useState({})
+
     useEffect(() => {
         form.resetFields()
         schedule.sectionList ? setListSection(schedule.sectionList) : setListSection([])
@@ -28,12 +32,13 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
             form.setFieldValue('price', regexNumber(schedule.price))
         }
         if(schedule.departureTime) {
-            form.setFieldValue("departureTime", dayjs(schedule.departureTime))
+            form.setFieldValue("departureTime", convertSecondsToDayjs(schedule.departureTime))
             setTime(schedule.departureTime)
         } else {
             form.setFieldValue("departureTime")
         }
     }, [schedule])
+
     useEffect(() => {
         let lc = listCoach.map((coach) => ({
             value: coach.id,
@@ -65,7 +70,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     }
 
     const handleChooseTime = (e) => {
-        setTime(e.valueOf())
+        setTime(e.$H * 3600 + e.$m * 60)
     }
 
     const handleUpdateTimeslot = async () => {
@@ -78,6 +83,12 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
             listTimeSlot[index] = data
         }
     } 
+
+    const handleUpdateMulti = async () => {
+        const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection, currentDate}
+        setDataMulti(data)
+        setMulti(true)
+    }
 
     return (
         <div >
@@ -131,9 +142,15 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                         setListSection([...listSection, {}])
                     }} style={{color: '#006D38'}} className='w-28'><PlusCircleOutlined />Thêm chặng</p>
                 }
-                <div className='flex flex-row justify-center'>
+                <div className='flex flex-row justify-center space-x-4'>
                     {
                         schedule.id && <Button onClick={() => handleUpdateTimeslot()} className='w-1/6'>Lưu</Button>
+                    }
+                    {
+                        schedule.id && <Button onClick={() => handleUpdateMulti()} className='w-1/6'>Cập nhật tất cả</Button>
+                    }
+                    {
+                        multi && <UpdateMulti data={dataMulti} modalShow={multi} setModalShow={setMulti} old={schedule?.departureTime}/>
                     }
                 </div>
             </Card>

@@ -178,6 +178,10 @@ export const apiUpdateTimeslot = async (props) => {
     return ApiAdminConfig(EndPoint.UPDATE_TIMESLOT, props)
 }
 
+export const apiUpdateMulti = async (props) => {
+    return ApiAdminConfig("/company/update-multi-timeslot", props)
+}
+
 export const apiDeleteTimeslot = async (id) => {
     return ApiAdminConfig("/company/delete-timeslot", {id: id})
 }

@@ -32,3 +32,13 @@ export const regexNumber = (num) => {
   const res = num.toString().replace(regex, '$1.');
   return res
 }
+
+const dayjs = require('dayjs');
+
+export const convertSecondsToDayjs = (seconds) => {
+    let now = dayjs();
+    let startOfToday = dayjs().startOf('day');
+    let result = startOfToday.add(seconds, 'second');
+
+    return result;
+}

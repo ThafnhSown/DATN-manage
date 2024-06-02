@@ -3,7 +3,7 @@ import { useAppSelector } from '../../../../../redux/hook'
 import { useEffect, useState } from 'react'
 import { DeleteFilled } from '@ant-design/icons'
 import dayjs from 'dayjs'
-import { regexNumber } from '../../../../../utils/convertTime'
+import { convertSecondsToDayjs, regexNumber } from '../../../../../utils/convertTime'
 
 const Section = ({section, index, listSection, setListSection, listTimeslot, timeslotIndex}) => {
     const [time, setTime] = useState(0)
@@ -17,7 +17,7 @@ const Section = ({section, index, listSection, setListSection, listTimeslot, tim
             form.setFieldValue('price', regexNumber(section.price))
         }
         if(section.departureTime) {
-            form.setFieldValue("departureTime", dayjs(section.departureTime))
+            form.setFieldValue("departureTime", convertSecondsToDayjs(section.departureTime))
             setTime(section.departureTime)
         } else {
             form.setFieldValue("departureTime")
@@ -25,7 +25,7 @@ const Section = ({section, index, listSection, setListSection, listTimeslot, tim
 
     }, [section])
     const handleChooseTime = (e) => {
-        setTime(e.valueOf())
+        setTime(e.$H * 3600 + e.$m * 60)
     }
     return (
             <Form
