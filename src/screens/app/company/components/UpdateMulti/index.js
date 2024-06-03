@@ -24,11 +24,11 @@ export const UpdateMulti = (props) => {
         setApplyDate(arr)
     }
 
-    async function handleUpdateMulti () {
+    const handleUpdateMulti = async () => {
         const tmp = {...data, applyDates: applyDate, oldDepartureTime: old, type: 1 }
         const subTmp = {...data, applyDates: applyDate, oldDepartureTime: old, type: 2 }
-        const res = await data.limit.to ? apiUpdateMulti(subTmp) : apiUpdateMulti(tmp)
-
+        const res = data.limit.to ? await apiUpdateMulti(subTmp) : await apiUpdateMulti(tmp)
+        console.log(res)
         if(!res.data.error) {
             setModalShow(false)
             enqueueSnackbar("Cập nhật thành công", {
