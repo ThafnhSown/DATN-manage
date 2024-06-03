@@ -38,7 +38,7 @@ const dayjs = require('dayjs');
 export const convertSecondsToDayjs = (seconds) => {
     let now = dayjs();
     let startOfToday = dayjs().startOf('day');
-    let result = startOfToday.add(seconds, 'second');
+    let result = startOfToday.add(seconds / 1000, 'second');
 
     return result;
 }
