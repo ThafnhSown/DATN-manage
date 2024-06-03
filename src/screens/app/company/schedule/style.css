@@ -7,3 +7,7 @@
     background-color: white;
     color: black;
 }
+
+.ant-progress-text {
+    visibility: hidden;
+}
