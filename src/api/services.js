@@ -217,3 +217,7 @@ export const apiGetListOrder = async(props) => {
 export const apiChangeOrderState = async (props) => {
     return ApiAdminConfig('/company/change-user-order-state', props)
 }
+
+export const apiGetStatistic = async (id) => {
+    return ApiAdminConfig(`/company/get-statistic?companyId=${id}`, undefined, "GET")
+}

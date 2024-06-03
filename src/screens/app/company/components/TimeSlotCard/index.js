@@ -9,7 +9,7 @@ import dayjs from 'dayjs'
 import { regexNumber, convertSecondsToDayjs } from '../../../../../utils/convertTime'
 import { UpdateMulti } from '../UpdateMulti'
 
-const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot, scheduleId, currentDate}) => {
+const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, setIsEdit, setCurrentTimeslot, scheduleId, limit}) => {
     const { enqueueSnackbar } = useSnackbar()
     const dispatch = useAppDispatch()
     const companyId = useAppSelector(state => state.authState.userInfo.id)
@@ -85,7 +85,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     } 
 
     const handleUpdateMulti = async () => {
-        const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection, currentDate}
+        const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection, limit}
         setDataMulti(data)
         setMulti(true)
     }

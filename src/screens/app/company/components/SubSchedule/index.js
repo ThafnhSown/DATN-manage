@@ -113,7 +113,7 @@ const SubSchedule = ({listSubTimeslot, schedule, setSubSchedule}) => {
                     >{sh.departureTime ? dayjs(sh.departureTime).format("HH:mm") : '--:--'}</Button>)
                 }
                 {
-                    (isCreate || currentTimeslot) && <TimeSlotCard schedule={currentTimeslot} setCurrentTimeslot={setCurrentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false}/>
+                    (isCreate || currentTimeslot) && <TimeSlotCard schedule={currentTimeslot} setCurrentTimeslot={setCurrentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false} limit={{from: currentTimeslot.coachSchedule.startTime, to: currentTimeslot.coachSchedule.endTime}}/>
                 }
             <Button 
             style={{backgroundColor:"white", color: "#006D38", borderRadius: 4, marginTop:10}} 

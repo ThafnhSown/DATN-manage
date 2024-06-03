@@ -143,7 +143,7 @@ const Schedule = () => {
                     >{sh.departureTime ? dayjs(convertSecondsToDayjs(sh.departureTime)).format("HH:mm") : '--:--'}</Button>)
                 }
                 {
-                   currentTimeslot && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false} setCurrentTimeslot={setCurrentTimeslot} scheduleId={scheduleId} currentDate={currentDate}/>
+                   currentTimeslot && <TimeSlotCard schedule={currentTimeslot} index={currentIndex} listTimeSlot={listTimeSlot} setListTimeSlot={setListTimeSlot} isEdit={false} setCurrentTimeslot={setCurrentTimeslot} scheduleId={scheduleId} limit={{from: currentDate, to: 0}}/>
                 }
        
             <Divider />
