@@ -25,7 +25,7 @@ const Section = ({section, index, listSection, setListSection, listTimeslot, tim
 
     }, [section])
     const handleChooseTime = (e) => {
-        setTime(e.$H * 3600 + e.$m * 60)
+        setTime((e.$H * 3600 + e.$m * 60) * 1000)
     }
     return (
             <Form
