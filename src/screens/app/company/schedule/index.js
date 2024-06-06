@@ -81,7 +81,7 @@ const Schedule = () => {
 
     const handleCreateTimeslot = async () => {
         let tmp = listTimeSlot.length - 1
-        const data = {...listTimeSlot[tmp], coachScheduleId: listTimeSlot[0].coachSchedule.id}
+        const data = {...listTimeSlot[tmp], coachScheduleId: listTimeSlot[0].coachSchedule.id, coachRouteId: currentRoute, type: 1}
         const res = await apiCreateTimeslot(data)
         if(!res.data.error) {
             setListTimeSlot([])
