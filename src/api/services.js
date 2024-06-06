@@ -182,6 +182,10 @@ export const apiUpdateMulti = async (props) => {
     return ApiAdminConfig("/company/update-multi-timeslot", props)
 }
 
+export const apiCreateMulti = async (props) => {
+    return ApiAdminConfig("/company/create-multi-timeslot", props)
+}
+
 export const apiDeleteTimeslot = async (id) => {
     return ApiAdminConfig("/company/delete-timeslot", {id: id})
 }

@@ -12,6 +12,7 @@ const { Title } = Typography
 import { convertDate, convertSecondsToDayjs } from "../../../../utils/convertTime";
 import './style.css'
 import dayjs from 'dayjs'
+import { ModalTimeslot } from "../components/ModalTimeslot";
 
 const Schedule = () => {
     const dispatch = useAppDispatch()
@@ -27,6 +28,7 @@ const Schedule = () => {
     const [currentIndex, setCurrentIndex] = useState(-1)
     const [listTimeSlot, setListTimeSlot] = useState([])
     const [listSubTimeslot, setListSubTimeslot] = useState([])
+    const [extraTimeslot, setExtraTimeslot] = useState(false)
     const [scheduleId, setScheduleId] = useState()
     useEffect(() => {
         handleLoadRoutes()
@@ -118,7 +120,7 @@ const Schedule = () => {
                 <Select defaultValue="Chọn tuyến xe" options={selectOption} style={{width: 500, height:40}} onSelect={(value) => handleChooseRoute(value)}>
                 </Select>
                 
-                <div className="flex justify-end">
+                <div className="flex justify-end space-x-4">
                     <Button
                         style={{backgroundColor:"white", color: "#006D38", borderRadius: 4}} 
                         icon={<PlusCircleOutlined />}
@@ -130,6 +132,11 @@ const Schedule = () => {
                     }}
                     >
                         Thêm giờ xuất bến
+                    </Button>
+                    <Button 
+                    onClick={() => setExtraTimeslot(true)}
+                    style={{backgroundColor:"white", color: "#006D38", borderRadius: 4}} >
+                        Tạo chuyến tăng cường
                     </Button>
                 </div>
                 <p className="text-lg">{listTimeSlot.length} chuyến</p>
@@ -172,7 +179,9 @@ const Schedule = () => {
             </Row>
         </Card>
         
-
+            {
+                extraTimeslot && <ModalTimeslot modalShow={extraTimeslot} setModalShow={setExtraTimeslot} /> 
+            }
         </div>
     )
 }

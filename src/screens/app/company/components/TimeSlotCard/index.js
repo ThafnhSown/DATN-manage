@@ -59,7 +59,14 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
             let tmp = listTimeSlot.filter(tl => tl)
             setListTimeSlot([...tmp])
         } else {
-            const res = await apiDeleteTimeslot(id)
+            const timeslot = listTimeSlot.filter(item => item.id == id)
+            const tmp = {
+                coachRouteId: currentRoute,
+                id: id,
+                departureTime: timeslot[0].departureTime,
+                type: 1
+            }
+            const res = await apiDeleteTimeslot(tmp)
             if(res.data.error == 0) {
                 delete listTimeSlot[index]
                 setCurrentTimeslot(listTimeSlot[index-1])
@@ -74,7 +81,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     }
 
     const handleUpdateTimeslot = async () => {
-        const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection}
+        const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection, coachRouteId: currentRoute, type: 1}
         const res = await apiUpdateTimeslot(data)
         if(!res.data.error) {
             enqueueSnackbar("Cập nhật thành công", {
@@ -87,6 +94,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     const handleUpdateMulti = async () => {
         const data = {...form.getFieldsValue(), departureTime: time, sectionList: listSection, limit}
         setDataMulti(data)
+        console.log(data)
         setMulti(true)
     }
 
@@ -146,9 +154,9 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
                     {
                         schedule.id && <Button onClick={() => handleUpdateTimeslot()} className='w-1/6'>Lưu</Button>
                     }
-                    {
+                    {/* {
                         schedule.id && <Button onClick={() => handleUpdateMulti()} className='w-1/6'>Cập nhật tất cả</Button>
-                    }
+                    } */}
                     {
                         multi && <UpdateMulti data={dataMulti} modalShow={multi} setModalShow={setMulti} old={schedule?.departureTime}/>
                     }
