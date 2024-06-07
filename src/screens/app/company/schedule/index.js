@@ -131,12 +131,13 @@ const Schedule = () => {
                             setListTimeSlot([...listTimeSlot, {}])
                     }}
                     >
-                        Thêm giờ xuất bến
+                        Giờ cố định
                     </Button>
                     <Button 
                     onClick={() => setExtraTimeslot(true)}
+                    icon={<PlusCircleOutlined />}
                     style={{backgroundColor:"white", color: "#006D38", borderRadius: 4}} >
-                        Tạo chuyến tăng cường
+                        Tăng cường
                     </Button>
                 </div>
                 <p className="text-lg">{listTimeSlot.length} chuyến</p>
