@@ -1,7 +1,7 @@
 import { Modal, DatePicker, Button } from "antd"
 import TimeSlotCard from "../TimeSlotCard"
 import dayjs from 'dayjs'
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAppSelector } from "../../../../../redux/hook"
 import { useSnackbar } from "notistack"
 import { apiCreateMulti } from "../../../../../api/services"
@@ -13,6 +13,7 @@ export const ModalTimeslot = (props) => {
     const [ listTimeSlot, setListTimeSlot ] = useState([])
     const [applyDate, setApplyDate] = useState([])
     const currentRoute = useAppSelector(state => state.routeState.currentRoute)
+    const initData = useAppSelector(state => state.scheduleState.currentTimeslot)
 
     const getArrayDate = (value) => {
         const arr = value.map((item) => dayjs(item).valueOf())
@@ -33,6 +34,10 @@ export const ModalTimeslot = (props) => {
             setModalShow(false)
         }
     }
+
+    useEffect(() => {
+        setCurrentTimeslot(initData)
+    }, [])
 
     return (
         <Modal

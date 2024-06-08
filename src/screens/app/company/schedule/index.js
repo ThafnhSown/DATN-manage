@@ -13,13 +13,13 @@ import { convertDate, convertSecondsToDayjs } from "../../../../utils/convertTim
 import './style.css'
 import dayjs from 'dayjs'
 import { ModalTimeslot } from "../components/ModalTimeslot";
+import { onSetCurentTimeslot } from "../../../../redux/slices/scheduleSlice";
 
 const Schedule = () => {
     const dispatch = useAppDispatch()
     const [isCreate, setIsCreate] = useState(false)
     const [listSchedule, setListSchedule] = useState([])
     const [subSchedule, setSubSchedule] = useState([])
-    // const listSchedule = useAppSelector(state => state.scheduleState.listSchedule)
     const companyId = useAppSelector(state => state.authState.userInfo.id)
     const listRoute = useAppSelector((state) => state.routeState.listRoute)
     const currentRoute = useAppSelector((state) => state.routeState.currentRoute)
@@ -53,6 +53,7 @@ const Schedule = () => {
             setListTimeSlot(tmp)
             setListSubTimeslot(subTmp)
             setScheduleId(tmp[0].coachSchedule.id)
+            dispatch(onSetCurentTimeslot(tmp[0]))
         } else {
             setCurrentTimeslot()
             setCurrentIndex(-1)

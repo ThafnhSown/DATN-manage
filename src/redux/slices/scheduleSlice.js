@@ -4,6 +4,7 @@ import { apiCreateSchedule, apiListSchedule } from "../../api/services";
 const initialState = {
     loading: false,
     listSchedule: [],
+    currentTimeslot: {}
 };
 
 export const requestCreateSchedule = createAsyncThunk("/company/create-coach-schedule", async(props) => {
@@ -24,6 +25,9 @@ export const scheduleSlice = createSlice({
         addSchedule: (state, action) => {
            state.listSchedule = [...state.listSchedule, action.payload]
 
+        },
+        onSetCurentTimeslot: (state, action) => {
+            state.currentTimeslot = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -45,7 +49,8 @@ export const scheduleSlice = createSlice({
 });
 
 export const {
-    addSchedule
+    addSchedule,
+    onSetCurentTimeslot
 } = scheduleSlice.actions
 
 export const scheduleState = (state) => state.scheduleState;
