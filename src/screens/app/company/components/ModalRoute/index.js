@@ -81,7 +81,7 @@ const ModalRoute = () => {
         <div className="mx-16 space-y-4">
            {
             isLoading ? <LoadingPage /> : <>
-             <div className="bg-white boder rounded-xl h-12 items-center flex flex-row space-x-2">
+             <div className="bg-white boder rounded-xl h-12 items-center flex flex-row space-x-2 p-2">
                 <ArrowLeftOutlined onClick={() => navigate("/")}/>
                 <p>Tạo tuyến</p>
             </div>

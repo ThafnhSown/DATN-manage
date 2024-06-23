@@ -4,14 +4,13 @@ import { Checkbox } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from "react"
 import './style.css'
-import { regexNumber } from "../../../../../utils/convertTime"
+import { regexNumber, convertSecondsToDayjs } from "../../../../../utils/convertTime"
 import OfficeAtPoint from "../OfficeAtPoint"
 
 const UserOrder = ({ order, listOrder, setListOrder }) => {
     const [isChecked, setIsChecked] = useState(false)
     const [startPointOffice, setStartPointOffice] = useState(false)
     const [endPointOffice, setEndPointOffice] = useState(false)
-    console.log(order)
     useEffect(() => {
         listOrder.includes(order) ? setIsChecked(true) : setIsChecked(false)
     }, [listOrder])
@@ -34,7 +33,7 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
                     <Checkbox onChange={handleCheckbox}  checked={isChecked}>
 
                     </Checkbox>
-                    <div className="text-xl text-green-700">{dayjs(order.departureTime).format("HH:mm")}</div>
+                    <div className="text-xl text-green-700">{dayjs(convertSecondsToDayjs(order.departureTime)).format("HH:mm")}</div>
                     <div>{dayjs(order.departureDate).format("DD/MM/YY")}</div>
                 </div>
                 

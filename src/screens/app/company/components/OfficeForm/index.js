@@ -24,7 +24,6 @@ const OfficeForm = () => {
     const listOffice = useAppSelector(state => state.officeState.listOffice)
     const isLoading = useAppSelector(state => state.officeState.loading)
     const listProvince = useAppSelector(state => state.globalState.listProvince)
-    // const [listProvince, setListProvince] = useState([])
     const [listDistrict, setListDistrict] = useState([])
     const [modalShow, setModalShow] = useState(false)
     const [avatar, setAvatar] = useState()

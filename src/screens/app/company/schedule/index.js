@@ -14,6 +14,7 @@ import './style.css'
 import dayjs from 'dayjs'
 import { ModalTimeslot } from "../components/ModalTimeslot";
 import { onSetCurentTimeslot } from "../../../../redux/slices/scheduleSlice";
+import ModalVoucher from "../components/ModalVoucher";
 
 const Schedule = () => {
     const dispatch = useAppDispatch()
@@ -29,6 +30,7 @@ const Schedule = () => {
     const [listTimeSlot, setListTimeSlot] = useState([])
     const [listSubTimeslot, setListSubTimeslot] = useState([])
     const [extraTimeslot, setExtraTimeslot] = useState(false)
+    const [voucher, setVoucher] = useState(false)
     const [scheduleId, setScheduleId] = useState()
     useEffect(() => {
         handleLoadRoutes()
@@ -140,6 +142,12 @@ const Schedule = () => {
                     style={{backgroundColor:"white", color: "#006D38", borderRadius: 4}} >
                         Tăng cường
                     </Button>
+                    {/* <Button 
+                    onClick={() => setVoucher(true)}
+                    icon={<PlusCircleOutlined />}
+                    style={{backgroundColor:"#006D38", color: "#fff", borderRadius: 4}} >
+                        Voucher
+                    </Button> */}
                 </div>
                 <p className="text-lg">{listTimeSlot.length} chuyến</p>
             </Row>
@@ -183,6 +191,9 @@ const Schedule = () => {
         
             {
                 extraTimeslot && <ModalTimeslot modalShow={extraTimeslot} setModalShow={setExtraTimeslot} /> 
+            }
+            {
+                voucher && <ModalVoucher modalShow={voucher} setModalShow={setVoucher}/>
             }
         </div>
     )

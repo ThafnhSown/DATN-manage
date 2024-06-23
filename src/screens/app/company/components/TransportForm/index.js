@@ -46,6 +46,7 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
             enqueueSnackbar("Xóa thành công !", {
                 variant: "success"
             })
+            window.location.reload()
             await dispatch(deleteCoach(coachId))
         }
     }
@@ -114,9 +115,7 @@ const TransportForm = ({ transport, setIsCreate, options }) => {
                     <Row className='items-center space-x-6' grid={24}>   
                         <Col span={4}>
                             <Title level={5}>Hình trong xe</Title>
-                            {
-                               transport.picture ? <img src={transport.picture} className='w-40 h-40'/> : <ImgUpload onImageUpload={handleUploadPicture} imageUrl={picture} setImageUrl={setPicture}/>
-                            }
+                            <ImgUpload onImageUpload={handleUploadPicture} imageUrl={picture} setImageUrl={setPicture}/>
                         </Col>
                         <Col span={5}>
                             <Select value={coachType ?? "Chọn loại xe"} onChange={(value) => setCoachType(value)} className='w-full'>
