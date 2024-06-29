@@ -1,19 +1,18 @@
 import { IconCar, IconTP, IconTicket, IconMoney, MiniBlue, MiniRed } from "../../../../../assets/svgs"
 import { UserOutlined, PhoneFilled, FormOutlined } from "@ant-design/icons"
-import { Checkbox } from 'antd'
+import { Button, Checkbox } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from "react"
 import './style.css'
 import { regexNumber, convertSecondsToDayjs } from "../../../../../utils/convertTime"
 import OfficeAtPoint from "../OfficeAtPoint"
+import { apiGetVoucherById } from "../../../../../api/services"
 
 const UserOrder = ({ order, listOrder, setListOrder }) => {
     const [isChecked, setIsChecked] = useState(false)
     const [startPointOffice, setStartPointOffice] = useState(false)
     const [endPointOffice, setEndPointOffice] = useState(false)
-    useEffect(() => {
-        listOrder.includes(order) ? setIsChecked(true) : setIsChecked(false)
-    }, [listOrder])
+    const [voucher, setVoucher] = useState({})
 
     const handleCheckbox = (e) => {
         if(e.target.checked) {
@@ -25,6 +24,25 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
             setListOrder([...tmp])
         }
     }
+
+    const handleGetVoucher = async () => {
+        const res = await apiGetVoucherById(order?.voucherId)
+        if(!res.data.error) {
+            setVoucher(res.data.data)
+        }
+        else {
+            setVoucher({
+                discount: 0,
+                discountType: 0
+            })
+        }
+    }
+
+    useEffect(() => {
+        handleGetVoucher()
+        listOrder.includes(order) ? setIsChecked(true) : setIsChecked(false)
+    }, [listOrder])
+
 
     return (
         <div className="w-full flex flex-col border-1 bg-white border-black shadow-xl p-2">
@@ -41,7 +59,7 @@ const UserOrder = ({ order, listOrder, setListOrder }) => {
             </div>
             <div className="flex flex-row ml-5">
                 <p className="flex flex-row items-center space-x-2 w-1/2"><IconTicket /><p>{order.quantity} vé</p></p>
-                <p className="flex flex-row items-center space-x-2 w-1/2"><IconMoney /> <p>{regexNumber(order.price*order.quantity)}đ</p></p>
+                <p className="flex flex-row items-center space-x-2 w-1/2"><IconMoney /> <p>{regexNumber(voucher.discountType ?  order.price*order.quantity - voucher.discount :  order.price*order.quantity - ( order.price*order.quantity*voucher.discount)/100)}đ</p></p>
             </div>
             <p className="flex flex-row items-center space-x-2 ml-5"><IconCar /> <p>{order.coachType.name}</p></p>
             <div className="flex flex-row text-xs mx-6 space-x-4">

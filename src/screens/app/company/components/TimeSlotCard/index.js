@@ -42,7 +42,7 @@ const TimeSlotCard = ({schedule, index, listTimeSlot, setListTimeSlot, isEdit, s
     useEffect(() => {
         let lc = listCoach.map((coach) => ({
             value: coach.id,
-            label: coach.coachType.name
+            label: `${coach.coachType.name} - ${coach.vsc}`
         }))
         setOptions(lc)
         const tmp = listPath.map(p => ({

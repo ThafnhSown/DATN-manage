@@ -234,6 +234,10 @@ export const apiGetVoucherList = async(id) => {
     return ApiAdminConfig(`/company/get-voucher-list?companyId=${id}`, undefined, "GET")
 }
 
+export const apiGetVoucherById = async(id) => {
+    return ApiAdminConfig(`/company/get-voucher-by-id?id=${id}`, undefined, "GET")
+}
+
 export const apiDelVoucher = async(props) => {
     return ApiAdminConfig("/company/delete-voucher", props)
 }
