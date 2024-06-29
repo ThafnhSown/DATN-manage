@@ -225,3 +225,19 @@ export const apiChangeOrderState = async (props) => {
 export const apiGetStatistic = async (id) => {
     return ApiAdminConfig(`/company/get-statistic?companyId=${id}`, undefined, "GET")
 }
+
+export const apiCreateVoucher = async (props) => {
+    return ApiAdminConfig("/company/create-voucher", props)
+}
+
+export const apiGetVoucherList = async(id) => {
+    return ApiAdminConfig(`/company/get-voucher-list?companyId=${id}`, undefined, "GET")
+}
+
+export const apiDelVoucher = async(props) => {
+    return ApiAdminConfig("/company/delete-voucher", props)
+}
+
+export const apiGetMonthlyRevenue = (id) => {
+    return ApiAdminConfig(`/company/get-monthly-revenue-each-route?companyId=${id}`, undefined, "GET")
+}

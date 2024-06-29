@@ -142,12 +142,12 @@ const Schedule = () => {
                     style={{backgroundColor:"white", color: "#006D38", borderRadius: 4}} >
                         Tăng cường
                     </Button>
-                    {/* <Button 
+                    <Button 
                     onClick={() => setVoucher(true)}
                     icon={<PlusCircleOutlined />}
                     style={{backgroundColor:"#006D38", color: "#fff", borderRadius: 4}} >
                         Voucher
-                    </Button> */}
+                    </Button>
                 </div>
                 <p className="text-lg">{listTimeSlot.length} chuyến</p>
             </Row>

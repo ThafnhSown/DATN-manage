@@ -1,15 +1,20 @@
 const { Modal, Form, Row, Col, Input, Typography, DatePicker, Select } = require("antd")
 const { Title } = Typography
-import { useState } from "react"
-import { useAppSelector } from "../../../../../redux/hook"
+import { useEffect, useState } from "react"
+import { useAppSelector, useAppDispatch } from "../../../../../redux/hook"
+import { apiCreateVoucher, apiGetVoucherList } from "../../../../../api/services"
+import { VoucherTag } from "./VoucherTag"
+import { requestLoadVoucher } from "../../../../../redux/slices/companySlice"
 
 const ModalVoucher = (props) => {
+    const dispatch = useAppDispatch()
     const coachRouteId = useAppSelector((state) => state.routeState.currentRoute)
     const companyId = useAppSelector((state) => state.authState.userInfo.id)
-
+    const listVoucher = useAppSelector((state) => state.companyState.listVoucher)
     const [form] = Form.useForm()
     const { modalShow, setModalShow } = props
     const [type, setType] = useState(0)
+
     const option = [
         {
             label: "Giảm giá theo %",
@@ -22,18 +27,34 @@ const ModalVoucher = (props) => {
        
     ]
 
-    const handleCreate = () => {
-        const data = {...form.getFieldsValue(), applyType: 0, companyId, coachRouteId}
-        console.log(data)
+    const handleGetVoucherList = async () => {
+        dispatch(requestLoadVoucher(companyId))
     }
+
+    const handleCreate = async () => {
+        const startTime = form.getFieldValue('applyFrom')
+        const endTime = form.getFieldValue('applyTo')
+        const data = {...form.getFieldsValue(), applyType: 0, companyId, coachRouteId, applyFrom: startTime.valueOf(), applyTo: endTime.valueOf()}
+        const res = await apiCreateVoucher(data)
+        if(!res.data.error) {
+            // setModalShow(false)
+            dispatch(requestLoadVoucher(companyId))
+            form.resetFields()
+        }
+    }
+    useEffect(() => {
+        handleGetVoucherList()
+    }, [])
 
     return (
         <Modal
         open={modalShow}
         onOk={handleCreate}
         onCancel={() => setModalShow(false)}
+        width={700}
         >
-            <Form form={form}>
+        <div className="flex flex-row">
+        <Form form={form}>
                 <Title level={3}>Tạo voucher</Title>
                     <Row>
                         <Col span={24}>
@@ -84,6 +105,17 @@ const ModalVoucher = (props) => {
                         </Col>
                     </Row>
                 </Form>
+                <hr className="w-0.5 h-96 bg-[#F3F3F3] mx-2"/>
+                <div>
+                    <Title level={3}>Danh sách Voucher</Title>
+                    <div className="flex flex-col space-y-2">
+                        {listVoucher.length ? listVoucher.map(voucher => (<>
+                            <VoucherTag {...voucher}/>
+                        </>)) : null}
+                    </div>
+                </div>
+        </div>
+           
         </Modal>
     )
 

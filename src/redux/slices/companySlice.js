@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiCreateCoach, apiCreateCompany, apiCreatePolicy, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany, apiGetListOrder, apiGetPolicyList } from "../../api/services";
+import { apiCreateCoach, apiCreateCompany, apiCreatePolicy, apiGetVoucherList, apiGetCoachList, apiGetCompanyInfo, apiGetListCompany, apiGetListOrder, apiGetPolicyList } from "../../api/services";
 
 const initialState = {
     loading: false,
@@ -7,7 +7,8 @@ const initialState = {
     listCompany: [],
     listCoach: [],
     listPolicy: [],
-    listOrder: []
+    listOrder: [],
+    listVoucher: []
 };
 
 export const requestLoadCompany = createAsyncThunk('admin/get-list-company', async () => {
@@ -47,6 +48,11 @@ export const requestCreatePolicy = createAsyncThunk("/company/create-policy", as
 
 export const requestLoadOrder = createAsyncThunk("/company/list-order", async(props) => {
     const res = await apiGetListOrder(props)
+    return res.data.data
+})
+
+export const requestLoadVoucher = createAsyncThunk("/company/get-voucher-list", async(id) => {
+    const res = await apiGetVoucherList(id)
     return res.data.data
 })
 
@@ -120,6 +126,9 @@ export const companySlice = createSlice({
         })
         builder.addCase(requestLoadOrder.rejected, (state, action) => {
             state.listOrder = []
+        })
+        builder.addCase(requestLoadVoucher.fulfilled, (state, action) => {
+            state.listVoucher = action.payload
         })
     }
 });

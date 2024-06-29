@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import UserOrder from "../components/UserOrder"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Button, Checkbox, Dropdown } from 'antd'
-import { DeleteFilled, MenuOutlined, AvatarOutlined } from '@ant-design/icons';
+import { DeleteFilled, MenuOutlined, } from '@ant-design/icons';
 import "./style.css"
 import { apiChangeOrderState } from "../../../../api/services"
 import SockJS from "sockjs-client"

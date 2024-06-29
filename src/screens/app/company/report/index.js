@@ -1,4 +1,4 @@
-import { apiGetStatistic } from "../../../../api/services"
+import { apiGetMonthlyRevenue, apiGetStatistic } from "../../../../api/services"
 import { useAppSelector } from "../../../../redux/hook"
 import { Progress, Typography, Card } from "antd"
 import { useEffect, useState } from "react"
@@ -11,6 +11,8 @@ const Report = () => {
 
     const handleLoadData = async () => {
         const res = await apiGetStatistic(id)
+        const tmp = await apiGetMonthlyRevenue(id)
+        console.log(tmp)
         if(!res.data.error) {
             setData(res.data.data)
         }
